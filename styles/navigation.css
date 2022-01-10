@@ -1,0 +1,89 @@
+/* HEADER AND NAVBAR */
+.navbar {
+  height: 5vh;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navbar button,
+a {
+  height: 5vh;
+}
+
+.submit-button,
+.sign-in-form input,
+hr {
+  margin: 5%;
+}
+
+.nav-container-left,
+.nav-container-right {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 20vw;
+  z-index: 1;
+}
+
+.nav-container-left {
+  justify-content: flex-start;
+}
+
+.nav-container-right {
+  justify-content: flex-end;
+}
+
+.nav-left,
+.nav-rigt {
+  display: flex;
+  flex-flow: row nowrap;
+  flex-basis: 15vw;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  border: none;
+  background: none;
+}
+
+.dropdown-content {
+  background-color: rgba(255, 255, 255, 0.5);
+  min-width: 15vw;
+  z-index: 1;
+  display: none;
+  position: absolute;
+  top: 5vh;
+}
+
+.dropdown-content a {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-button:hover {
+  color: white;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.sign-in-form {
+  display: flex;
+  flex-direction: column;
+}
