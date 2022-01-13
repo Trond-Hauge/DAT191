@@ -1,26 +1,22 @@
 'use strict';
-/*
-export async function getServerSideProps ({params}) {
-    return {
-        props: {},
-    };
-}
 
-/*
-*   Database:
-*   
-*   PostgreSQL. But: MongoDB might be a good solution for only files.
-*   PostgreSQL idea: Store link to file, and some basic, informative text(s) about the file??
-*
-*/
+import Link from "next/link";
 
-export default function Library() {
+
+export default function Library({list}) {
     return (
         <div>
             <p>Page for library!</p>
             <hr/>
             <div>
+                List: {JSON.stringify(list, null, 2)}
             </div>
         </div>
     );
+}
+
+Library.getInitialProps = async () => {
+    const res = await fetch("http://localhost:3000/api/documents/documents"); //There must be a better way.
+    const json = await res.json();
+    return {list: json};
 }
