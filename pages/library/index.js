@@ -1,4 +1,10 @@
 'use strict';
+/*
+export async function getServerSideProps ({params}) {
+    return {
+        props: {},
+    };
+}
 
 /*
 *   Database:
@@ -12,6 +18,9 @@ export default function Library() {
     return (
         <div>
             <p>Page for library!</p>
+            <hr/>
+            <div>
+            </div>
         </div>
     );
 }

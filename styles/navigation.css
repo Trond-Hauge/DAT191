@@ -22,6 +22,7 @@ a {
 .sign-in-form input,
 hr {
   margin: 5%;
+  width: 90%;
 }
 
 .nav-container-left,

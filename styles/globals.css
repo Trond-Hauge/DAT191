@@ -19,7 +19,7 @@ a:hover{
 }
 
 input {
-  border-width: 0 0 3px;
+  border-width: 0 0 1px;
   background-color: transparent;
   color: rgb(50, 50, 50);
 }
