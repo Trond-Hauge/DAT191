@@ -1,7 +1,7 @@
 "use strict";
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from "../../../../db.js";
+import { db } from "../../../db.js";
 
 export default async function getDocumentById(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {

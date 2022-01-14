@@ -8,7 +8,8 @@ CREATE TABLE members (
     first_name VARCHAR(64) NOT NULL,
     last_name VARCHAR(32) NOT NULL,
     email VARCHAR(64) NOT NULL,
-    username VARCHAR(16) NOT NULL -- may be ommitted
+    username VARCHAR(16) NOT NULL, -- may be ommitted
+    password TEXT NOT NULL
     --password. Looking for necessary specs for SHA3-256
     --salt? -||-
     --link to character table for character settings per member
