@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import {Header} from '../components/header.js';
+import MatrixImage from "../public/matrix_world_1200.jpg";
+import BookImage from "../public/book_1276.jpg";
 
 export default function Home() {
   return (
@@ -13,11 +15,12 @@ export default function Home() {
           <Link href="/streaming">
             <a>
               <Image
-                src="/matrix_world_1200.jpg"
+                src={MatrixImage}
                 alt="Picture of Matrix and world map"
                 objectFit="cover"
                 layout="fill"
                 priority
+                placeholder="blur"
               />
               <div className="centered">Streaming</div>
             </a>
@@ -27,11 +30,12 @@ export default function Home() {
           <Link href="/library">
             <a>
               <Image
-                src="/book_1276.jpg"
-                alt="Picture of Matrix and world map"
+                src={BookImage}
+                alt="Picture of book"
                 objectFit="cover"
                 layout="fill"
                 priority
+                placeholder="blur"
               />
               <div className="centered">Library</div>
             </a>
