@@ -7,7 +7,7 @@ CREATE TABLE members (
     member_id SERIAL PRIMARY KEY,
     first_name VARCHAR(64) NOT NULL,
     last_name VARCHAR(32) NOT NULL,
-    email VARCHAR(64) NOT NULL,
+    email VARCHAR(64) NOT NULL UNIQUE,
     username VARCHAR(16) NOT NULL, -- may be ommitted
     password TEXT NOT NULL
     --password. Looking for necessary specs for SHA3-256
@@ -36,3 +36,6 @@ CREATE TABLE documents(
 INSERT INTO documents (document_name, document_description)
 VALUES ('Document 1', 'Hocus, pocus'),
     ('Document', 'Blablabla');
+
+INSERT INTO members (first_name, last_name, email, username, password)
+VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu');
