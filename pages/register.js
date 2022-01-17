@@ -9,7 +9,6 @@ const Register = () => {
      const [firstName, setFirstName] = useState('');
      const [lastName, setLastName] = useState('');
      const [email, setEmail] = useState('');
-     const [username, setUsername] = useState('');
      const [password, setPassword] = useState('');
      const router = useRouter();
 
@@ -23,7 +22,6 @@ const Register = () => {
                 firstName,
                 lastName,
                 email,
-                username,
                 password
             })
         });
@@ -53,11 +51,6 @@ const Register = () => {
                        onChange={e => setEmail(e.target.value)}
                 />
               </div>
-              <div>
-                <input className="sign-in-form" placeholder="Create a username" required
-                       onChange={e => setUsername(e.target.value)}
-                />
-                 </div>
                  <div>
                 <input type="password" className="sign-in-form" placeholder="Create a password" required
                        onChange={e => setPassword(e.target.value)}
