@@ -15,13 +15,13 @@ body, #__next {
 }
 
 a:hover{
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 input {
   border-width: 0 0 1px;
   background-color: transparent;
-  color: rgb(50, 50, 50);
+  color: rgb(255, 255, 255);
 }
 
 /* MAIN BODY */

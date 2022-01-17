@@ -2,6 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import React from "react";
+import Link from "next/link";
 
 export default class LoginForm extends React.Component {
   state = {
@@ -42,7 +43,9 @@ export default class LoginForm extends React.Component {
             className="submit-button"
             type="submit">Submit</button>
         <hr />
-        <a>Create account</a>
+        <Link href="/register">
+              <a>Create Account</a>
+            </Link>
       </form>
     );
   }
