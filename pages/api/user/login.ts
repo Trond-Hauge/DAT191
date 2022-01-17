@@ -3,6 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { compare } from "bcrypt";
+import { sign } from "jsonwebtoken";
 
 // NOT TESTED!!
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
@@ -11,10 +12,14 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
 
         console.log(member.password);
         
-        
+        // ToDo: All the other logic. F.ex. catching empty return, where user was not found.
         compare(req.body.password, member.password, function (err, result) {
             if(!err && result) {
-                res.json({message: "Great success!"});
+                //consider adding more features to the claims, but not anything personal. Make a hash for this purpose?
+                const claims =  {sub: member.member_id, memberEmail: member.email};
+                const jwt = sign(claims, process.env.JWT_SECRET, {expiresIn: "1h"});
+
+                res.json({authToken: jwt});
             } else {
                 res.json({message: "Oof."});
             }

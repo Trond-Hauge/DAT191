@@ -18,11 +18,11 @@ const pool = new Pool({
 export const db = knex({
   client: "pg",
   connection: {
-    user: "postgres",
-    password: "postgres",
-    host: "localhost",
-    database: "dat191",
-    port: "5433",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    port: process.env.DB_PORT,
   },
   debug: false,
   pool: {min: 1, max: 5},
