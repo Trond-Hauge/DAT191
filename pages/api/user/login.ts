@@ -19,6 +19,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                 const claims =  {sub: member.member_id, memberEmail: member.email};
                 const jwt = sign(claims, process.env.JWT_SECRET, {expiresIn: "1h"});
 
+                res.setHeader("authorization", jwt);
                 res.json({authToken: jwt});
             } else {
                 res.json({message: "Oof."});
