@@ -9,7 +9,8 @@ CREATE TABLE members (
     last_name VARCHAR(32) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
     username VARCHAR(16) NOT NULL, -- may be ommitted
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    admin BOOLEAN NOT NULL
     --password. Looking for necessary specs for SHA3-256
     --salt? -||-
     --link to character table for character settings per member
@@ -26,7 +27,7 @@ CREATE TABLE documents(
     document_id SERIAL PRIMARY KEY,
     document_name VARCHAR(128) NOT NULL,
     document_description TEXT,
-    shared BOOLEAN,
+    shared BOOLEAN NOT NULL,
     owner INTEGER,
     FOREIGN KEY(owner) REFERENCES members(member_id)
 
@@ -37,9 +38,9 @@ CREATE TABLE documents(
 );
 
 -- *** GENERATING EXAMPLE ENTRIES *** --
-INSERT INTO members (first_name, last_name, email, username, password)
-VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu'),
-    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu');
+INSERT INTO members (first_name, last_name, email, username, password, admin)
+VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', true),
+    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', false);
 
 INSERT INTO documents (document_name, document_description, shared, owner)
 VALUES ('Document 1', 'Hocus, pocus', true, 1),

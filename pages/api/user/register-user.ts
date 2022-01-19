@@ -13,6 +13,7 @@ export default async function registerUser(req: NextApiRequest, res: NextApiResp
                 email: req.body.email, // Add a unique constraint to the database
                 username: req.body.username,
                 password: hash,
+                admin: false
             });
         });
         // If it doesn't work, check: https://www.youtube.com/watch?v=R1f43FmHu7w&ab_channel=WalkThroughCode
