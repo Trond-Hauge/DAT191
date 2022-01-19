@@ -25,7 +25,11 @@ CREATE TABLE organisations (
 CREATE TABLE documents(
     document_id SERIAL PRIMARY KEY,
     document_name VARCHAR(128) NOT NULL,
-    document_description TEXT
+    document_description TEXT,
+    shared BOOLEAN,
+    owner INTEGER,
+    FOREIGN KEY(owner) REFERENCES members(member_id)
+
 	-- SERIAL REFERENCES members(member_id)
 	
     --categorisation! IMPORTANT, hear with users.
@@ -33,9 +37,11 @@ CREATE TABLE documents(
 );
 
 -- *** GENERATING EXAMPLE ENTRIES *** --
-INSERT INTO documents (document_name, document_description)
-VALUES ('Document 1', 'Hocus, pocus'),
-    ('Document', 'Blablabla');
-
 INSERT INTO members (first_name, last_name, email, username, password)
-VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu');
+VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu'),
+    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu');
+
+INSERT INTO documents (document_name, document_description, shared, owner)
+VALUES ('Document 1', 'Hocus, pocus', true, 1),
+    ('Document', 'Blablabla', true, 2),
+    ('Doc Oc', 'This doc is verry oc', false, 1);
