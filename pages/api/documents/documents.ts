@@ -1,26 +1,23 @@
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiRequest, NextApiResponse, NextApiHandler} from "next";
 import {db} from "../../../db.js";
+import {verify} from "jsonwebtoken";
+import Authenticate from "../user/users"
 
-export default async function getAllSharedDocuments(req: NextApiRequest, res: NextApiResponse) {
-    const id = 5; // Temporary
+export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
+    const id = 1; // TODO - Need to get member id or member email from request/api
+    const adminField = await db.select("admin").from("members").where("member_id", id).first();
+    if (adminField) {
+        const admin = adminField.admin;
 
-    // Find member using the member_id
-    // If no results are found, the user is not logged in
-    const result = await db("members").where("member_id", id);
-    if (result.length > 0) {
-        // The result is a list, but there can be only 1 member corresponding to any given id
-        // Then check to see if this member is an admin user. If so, they have access to all documents.
-        const member = result[0];
-        const admin = member.admin;
+        // TODO - Change what information from documents is actually returned
         if (admin) {
             const documents = await db("documents");
             res.json(documents);
         } else {
-            console.log("Not Admin")
             const documents = await db("documents").where("shared", true);
             res.json(documents);
         }
     } else {
-        res.json(["Not logged in"]);
+        res.json(["Must be logged in to see documents!"]);
     }
 }
