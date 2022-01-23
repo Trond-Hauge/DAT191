@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {Header} from '../components/header';
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
 export default function Home() {
   return (
     <div className="container">
-      {Header()}
+      
       <div className="container-flex">
         <div className="container-inner">
           <Link href="/streaming">

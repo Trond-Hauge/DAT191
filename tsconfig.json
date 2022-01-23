@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/register.js", "components/LoginForm.js"  ],
+, "pages/register.js", "components/LoginForm.js", "pages/streaming.tsx"  ],
   "exclude": [
     "node_modules"
   ]

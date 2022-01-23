@@ -1,7 +1,7 @@
 "use strict";
 
 import Link from "next/link";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 
 export function Header() {
   return (
@@ -23,31 +23,19 @@ export function Header() {
 
       <div className="nav-container-right">
         <ul className="nav-right">
-          <div className="dropdown">
-            <button className="dropdown-button">Sign In</button>
-            <div className="dropdown-content">
-              <LoginForm/>
-            </div>
-          </div>
+          <LoginForm />
         </ul>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 
 function LoginForm() {
-  const emailRef = useRef < HTMLInputElement > (null);
-  const passRef = useRef < HTMLInputElement > (null);
-  const [message, setMessage] = useState < any > (null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState<any>(null);
 
   async function handleForm() {
-
-    console.log(JSON.stringify({
-      email: emailRef.current?.value,
-      password: passRef.current?.value
-    }));
-    
-    
     const respt = await fetch("http://localhost:3000/api/user/login", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -59,37 +47,52 @@ function LoginForm() {
 
     const json = await respt.json();
     setMessage(json);
-    
 
-    console.log(emailRef.current?.value, passRef.current?.value);
+    // FOR TESTING!!
+    console.log(message);
   }
 
   return (
-    <div className="sign-in-form">
-      {JSON.stringify(message)}
-      <div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Your email address"
-          ref={emailRef}
-        />
+    <div className="dropdown">
+      <button className="dropdown-button">Sign In</button>
+      <div className="dropdown-content">
+        <div className="sign-in-form">
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              ref={emailRef}
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Your password"
+              ref={passRef}
+            />
+          </div>
+          <button className="submit-button" onClick={handleForm}>
+            Submit
+          </button>
+          <hr />
+          <Link href="/register">
+            <a>Create Account</a>
+          </Link>
+        </div>
       </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Your password"
-          ref={passRef}
-        />
+    </div>
+  );
+}
+
+function LoggedIn() {
+  return (
+    <div className="dropdown">
+      <button className="dropdown-button">Sign In</button>
+      <div className="dropdown-content">
+        
       </div>
-      <button className="submit-button" onClick={handleForm}>
-        Submit
-      </button>
-      <hr />
-      <Link href="/register">
-        <a>Create Account</a>
-      </Link>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import { db } from "../../../db";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 
-// NOT TESTED!!
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const member = await db("members").where("email", req.body.email as string).select("*").first();
