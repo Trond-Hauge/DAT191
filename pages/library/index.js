@@ -1,16 +1,30 @@
 'use strict';
 
 import Link from "next/link";
-import {Header} from "../../components/header";
+
+const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
 
 export default function Library({list}) {
+    const documents = Array.from(list);
+    documents.sort(compareDocs);
+
     return (
         <div className="container">
-            {Header()}
             <div>
+                <input 
+                    name="search"
+                    type="text"
+                />
+                <br></br>
+
                 List:
                 <ul>
-                    {JSON.stringify(list, null, 2)}
+                    {documents.map((doc, index) => {
+                        // Will implement Link here
+                        return (<li>
+                                <a>{doc.document_name}</a>
+                            </li>)
+                    })}
                 </ul>
             </div>
         </div>

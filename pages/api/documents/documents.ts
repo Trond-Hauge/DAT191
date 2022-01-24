@@ -18,6 +18,6 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             res.json(documents);
         }
     } else {
-        res.json(["Must be logged in to see documents!"]);
+        res.json({authorized: false});
     }
 }

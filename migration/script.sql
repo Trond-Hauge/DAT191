@@ -45,4 +45,5 @@ VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.
 INSERT INTO documents (document_name, document_description, shared, owner)
 VALUES ('Document 1', 'Hocus, pocus', true, 1),
     ('Document', 'Blablabla', true, 2),
-    ('Doc Oc', 'This doc is verry oc', false, 1);
+    ('Doc Oc', 'This doc is verry oc', false, 1),
+    ('Adoc', 'Should be first in sorted list', true, 2);
