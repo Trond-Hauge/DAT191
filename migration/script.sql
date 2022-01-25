@@ -46,4 +46,4 @@ INSERT INTO documents (document_name, document_description, shared, owner)
 VALUES ('Document 1', 'Hocus, pocus', true, 1),
     ('Document', 'Blablabla', true, 2),
     ('Doc Oc', 'This doc is verry oc', false, 1),
-    ('Adoc', 'Should be first in sorted list', true, 2);
+    ('Adoc', 'Should be first in sorted list', false, 2);

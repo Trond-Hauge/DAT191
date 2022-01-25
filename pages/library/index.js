@@ -15,15 +15,19 @@ export default function Library({list}) {
                     name="search"
                     type="text"
                 />
+                <input
+                    name="submit"
+                    type="submit"
+                    value="Search"
+                />
                 <br></br>
 
                 List:
                 <ul>
                     {documents.map((doc, index) => {
-                        // Will implement Link here
                         return (<li>
-                                <a>{doc.document_name}</a>
-                            </li>)
+                                <Link href={"/library/" + doc.document_id}><a>{doc.document_name}, shared: {doc.shared.toString()}</a></Link>
+                                </li>)
                     })}
                 </ul>
             </div>
