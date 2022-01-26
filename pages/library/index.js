@@ -2,21 +2,25 @@
 
 import Link from "next/link";
 import React from "react";
+import { useRouter } from 'next/router'
+import { client_encoding } from "pg/lib/defaults";
 
 export default function Library({list}) {
     const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
     const documents = Array.from(list).sort(compareDocs);
+    const router = useRouter();
+    const searchParam = router.query.search;
+    const searchStr = searchParam ? searchParam : "";
 
-    const search = event => {
+    const handleSubmit= event => {
         event.preventDefault();
-        const searchStr = event.target.value;
-        const newDocsList = documentsList(searchStr);
-        const docsContainer = document.getElementById("docs-container");
-        // TODO: Find out how to replace current docs list with new docs list.
+        const form = new FormData(event.target);
+        const formData = Object.fromEntries(form.entries());
+        const search = formData.search;
     }
 
-    function documentsList(searchStr = "") {
-        const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toString().toLowerCase());
+    function documentsList() {
+        const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toLowerCase());
         return (
             <ul>
                 {documents.filter(filterDocs).map((doc, index) => {
@@ -31,12 +35,13 @@ export default function Library({list}) {
     return (
         <div className="container">
             <div>
-                <input
-                    onInput={search}
-                    name="search"
-                    type="text"
-                    placeholder="Search documents"
-                />
+                <form onSubmit={handleSubmit} method="GET">
+                    <input
+                        name="search"
+                        type="text"
+                    />
+                    <button type="input">Search</button>
+                </form>
                 <br></br>
 
                 List:
