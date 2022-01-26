@@ -1,35 +1,48 @@
 'use strict';
 
 import Link from "next/link";
-
-const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
+import React from "react";
 
 export default function Library({list}) {
-    const documents = Array.from(list);
-    documents.sort(compareDocs);
+    const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
+    const documents = Array.from(list).sort(compareDocs);
+
+    const search = event => {
+        event.preventDefault();
+        const searchStr = event.target.value;
+        const newDocsList = documentsList(searchStr);
+        const docsContainer = document.getElementById("docs-container");
+        // TODO: Find out how to replace current docs list with new docs list.
+    }
+
+    function documentsList(searchStr = "") {
+        const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toString().toLowerCase());
+        return (
+            <ul>
+                {documents.filter(filterDocs).map((doc, index) => {
+                    return (<li key={doc.document_id}>
+                                <Link href={"/library/" + doc.document_id}><a>{doc.document_name}, shared: {doc.shared.toString()}</a></Link>
+                            </li>)
+                })}
+            </ul>
+        );
+    }
 
     return (
         <div className="container">
             <div>
-                <input 
+                <input
+                    onInput={search}
                     name="search"
                     type="text"
-                />
-                <input
-                    name="submit"
-                    type="submit"
-                    value="Search"
+                    placeholder="Search documents"
                 />
                 <br></br>
 
                 List:
-                <ul>
-                    {documents.map((doc, index) => {
-                        return (<li>
-                                <Link href={"/library/" + doc.document_id}><a>{doc.document_name}, shared: {doc.shared.toString()}</a></Link>
-                                </li>)
-                    })}
-                </ul>
+                <div id="docs-container">
+                    {documentsList()}
+                </div>
             </div>
         </div>
     );

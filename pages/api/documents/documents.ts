@@ -4,7 +4,7 @@ import {verify} from "jsonwebtoken";
 import Authenticate from "../user/users"
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
-    const id = 2; // TODO - Need to get member id or member email from request/api
+    const id = 1; // TODO - Need to get member id or member email from request/api
     const adminField = await db.select("admin").from("members").where("member_id", id).first();
     if (adminField) {
         const admin = adminField.admin;
