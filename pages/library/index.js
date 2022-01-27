@@ -4,32 +4,33 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from 'next/router'
 
+function docsList(docs) {
+    return (
+        <ul>
+            {docs.map((doc, index) => {
+                return (<li key={doc.document_id}>
+                            <Link href={`/library/${doc.document_id}`}><a>{doc.document_name}</a></Link>
+                        </li>)
+            })}
+        </ul>
+    );
+}
+
 export default function Library({list}) {
-    const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-    const documents = Array.from(list).sort(compareDocs);
     const router = useRouter();
     const searchParam = router.query.search;
     const searchStr = searchParam ? searchParam : "";
+
+    const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toLowerCase());
+    const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
+    const documents = Array.from(list).filter(filterDocs).sort(compareDocs);
 
     const handleSearch = event => {
         event.preventDefault();
         const search = event.target.value;
 
-        // This causes database reads for each search, not optimal. Need to find alternative.
+        // This causes database reads for each search, not optimal. Should find alternative.
         router.push(`/library?search=${search}`)
-    }
-
-    function documentsList() {
-        const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toLowerCase());
-        return (
-            <ul>
-                {documents.filter(filterDocs).map((doc, index) => {
-                    return (<li key={doc.document_id}>
-                                <Link href={"/library/" + doc.document_id}><a>{doc.document_name}, shared: {doc.shared.toString()}</a></Link>
-                            </li>)
-                })}
-            </ul>
-        );
     }
 
     return (
@@ -45,7 +46,7 @@ export default function Library({list}) {
 
                 List:
                 <div id="docs-container">
-                    {documentsList()}
+                    {docsList(documents)}
                 </div>
             </div>
         </div>

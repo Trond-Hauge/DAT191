@@ -7,7 +7,6 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
     if (req.method === "GET") {
         const id = 1; // TODO - Need to get member id or member email from request/api
         const adminField = await db.select("admin").from("members").where("member_id", id).first();
-        console.log("API");
         if (adminField) {
             const admin = adminField.admin;
 
