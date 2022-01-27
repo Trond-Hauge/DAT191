@@ -3,7 +3,6 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from 'next/router'
-import { client_encoding } from "pg/lib/defaults";
 
 export default function Library({list}) {
     const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
@@ -12,11 +11,12 @@ export default function Library({list}) {
     const searchParam = router.query.search;
     const searchStr = searchParam ? searchParam : "";
 
-    const handleSubmit= event => {
+    const handleSearch = event => {
         event.preventDefault();
-        const form = new FormData(event.target);
-        const formData = Object.fromEntries(form.entries());
-        const search = formData.search;
+        const search = event.target.value;
+
+        // This causes database reads for each search, not optimal. Need to find alternative.
+        router.push(`/library?search=${search}`)
     }
 
     function documentsList() {
@@ -35,13 +35,12 @@ export default function Library({list}) {
     return (
         <div className="container">
             <div>
-                <form onSubmit={handleSubmit} method="GET">
-                    <input
-                        name="search"
-                        type="text"
-                    />
-                    <button type="input">Search</button>
-                </form>
+                <input
+                    onInput={handleSearch}
+                    name="search"
+                    type="text"
+                    placeholder="Search documents"
+                />
                 <br></br>
 
                 List:
