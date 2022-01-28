@@ -3,11 +3,10 @@ import {db} from "../../../db.js";
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
-        const id = 3; // TODO - Need to get member id or member email from request/api
-        const adminField = await db.select("admin").from("members").where("member_id", id).first();
-        if (adminField) {
-            const admin = adminField.admin;
-            if (admin) {
+        const id = 1; // TODO - Need to get member id or member email from request/api
+        const user = await db("members").where("member_id", id).first();
+        if (user) {
+            if (user.admin) {
                 const documents = await db.column("document_id", "document_name").select().from("documents");
                 res.json(documents);
             } else {
