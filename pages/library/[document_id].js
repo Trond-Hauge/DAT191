@@ -12,8 +12,8 @@ export default function Document(document) {
     )
 }
 
-Document.getInitialProps = async () => {
-    const document_id = 4; // TODO: How to get id from url param?
+Document.getInitialProps = async (context) => {
+    const document_id = context.query.document_id;
     const res = await fetch(`http://localhost:3000/api/documents/${document_id}`, {method: "GET"});
     const document = await res.json();
     return document;
