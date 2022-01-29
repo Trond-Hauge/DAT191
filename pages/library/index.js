@@ -20,17 +20,16 @@ export default function Library({list}) {
     const router = useRouter();
     const searchParam = router.query.search;
     const searchStr = searchParam ? searchParam : "";
-
     const filterDocs = doc => doc.document_name.toLowerCase().includes(searchStr.toLowerCase());
     const compareDocs = (d1, d2) => d1.document_name < d2.document_name ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-    const documents = Array.from(list).filter(filterDocs).sort(compareDocs);
+    const documents = Array.from(list).sort(compareDocs).filter(filterDocs);
 
     const handleSearch = event => {
         event.preventDefault();
         const search = event.target.value;
 
         // This causes database reads for each search, not optimal. Should find alternative.
-        router.push(`/library?search=${search}`)
+        router.push(`/library?search=${search}`, undefined, {shallow: true})
     }
 
     return (
@@ -53,7 +52,7 @@ export default function Library({list}) {
     );
 }
 
-Library.getInitialProps = async () => {
+Library.getInitialProps = async (context) => {
     const res = await fetch("http://localhost:3000/api/documents/documents", {method: "GET"}); //There must be a better way.
     const json = await res.json();
     return {list: json};
