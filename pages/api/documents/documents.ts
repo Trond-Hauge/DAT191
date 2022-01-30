@@ -2,7 +2,6 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {db} from "../../../db.js";
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
-    console.log("DATABASE READ");
     if (req.method === "GET") {
         const id = 1; // TODO - Need to get member id or member email from request/api
         const user = await db("members").where("member_id", id).first();

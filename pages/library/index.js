@@ -27,8 +27,6 @@ export default function Library({list}) {
     const handleSearch = event => {
         event.preventDefault();
         const search = event.target.value;
-
-        // This causes database reads for each search, not optimal. Should find alternative.
         router.push(`/library?search=${search}`, undefined, {shallow: true})
     }
 
