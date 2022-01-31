@@ -3,18 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from 'next/router'
-
-function docsList(docs) {
-    return (
-        <ul>
-            {docs.map((doc, index) => {
-                return (<li key={doc.document_id}>
-                            <Link href={`/library/${doc.document_id}`}><a>{doc.document_name}</a></Link>
-                        </li>)
-            })}
-        </ul>
-    );
-}
+import {server} from "../../next.config"
 
 export default function Library({list}) {
     const router = useRouter();
@@ -50,8 +39,20 @@ export default function Library({list}) {
     );
 }
 
+function docsList(docs) {
+    return (
+        <ul>
+            {docs.map((doc, index) => {
+                return (<li key={doc.document_id}>
+                            <Link href={`/library/${doc.document_id}`}><a>{doc.document_name}</a></Link>
+                        </li>)
+            })}
+        </ul>
+    );
+}
+
 Library.getInitialProps = async (context) => {
-    const res = await fetch("http://localhost:3000/api/documents/documents", {method: "GET"}); //There must be a better way.
+    const res = await fetch(`${server}/api/documents/documents`, {method: "GET"}); //There must be a better way.
     const json = await res.json();
     return {list: json};
 }
