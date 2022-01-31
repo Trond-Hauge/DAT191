@@ -8,7 +8,6 @@ import BookImage from "../public/book_1276.jpg";
 export default function Home() {
   return (
     <div className="container">
-      
       <div className="container-flex">
         <div className="container-inner">
           <Link href="/streaming">

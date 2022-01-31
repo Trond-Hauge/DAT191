@@ -8,11 +8,14 @@ const authenticated = (fn: NextApiHandler) => async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    verify(req.headers.authorization!, process.env.JWT_SECRET, async function (err, decoded) {
+    verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
         if (!err && decoded) {
+            console.log("Hippidy-hoppidy!");
+            
             return await fn(req, res);
         }
-
+        console.log("oof!");
+        
         res.status(500).json({ message: "You are not authenticated." });
     })
 };
