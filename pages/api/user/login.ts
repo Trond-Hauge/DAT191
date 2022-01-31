@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import cookie from "cookie";
 
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
@@ -18,8 +19,14 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                 const claims =  {sub: member.member_id, memberEmail: member.email};
                 const jwt = sign(claims, process.env.JWT_SECRET, {expiresIn: "1h"});
 
-                res.setHeader("authorization", jwt);
-                res.json({authToken: jwt});
+                res.setHeader("Set-Cookie", cookie.serialize("auth", jwt, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV !== "development",
+                    sameSite: "strict",
+                    maxAge: 3600, //1h 
+                    path: "/", //root of domain
+                }));
+                res.json({message: "Welcome back to the app!"});
             } else {
                 res.json({message: "Oof."});
             }

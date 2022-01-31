@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 
 export function Header() {
+  //<LoginForm />
   return (
     <div className="navbar">
       <div className="nav-container-left">
@@ -91,7 +92,7 @@ function LoggedIn() {
     <div className="dropdown">
       <button className="dropdown-button">Sign In</button>
       <div className="dropdown-content">
-        
+
       </div>
     </div>
   );

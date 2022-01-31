@@ -1,16 +1,40 @@
 "use strict";
-//import {authenticated} from ".//api/user/users"
 
-export default function Streaming() {
-  //const res = await fetch("http://localhost:3000/api/documents/documents", {method: "POST"});
+import { NextPageContext } from "next";
+import Router from "next/router";
+
+export default function Streaming({ context }: any) {
+  //
   return (
     <div>
       <p>Page for streaming!</p>
+      <p>{JSON.stringify(context)}</p>
     </div>
   );
 };
 
-//Streaming.getInitialProps
+Streaming.getInitialProps = async (ctx: NextPageContext) => {
+  const cookie = ctx.req?.headers.cookie;
 
-// Follow: https://dev.to/ivandotv/protecting-static-pages-in-next-js-application-1e50
-Streaming.requireAuthentication = true;
+  const response = await fetch("http://localhost:3000/api/streaming", {
+    headers: {
+      cookie: cookie!
+    }
+  });
+
+  // Hard redirect
+  if (response.status === 401 && !ctx.req) {
+    Router.replace("/user/login");
+    return {}; // Necessary "{}" !! Removes last page from history, though.
+  }
+
+  // Soft redirect
+  if (response.status === 401 && ctx.req) {
+    ctx.res?.writeHead(302, { Location: "http://localhost:3000/user/login" }); // PLACEHOLDER LOCATION!!! Use Link instead?
+    ctx.res?.end();
+    return;
+  }
+
+  const json = await response.json();
+  return { context: json };
+}
