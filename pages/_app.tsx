@@ -1,19 +1,10 @@
-import Header from "../components/header";
-import { server } from "../next.config";
-
-import { NextPageContext } from "next";
-
-
 import "../styles/globals.css";
 import "../styles/navigation.css";
 import "../styles/normalize.css";
 
-export default function MyApp({ Component, pageProps }, ctx : NextPageContext)  {
-  const cookie = ctx.req?.headers.cookie;
-
+export default function MyApp({ Component, pageProps })  {
   return (
     <div>
-      {Header(cookie)}
       <Component {...pageProps} />
     </div>
   );

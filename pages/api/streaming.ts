@@ -7,8 +7,7 @@ import { verify } from "jsonwebtoken";
 const authenticator = (fn: NextApiHandler) => async (
     req: NextApiRequest,
     res: NextApiResponse
-) => {
-    //const router = useRouter();
+) => {    
     verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {        
         if (!err && decoded) {
 

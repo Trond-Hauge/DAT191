@@ -4,10 +4,15 @@ import { NextPageContext } from "next";
 import Router from "next/router";
 import {server} from "../next.config";
 
+import Header from "../components/header";
 
-export default function Streaming({ context }: any) {
+
+export default function Streaming({ context, isCookie }: any) {
+  console.log("Streaming-cookie = ", isCookie);
+  
   return (
     <div>
+      {Header(isCookie)}
       <p>Page for streaming!</p>
       <p>{JSON.stringify(context)}</p>
     </div>
@@ -15,7 +20,11 @@ export default function Streaming({ context }: any) {
 };
 
 Streaming.getInitialProps = async (ctx: NextPageContext) => {
-  const cookie = ctx.req?.headers.cookie;  
+  const cookie = await ctx.req?.headers.cookie;  
+  const isCookie = await ctx.req?.headers.cookie != undefined;
+
+  console.log("Kakefaen",cookie);
+  
 
   const response = await fetch(`${server}/api/streaming`, {
     headers: {
@@ -37,5 +46,8 @@ Streaming.getInitialProps = async (ctx: NextPageContext) => {
   }  
 
   const json = await response.json();
-  return { context: json };
+  return {
+    context: json,
+    isCookie
+  };
 }

@@ -2,12 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { NextPageContext } from "next";
+
+import Header from "../components/header";
+
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home() {
+export default function Home({isCookie}: any) {
   return (
     <div className="container">
+    {Header(isCookie)}
       <div className="container-flex">
         <div className="container-inner">
           <Link href="/streaming">
@@ -42,4 +47,13 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+
+Home.getInitialProps  = async (ctx: NextPageContext) => {
+  const isCookie = ctx.req?.headers.cookie != undefined;
+  
+  console.log("is? = ",isCookie);
+  
+  return await {isCookie};
 }

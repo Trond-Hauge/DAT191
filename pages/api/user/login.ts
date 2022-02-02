@@ -23,7 +23,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== "development",
                     sameSite: "strict",
-                    maxAge: 3600, //1h 
+                    maxAge: 3600, //1h
                     path: "/", //root of domain
                 }));
                 res.json({message: "Welcome back to the app!"});

@@ -5,22 +5,13 @@ import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(cookie) {  
-  
-  let greie;
-
-  //useEffect from React
-  
-  cookieValue(cookie).then(json => {
-    greie = json;
-  });
-
-  console.log("Outside",greie);
+export default function Header(boolski?) {
+  console.log(boolski);
   
 
   let button;
-
-  if (false){
+  
+  if (boolski) {
     button = Account();
   } else {
     button = SignIn();
