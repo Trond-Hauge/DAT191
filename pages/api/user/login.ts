@@ -32,13 +32,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             }
         });
 
-       
-        // If it doesn't work, check: https://www.youtube.com/watch?v=R1f43FmHu7w&ab_channel=WalkThroughCode
-
     } else {
         res.status(405).json({ message: "The request was not a POST request!" });
     }
 }
-
-// For the login part:
-// Continue tutorial at 32:00 : https://www.youtube.com/watch?v=j4Tob0KDbuQ&ab_channel=BrunoAntunes

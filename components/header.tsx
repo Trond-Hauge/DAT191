@@ -2,9 +2,30 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { server } from "../next.config";
 
-export function Header() {
-  //<LoginForm />
+
+export default function Header(cookie) {  
+  
+  let greie;
+
+  //useEffect from React
+  
+  cookieValue(cookie).then(json => {
+    greie = json;
+  });
+
+  console.log("Outside",greie);
+  
+
+  let button;
+
+  if (false){
+    button = Account();
+  } else {
+    button = SignIn();
+  }
+
   return (
     <div className="navbar">
       <div className="nav-container-left">
@@ -21,23 +42,37 @@ export function Header() {
           </li>
         </ul>
       </div>
-
       <div className="nav-container-right">
         <ul className="nav-right">
-          <LoginForm />
+          {button}
         </ul>
       </div >
     </div >
   );
 }
 
-function LoginForm() {
+async function cookieValue (cookie) {
+  console.log("HELLO! I JUST ARRIVED!!");
+  
+  const response = await fetch(`${server}/api/user/isLoggedIn`, {
+    headers: {
+      cookie: cookie!
+    }
+  });
+  const json = await response.json();
+  console.log("Inside",json.loggedIn);
+  
+  return json?.loggedIn;
+}
+
+function SignIn() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<any>(null);
 
   async function handleForm() {
-    const respt = await fetch("http://localhost:3000/api/user/login", {
+
+    const response = await fetch(`${server}/api/user/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -46,12 +81,9 @@ function LoginForm() {
       })
     });
 
-    const json = await respt.json();
+    const json = await response.json();
     setMessage(json);
-
-    // FOR TESTING!!
-    console.log(message);
-  }
+  }  
 
   return (
     <div className="dropdown">
@@ -87,12 +119,12 @@ function LoginForm() {
   );
 }
 
-function LoggedIn() {
+function Account() {
   return (
     <div className="dropdown">
-      <button className="dropdown-button">Sign In</button>
+      <button className="dropdown-button">Account</button>
       <div className="dropdown-content">
-
+        <p>Akka bakka!</p>
       </div>
     </div>
   );

@@ -2,9 +2,10 @@
 
 import { NextPageContext } from "next";
 import Router from "next/router";
+import {server} from "../next.config";
+
 
 export default function Streaming({ context }: any) {
-  //
   return (
     <div>
       <p>Page for streaming!</p>
@@ -14,9 +15,9 @@ export default function Streaming({ context }: any) {
 };
 
 Streaming.getInitialProps = async (ctx: NextPageContext) => {
-  const cookie = ctx.req?.headers.cookie;
+  const cookie = ctx.req?.headers.cookie;  
 
-  const response = await fetch("http://localhost:3000/api/streaming", {
+  const response = await fetch(`${server}/api/streaming`, {
     headers: {
       cookie: cookie!
     }
@@ -30,10 +31,10 @@ Streaming.getInitialProps = async (ctx: NextPageContext) => {
 
   // Soft redirect
   if (response.status === 401 && ctx.req) {
-    ctx.res?.writeHead(302, { Location: "http://localhost:3000/user/login" }); // PLACEHOLDER LOCATION!!! Use Link instead?
+    ctx.res?.writeHead(302, { Location: `${server}/user/login` }); // PLACEHOLDER LOCATION!!! Use Link instead?
     ctx.res?.end();
     return;
-  }
+  }  
 
   const json = await response.json();
   return { context: json };
