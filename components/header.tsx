@@ -5,8 +5,8 @@ import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(boolski?) {
-  console.log(boolski);
+export default function Header(boolski) {
+  console.log("Boolean input:", boolski);
   
 
   let button;

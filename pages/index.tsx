@@ -9,10 +9,13 @@ import Header from "../components/header";
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home({isCookie}: any) {
+export default function Home({cookie}) {
+  const isCookie = cookie != undefined;
+  console.log("Cookie found:", isCookie);
+  
   return (
     <div className="container">
-    {Header(isCookie)}
+    {Header(isCookie!)}
       <div className="container-flex">
         <div className="container-inner">
           <Link href="/streaming">
@@ -49,11 +52,7 @@ export default function Home({isCookie}: any) {
   );
 }
 
-
 Home.getInitialProps  = async (ctx: NextPageContext) => {
-  const isCookie = ctx.req?.headers.cookie != undefined;
-  
-  console.log("is? = ",isCookie);
-  
-  return await {isCookie};
+  const cookie = ctx.req?.headers.cookie;  
+  return {cookie};
 }
