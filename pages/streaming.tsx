@@ -40,7 +40,7 @@ Streaming.getInitialProps = async (ctx: NextPageContext) => {
 
   // Soft redirect
   if (response.status === 401 && ctx.req) {
-    ctx.res?.writeHead(302, { Location: `${server}/user/login` }); // PLACEHOLDER LOCATION!!! Use Link instead?
+    ctx.res?.writeHead(302, { Location: `${server}/user/login` });
     ctx.res?.end();
     return;
   }  

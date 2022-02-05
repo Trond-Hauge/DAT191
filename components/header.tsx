@@ -7,10 +7,10 @@ import { server } from "../next.config";
 
 export default function Header(boolski) {
   console.log("Boolean input:", boolski);
-  
+
 
   let button;
-  
+
   if (boolski) {
     button = Account();
   } else {
@@ -42,17 +42,17 @@ export default function Header(boolski) {
   );
 }
 
-async function cookieValue (cookie) {
+async function cookieValue(cookie) {
   console.log("HELLO! I JUST ARRIVED!!");
-  
+
   const response = await fetch(`${server}/api/user/isLoggedIn`, {
     headers: {
       cookie: cookie!
     }
   });
   const json = await response.json();
-  console.log("Inside",json.loggedIn);
-  
+  console.log("Inside", json.loggedIn);
+
   return json?.loggedIn;
 }
 
@@ -74,29 +74,25 @@ function SignIn() {
 
     const json = await response.json();
     setMessage(json);
-  }  
+  }
 
   return (
     <div className="dropdown">
       <button className="dropdown-button">Sign In</button>
       <div className="dropdown-content">
         <div className="sign-in-form">
-          <div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Your email address"
-              ref={emailRef}
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              ref={passRef}
-            />
-          </div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Your email address"
+            ref={emailRef}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Your password"
+            ref={passRef}
+          />
           <button className="submit-button" onClick={handleForm}>
             Submit
           </button>
