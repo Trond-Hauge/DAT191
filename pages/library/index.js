@@ -1,11 +1,11 @@
 'use strict';
 
+import Header from "../../components/header";
 import Link from "next/link";
-import React from "react";
-import { useRouter } from 'next/router'
-import {server} from "../../next.config"
+import {useRouter} from "next/router";
+import {server} from "../../next.config";
 
-export default function Library({list}) {
+export default function Library({list, isCookie}) {
     const router = useRouter();
     const searchParam = router.query.search;
     const searchStr = searchParam ? searchParam : "";
@@ -16,12 +16,14 @@ export default function Library({list}) {
     const handleSearch = event => {
         event.preventDefault();
         const search = event.target.value;
-        router.push(`/library?search=${search}`, undefined, {shallow: true})
+        router.push(`/library?search=${search}`, undefined, {shallow: true});
     }
 
     return (
         <div className="container">
-            <div>
+            {Header(isCookie)}
+
+            <div id="input-container">
                 <input
                     onInput={handleSearch}
                     name="search"
@@ -29,30 +31,51 @@ export default function Library({list}) {
                     placeholder="Search documents"
                 />
                 <br></br>
-
-                List:
-                <div id="docs-container">
-                    {docsList(documents)}
-                </div>
             </div>
+
+            List:
+            {docsList(documents)}
+
         </div>
     );
 }
 
 function docsList(docs) {
     return (
-        <ul>
+        <div className="docs-container">
             {docs.map((doc, index) => {
-                return (<li key={doc.document_id}>
-                            <Link href={`/library/${doc.document_id}`}><a>{doc.document_name}</a></Link>
-                        </li>)
+                const desc = doc.document_description.length > 130 ? doc.document_description.substring(0,130) + "..." : doc.document_description;
+                return (
+                    <Link href={`/library/${doc.document_id}`}>
+                        <div className="card">
+                            <div className="publishers">
+                                <h3>Author of doc</h3>
+                                <h4>Institution of publishment</h4>
+                            </div>
+
+                            <div className="title">
+                                <h4>{doc.document_name}</h4>
+                            </div>
+
+                            <div className="description">
+                                <p>{desc}</p>
+                            </div>
+                        </div>
+                    </Link>
+                )
             })}
-        </ul>
+        </div>
     );
 }
 
 Library.getInitialProps = async (context) => {
-    const res = await fetch(`${server}/api/documents/documents`, {method: "GET"}); //There must be a better way.
+    const cookie = context.req?.headers.cookie;
+    const res = await fetch(`${server}/api/documents/documents`, {
+        method: "GET",
+        headers: {cookie: cookie}
+    });
+
+    const isCookie = cookie ? true : false;
     const json = await res.json();
-    return {list: json};
+    return {list: json, isCookie: isCookie};
 }

@@ -1,9 +1,10 @@
 "use strict";
 
+import Header from "../../components/header";
 import {useRouter} from "next/router"
 import {server} from "../../next.config"
 
-export default function Document({document}) {
+export default function Document({document, isCookie}) {
     const router = useRouter();
 
     const handleUpdate = async event => {
@@ -19,15 +20,16 @@ export default function Document({document}) {
 
     return (
         <div className="container">
+            {Header(isCookie)}
 
-        <form onSubmit={handleUpdate}>
-            <input
-                name="newName"
-                type="text"
-                placeholder="New Name"
-            />
-            <button type="submit">Update document</button>
-        </form>
+            <form onSubmit={handleUpdate}>
+                <input
+                    name="newName"
+                    type="text"
+                    placeholder="New Name"
+                />
+                <button type="submit">Update document</button>
+            </form>
 
             Document page for: {document.document_name}
         </div>
@@ -35,8 +37,14 @@ export default function Document({document}) {
 }
 
 Document.getInitialProps = async (context) => {
+    const cookie = context.req?.headers.cookie;
     const document_id = context.query.document_id;
-    const res = await fetch(`${server}/api/documents/${document_id}`, {method: "GET"});
+    const res = await fetch(`${server}/api/documents/${document_id}`, {
+        method: "GET", 
+        headers: {cookie: cookie}
+    });
+
+    const isCookie = cookie ? true : false;
     const json = await res.json();
-    return {document: json};
+    return {document: json, isCookie: isCookie};
 }

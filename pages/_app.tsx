@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import "../styles/navigation.css";
 import "../styles/normalize.css";
+import "../styles/library.css";
 
 export default function MyApp({ Component, pageProps })  {
   return (
