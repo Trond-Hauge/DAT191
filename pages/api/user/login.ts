@@ -26,9 +26,9 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                     maxAge: 3600, //1h
                     path: "/", //root of domain
                 }));
-                res.json({message: "Welcome back to the app!"});
+                res.json({ loggedIn: true });
             } else {
-                res.json({message: "Oof."});
+                res.json({ loggedIn: false });
             }
         });
 

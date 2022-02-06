@@ -5,17 +5,8 @@ import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(boolski) {
-  console.log("Boolean input:", boolski);
-
-
-  let button;
-
-  if (boolski) {
-    button = Account();
-  } else {
-    button = SignIn();
-  }
+export default function Header(bool) {
+  console.log("Boolean input:", bool);
 
   return (
     <div className="navbar">
@@ -35,33 +26,25 @@ export default function Header(boolski) {
       </div>
       <div className="nav-container-right">
         <ul className="nav-right">
-          {button}
+          {SignIn(bool)}
         </ul>
       </div >
     </div >
   );
 }
 
-async function cookieValue(cookie) {
-  console.log("HELLO! I JUST ARRIVED!!");
 
-  const response = await fetch(`${server}/api/user/isLoggedIn`, {
-    headers: {
-      cookie: cookie!
-    }
-  });
-  const json = await response.json();
-  console.log("Inside", json.loggedIn);
-
-  return json?.loggedIn;
-}
-
-function SignIn() {
+// Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
+function SignIn(bool) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const [message, setMessage] = useState<any>(null);
+  const [loggedIn, setLoggedIn] = useState(bool);
+  const [open, setOpen] = useState();
+
 
   async function handleForm() {
+    console.log("STARTING!");
+    
 
     const response = await fetch(`${server}/api/user/login`, {
       method: 'POST',
@@ -72,13 +55,28 @@ function SignIn() {
       })
     });
 
+    console.log("HELLO!!!");
+    
+
     const json = await response.json();
-    setMessage(json);
+    setLoggedIn(json.loggedIn);
+    console.log("Fetched: ", json.loggedIn, " - Type: ", typeof json.loggedIn);
+  }
+
+  if (loggedIn) {
+    return (
+      <div className="dropdown">
+        <button className="dropdown-button">Account</button>
+        <div className="dropdown-content">
+          <p>Akka bakka!</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="dropdown">
-      <button className="dropdown-button">Sign In</button>
+      <a className="dropdown-button">Sign In</a>
       <div className="dropdown-content">
         <div className="sign-in-form">
           <input
@@ -101,17 +99,6 @@ function SignIn() {
             <a>Create Account</a>
           </Link>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function Account() {
-  return (
-    <div className="dropdown">
-      <button className="dropdown-button">Account</button>
-      <div className="dropdown-content">
-        <p>Akka bakka!</p>
       </div>
     </div>
   );
