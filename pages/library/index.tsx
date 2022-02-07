@@ -55,14 +55,14 @@ function docsList(docs) {
     );
 }
 
-Library.getInitialProps = async (context) => {
+export async function getServerSideProps(context) {
     const cookie = context.req?.headers.cookie;
     const res = await fetch(`${server}/api/documents/documents`, {
         method: "GET",
         headers: { cookie: cookie }
     });
 
-    const isCookie = cookie ? true : false;
     const json = await res.json();
-    return { list: json, isCookie: isCookie };
+    const isCookie = cookie ? true : false;
+    return { props: { list: json, isCookie: isCookie } };
 }

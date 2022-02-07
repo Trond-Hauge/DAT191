@@ -35,7 +35,7 @@ input {
 
 /* MAIN BODY */
 main {
-  top: var(--nav-height);
+  margin-top: var(--nav-height);
   min-height: calc(100vh - var(--nav-height));
 }
 

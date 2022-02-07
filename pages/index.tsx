@@ -2,20 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { NextPageContext } from "next";
 
 import Header from "../components/header";
 
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home({ cookie }) {
-  const isCookie = cookie != undefined;
-  console.log("Cookie found:", isCookie);
-
+export default function Home({isCookie}) {
+  console.log("Home: ", isCookie);
+  
   return (
     <>
-      {Header(isCookie!)}
+      {Header(isCookie)}
       <main>
         <div className="home-container-flex">
           <div className="container-inner">
@@ -54,7 +52,8 @@ export default function Home({ cookie }) {
   );
 }
 
-Home.getInitialProps = async (ctx: NextPageContext) => {
-  const cookie = ctx.req?.headers.cookie;
-  return { cookie };
+export async function getServerSideProps (context) {
+  const cookie = context.req?.headers.cookie;
+  const isCookie = cookie ? true : false;  
+  return { props: {isCookie} };
 }

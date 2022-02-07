@@ -1,12 +1,13 @@
 "use strict";
 
 import Link from "next/link";
+import Router from "next/router";
 import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(bool) {
-  console.log("Boolean input:", bool);
+export default function Header(isCookie) {
+  console.log("Boolean input:", isCookie);
 
   return (
     <div className="navbar">
@@ -26,7 +27,7 @@ export default function Header(bool) {
       </div>
       <div className="nav-container-right">
         <ul className="nav-right">
-          {SignIn(bool)}
+          {SignIn(isCookie)}
         </ul>
       </div >
     </div >
@@ -35,16 +36,14 @@ export default function Header(bool) {
 
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
-function SignIn(bool) {
+function SignIn(isCookie) {  
+  console.log("is bool? ",isCookie);
+  
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const [loggedIn, setLoggedIn] = useState(bool);
-  const [open, setOpen] = useState();
-
-
-  async function handleForm() {
-    console.log("STARTING!");
-    
+  const [open, setOpen] = useState(false);  
+  
+  async function handleForm() {    
 
     const response = await fetch(`${server}/api/user/login`, {
       method: 'POST',
@@ -55,18 +54,17 @@ function SignIn(bool) {
       })
     });
 
-    console.log("HELLO!!!");
-    
-
     const json = await response.json();
-    setLoggedIn(json.loggedIn);
-    console.log("Fetched: ", json.loggedIn, " - Type: ", typeof json.loggedIn);
+
+    if (json.loggedIn) {
+      Router.reload();
+    }
   }
 
-  if (loggedIn) {
+  if (isCookie) {
     return (
       <div className="dropdown">
-        <button className="dropdown-button">Account</button>
+        <a className="dropdown-button" onClick={() => setOpen(!open)}>Account</a>
         <div className="dropdown-content">
           <p>Akka bakka!</p>
         </div>
@@ -76,7 +74,8 @@ function SignIn(bool) {
 
   return (
     <div className="dropdown">
-      <a className="dropdown-button">Sign In</a>
+      <a className="dropdown-button" onClick={() => setOpen(!open)}>Sign In</a>
+      {open}
       <div className="dropdown-content">
         <div className="sign-in-form">
           <input
