@@ -7,7 +7,7 @@ export function fileCard(doc) {
             <div className="file-card">
                 <h2>{doc.organisation_name}</h2>
                 <br></br>
-                <h2>{doc.first_name}</h2>
+                <h2>{doc.first_name} {doc.last_name}</h2>
                 <br></br>
                 <h3>{doc.document_name}</h3>
                 <p>{desc}</p>
