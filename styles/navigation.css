@@ -73,8 +73,8 @@ hr {
   background-color: var(--glass);
   min-width: 15vw;
   z-index: 1;
-  display: none;
   position: fixed;
+  display: block;
   top: var(--nav-height);
 }
 
@@ -88,10 +88,6 @@ hr {
 .dropdown-button:hover {
   color: #d0dff0;
   border-bottom: 1px solid #d0dff0;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
 }
 
 .sign-in-form {

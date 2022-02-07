@@ -54,7 +54,6 @@ main {
   align-self: center;
   height: 80vh;
   width: calc(80vh / 1.62);
-  max-height: 80vh;
   margin: 2rem;
   position: relative;
   box-shadow: 0 0 1vh .1vh var(--dark);

@@ -9,11 +9,11 @@ import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
 export default function Home({isCookie}) {
-  console.log("Home: ", isCookie);
+  //console.log("Home: ", isCookie);
   
   return (
     <>
-      {Header(isCookie)}
+    {Header(isCookie)}
       <main>
         <div className="home-container-flex">
           <div className="container-inner">
@@ -52,8 +52,9 @@ export default function Home({isCookie}) {
   );
 }
 
-export async function getServerSideProps (context) {
-  const cookie = context.req?.headers.cookie;
+export async function getServerSideProps (appContext) {
+  const cookie = appContext.req?.headers.cookie;
+  
   const isCookie = cookie ? true : false;  
   return { props: {isCookie} };
 }

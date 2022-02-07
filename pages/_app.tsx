@@ -2,13 +2,12 @@ import "../styles/globals.css";
 import "../styles/navigation.css";
 import "../styles/normalize.css";
 import "../styles/library.css";
+import Layout from "../components/layout";
 
-export default function MyApp({ Component, pageProps })  {
+export default function MyApp({ Component, pageProps }) {
   return (
-    <div>
+    <Layout>
       <Component {...pageProps} />
-    </div>
+    </Layout>
   );
 }
-
-// An authenticator, that may be used for more than just the header

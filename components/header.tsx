@@ -6,8 +6,10 @@ import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(isCookie) {
-  console.log("Boolean input:", isCookie);
+export default function Header(cookies) {
+  console.log("Boolean input:", cookies);
+
+  const isCookie = cookies ? true : false;
 
   return (
     <div className="navbar">
@@ -36,14 +38,14 @@ export default function Header(isCookie) {
 
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
-function SignIn(isCookie) {  
-  console.log("is bool? ",isCookie);
-  
+function SignIn(isCookie) {
+  console.log("is bool? ", isCookie);
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const [open, setOpen] = useState(false);  
-  
-  async function handleForm() {    
+  const [open, setOpen] = useState(false);
+
+  async function handleForm() {
 
     const response = await fetch(`${server}/api/user/login`, {
       method: 'POST',
@@ -65,9 +67,11 @@ function SignIn(isCookie) {
     return (
       <div className="dropdown">
         <a className="dropdown-button" onClick={() => setOpen(!open)}>Account</a>
-        <div className="dropdown-content">
-          <p>Akka bakka!</p>
-        </div>
+        {open &&
+          <div className="dropdown-content">
+            <p>Akka bakka!</p>
+          </div>
+        }
       </div>
     );
   }
@@ -75,30 +79,31 @@ function SignIn(isCookie) {
   return (
     <div className="dropdown">
       <a className="dropdown-button" onClick={() => setOpen(!open)}>Sign In</a>
-      {open}
-      <div className="dropdown-content">
-        <div className="sign-in-form">
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email address"
-            ref={emailRef}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Your password"
-            ref={passRef}
-          />
-          <button className="submit-button" onClick={handleForm}>
-            Submit
-          </button>
-          <hr />
-          <Link href="/register">
-            <a>Create Account</a>
-          </Link>
+      {open &&
+        <div className="dropdown-content">
+          <div className="sign-in-form">
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              ref={emailRef}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Your password"
+              ref={passRef}
+            />
+            <button className="submit-button" onClick={handleForm}>
+              Submit
+            </button>
+            <hr />
+            <Link href="/register">
+              <a>Create Account</a>
+            </Link>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }
