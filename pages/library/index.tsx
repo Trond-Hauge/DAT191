@@ -5,20 +5,19 @@ import { fileCard } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
 
+let titleSearch = "";
+let orgSearch = "";
+let authorSearch = "";
 
 export default function Library({ list, isCookie }) {
-    let titleSearch = "";
-    let orgSearch = "";
-    let authorSearch = "";
-
     let documents = Array.from(list).sort(compareDocs);
 
     const router = useRouter();
     const {title, org, author} = router.query;
 
     if (title) documents = documents.filter(doc => filterByTitle(doc, title));
-    if (org) documents = documents.filter(doc => {});
-    if (author) documents = documents.filter(doc => {});
+    if (org) documents = documents.filter(doc => filterByOrg(doc, org));
+    if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
 
     const handleChange = e => {
         e.preventDefault();
@@ -58,6 +57,11 @@ export default function Library({ list, isCookie }) {
                             type="text"
                             placeholder="Search by organisation"
                         />
+                        <input
+                            name="author"
+                            type="text"
+                            placeholder="Search by author"
+                        />
                     </form>
                 </div>
                 <div className="card-space">
@@ -70,6 +74,20 @@ export default function Library({ list, isCookie }) {
 
 const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
 const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
+const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
+const filterByAuthor = (doc, author) => {
+    let check = false;
+    const names = author.split(" ");
+    check = doc.first_name.toLowerCase().includes(author.toLowerCase()) ||
+        doc.last_name.toLowerCase().includes(author.toLowerCase());
+
+    if (!check && names.length > 1) {
+        check = names.some( name => doc.first_name.toLowerCase().includes(name.toLowerCase()) );
+        if (!check) check = names.some( name => doc.last_name.toLowerCase().includes(name.toLowerCase()) );
+    }
+
+    return check;
+}
 
 function docsList(docs) {
     return (
