@@ -1,11 +1,14 @@
 :root {
   --dark: rgba(30, 30, 30, 0.7);
   --light: rgba(255, 255, 255, 0.9);
+  --glass: rgba(255, 255, 255, 0.5);
   --bgGradient: linear-gradient(-43deg, #ffffff, #d0dff0);
+  --nav-height: 3rem;
 }
 
 html,
 body, #__next {
+  min-height: 100%;
   color: var(--dark);
   background: var(--bgGradient);
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -21,27 +24,28 @@ body, #__next {
 }
 
 a:hover{
-  color: rgb(255, 255, 255);
+  color: white;
 }
 
 input {
   border-width: 0 0 1px;
   background-color: transparent;
-  color: var(--light);
+  color: inherit;
 }
 
 /* MAIN BODY */
-.container {
-  min-height: 95vh;
+main {
+  top: var(--nav-height);
+  min-height: calc(100vh - var(--nav-height));
 }
 
-.container-flex {
+.home-container-flex {
   display: flex;
   justify-content: center;
   align-content: center;
-  height: 95vh;
+  height: calc(100vh - var(--nav-height));
   padding: 2rem;
-  /*margin-top: -5vh;*/
+  margin-top: var(--nav-height);
   z-index: 0;
 }
 
