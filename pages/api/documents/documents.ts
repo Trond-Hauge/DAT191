@@ -8,10 +8,17 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
         const user = await db("members").where("member_id", id).first();
         if (user) {
             if (user.admin) {
-                const documents = await db.column("document_id", "document_name", "document_description").select().from("documents");
+                const documents = await db.select("*").from("documents")
+                .leftJoin("members", "documents.owner", "members.member_id")
+                .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
+                .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
                 res.json(documents);
             } else {
-                const documents = await db.column("document_id", "document_name", "document_description").select().from("documents").where("shared", true).orWhere("owner", id);
+                const documents = await db.select("*").from("documents")
+                .leftJoin("members", "documents.owner", "members.member_id")
+                .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
+                .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
+                .where("shared", true).orWhere("owner", id);
                 res.json(documents);
             }
         } else {

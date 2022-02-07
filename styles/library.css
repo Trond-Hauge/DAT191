@@ -1,7 +1,7 @@
 :root {
     --side-bar-width: 15rem;
     --card-width: 15rem;
-    --card-height: calc(var(--card-width) * 1.62)
+    --card-height: calc(var(--card-width) * 1.5)
 }
 
 /* W3 for more - especially layering, and think about scalability for mobile: https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp */
