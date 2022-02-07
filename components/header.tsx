@@ -6,11 +6,7 @@ import { useRef, useState } from "react";
 import { server } from "../next.config";
 
 
-export default function Header(cookies) {
-  console.log("Boolean input:", cookies);
-
-  const isCookie = cookies ? true : false;
-
+export default function Header(isCookie) {
   return (
     <div className="navbar">
       <div className="nav-container-left">
