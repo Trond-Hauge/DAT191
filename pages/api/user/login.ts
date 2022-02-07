@@ -9,9 +9,7 @@ import cookie from "cookie";
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const member = await db("members").where("email", req.body.email as string).select("*").first();
-
-        console.log(member.password);
-        
+                
         // ToDo: All the other logic. F.ex. catching empty return, where user was not found.
         compare(req.body.password, member.password, function (err, result) {
             if(!err && result) {

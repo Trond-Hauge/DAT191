@@ -59,6 +59,12 @@ function SignIn(isCookie) {
     }
   }
 
+  async function logout() {
+    await fetch(`${server}/api/user/logout`);
+    Router.reload();
+    
+  }
+
   if (isCookie) {
     return (
       <div className="dropdown">
@@ -66,6 +72,7 @@ function SignIn(isCookie) {
         {open &&
           <div className="dropdown-content">
             <p>Akka bakka!</p>
+            <a onClick={logout}>Log out</a>
           </div>
         }
       </div>
