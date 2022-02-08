@@ -16,7 +16,7 @@ const Register = () => {
      const submit = async (e) => {
         e.preventDefault();
 
-        await fetch('http://localhost:3000/api/user/register-user', {
+        await fetch('http://localhost:3000/pages/api/user/register-user', {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -28,14 +28,12 @@ const Register = () => {
             })
         });
 
-        await router.push('/');
+        await router.push('/user/login');
     }
-
     return (
+
                  <div className="sign-in-form">
-                      {Header()}
-            
-    
+                     
            <form onSubmit={submit}>
                 <h1>Create Account</h1>
             <div>
@@ -70,6 +68,5 @@ const Register = () => {
             </div>
     );
 };
-
 
 export default Register;
