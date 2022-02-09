@@ -1,7 +1,10 @@
 :root {
   --dark: rgba(30, 30, 30, 0.7);
+  --dark-select: rgba(50, 50, 50, 0.7);
   --light: rgba(255, 255, 255, 0.9);
+  --light-select: rgba(230, 230, 230, 0.9);
   --glass: rgba(255, 255, 255, 0.5);
+  --glass-select: rgba(230, 230, 230, 0.5);
   --bgGradient: linear-gradient(-43deg, #ffffff, #d0dff0);
   --nav-height: 3rem;
 }
@@ -23,6 +26,14 @@ body, #__next {
   text-decoration: none;
 }
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1rem 0;
+  padding: 0;
+}
+
 a:hover{
   color: white;
 }
@@ -37,6 +48,10 @@ input {
 main {
   margin-top: var(--nav-height);
   min-height: calc(100vh - var(--nav-height));
+}
+
+.main-content {
+  margin: 7rem;
 }
 
 .home-container-flex {

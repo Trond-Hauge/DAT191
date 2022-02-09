@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import Header from "../../components/header";
 
-export default function Login() {
+
+export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<any>(null);
@@ -26,9 +28,10 @@ export default function Login() {
   }
 
   return (
-    <div className="container">
-      <div className="sign-in-form">
-        <div>
+    <>
+      {Header(isCookie)}
+      <main>
+        <div className="main-content">
           <input
             type="email"
             name="email"
@@ -51,7 +54,14 @@ export default function Login() {
         <Link href="/register">
           <a>Create Account</a>
         </Link>
-      </div>
-    </div>
+      </main>
+    </>
   );
+}
+
+export async function getServerSideProps(appContext) {
+  const cookie = appContext.req?.headers.cookie;
+
+  const isCookie = cookie ? true : false;
+  return { props: { isCookie } };
 }
