@@ -36,6 +36,31 @@
     text-align: center;
 }
 
+.inner-card-container {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
 .file-card:hover {
     box-shadow: inset 0 0 2rem 2rem var(--light);
+}
+
+.desc {
+    text-align: left;
+}
+
+.author {
+    text-align: center;
+    height: 15%;
+}
+
+.title {
+    text-align: center;
+}
+
+.org {
+    text-align: center;
+    height: 20%;
 }
