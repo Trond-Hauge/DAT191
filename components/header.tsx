@@ -71,7 +71,10 @@ function SignIn(isCookie) {
         <a className="dropdown-button" onClick={() => setOpen(!open)}>Account</a>
         {open &&
           <div className="dropdown-content">
-            <p>Akka bakka!</p>
+            <a>Account Settings</a>
+            <a>Your Publications</a>
+            <a>Meetings</a>
+            <hr/>
             <a onClick={logout}>Log out</a>
           </div>
         }
@@ -97,10 +100,10 @@ function SignIn(isCookie) {
               placeholder="Your password"
               ref={passRef}
             />
-            <button className="submit-button" onClick={handleForm}>
+            <a onClick={handleForm} type="button">
               Submit
-            </button>
-            <hr />
+            </a>
+            <hr/>
             <Link href="/register">
               <a>Create Account</a>
             </Link>
