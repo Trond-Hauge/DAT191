@@ -6,6 +6,7 @@
   --glass: rgba(255, 255, 255, 0.5);
   --glass-select: rgba(230, 230, 230, 0.5);
   --bgGradient: linear-gradient(-43deg, #ffffff, #d0dff0);
+  --bgShadow: #a9b5c4;
   --nav-height: 3rem;
 }
 
@@ -66,18 +67,21 @@ main {
 
 .container-inner {
   color: var(--light);
+  border-radius: .2rem;
   align-self: center;
   height: 80vh;
   width: calc(80vh / 1.62);
   margin: 2rem;
   position: relative;
-  box-shadow: 0 0 1vh .1vh var(--dark);
+  transition: .2s;
+  box-shadow: 1rem 1rem 2.2rem var(--bgShadow);
 
   text-align: center;
+  overflow: hidden;
 }
 
 .container-inner:hover {
-  box-shadow: 0 0 2vh .1vh var(--dark);
+  transform: scale(1.05);
 }
 
 @media (max-aspect-ratio: 1/1) {

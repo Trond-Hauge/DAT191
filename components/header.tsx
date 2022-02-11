@@ -35,8 +35,6 @@ export default function Header(isCookie) {
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
 function SignIn(isCookie) {
-  console.log("is bool? ", isCookie);
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);

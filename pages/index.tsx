@@ -52,8 +52,8 @@ export default function Home({isCookie}) {
   );
 }
 
-export async function getServerSideProps (appContext) {
-  const cookie = appContext.req?.headers.cookie;
+export async function getServerSideProps (context) {
+  const cookie = context.req?.headers.cookie;
   
   const isCookie = cookie ? true : false;  
   return { props: {isCookie} };

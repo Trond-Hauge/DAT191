@@ -79,12 +79,12 @@ hr {
 }
 
 .dropdown-content a:hover {
-  background-color: var(--glass-select);
+  background-color: var(--light-select);
 }
 
 .dropdown-content {
   color: var(--dark);
-  background-color: var(--glass);
+  background-color: var(--light);
   min-width: 15vw;
   padding-top: 1rem;
   padding-bottom: 1rem;

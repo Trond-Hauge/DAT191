@@ -53,7 +53,7 @@ VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.
 
 INSERT INTO organisations(organisation_name, fk_leader)
 VALUES ('University Institution', 1),
-    ('Science And Reasearch Center', 2);
+    ('Science And Research Center', 2);
 
 INSERT INTO members_organisations (member_id, organisation_id)
 VALUES (1, 1),
@@ -61,7 +61,7 @@ VALUES (1, 1),
     (3,2);
 
 INSERT INTO documents (document_name, document_description, shared, owner)
-VALUES ('Document 1', 'Hocus, pocus. Avada kadavra. Harry Potter is no more. RIP', true, 1),
+VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 1),
     ('Document 2', 'Blablabla, testign testing, another test, hello there yes you hi', true, 2),
     ('Doc Oc', 'This doc is verry oc. Simple description, not too long', false, 1),
     ('A Document Of Great Importance', 'Should be first in sorted list. This is a test document, and this is the description. A document description may be quite long, perhaps over 100 characters. Therefore it might be desireable to cut the contents when displayed on the website in a card. Maybe this limit should be at about 200 characters, but that is why we have this test', false, 2),

@@ -27,28 +27,34 @@
   display: grid;
   padding: 2rem;
   grid-gap: 2rem;
-  grid-auto-rows: var(--card-height); 
+  grid-auto-rows: auto;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1rem));
 }
+
 
 .file-card {
   width: var(--card-width);
   height: var(--card-height);
-  background-color: var(--glass);
+  background-color: var(--light);
   padding: 1rem;
   border-radius: 0.2rem;
   text-align: center;
+  box-shadow: .6rem .6rem 1.2em var(--bgShadow);
+  transition: .2s;
 }
+
+.file-card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+  
+}
+
 
 .inner-card-container {
     height: 100%;
     width: 100%;
     overflow: hidden;
     overflow-wrap: break-word;
-}
-
-.file-card:hover {
-  box-shadow: inset 0 0 4rem 4rem var(--light);
 }
 
 .desc {
