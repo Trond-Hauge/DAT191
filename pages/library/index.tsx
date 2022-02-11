@@ -73,19 +73,7 @@ export default function Library({ list, isCookie }) {
 const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
 const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
 const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
-const filterByAuthor = (doc, author) => {
-    let check = false;
-    const names = author.split(" ");
-    check = doc.first_name.toLowerCase().includes(author.toLowerCase()) ||
-        doc.last_name.toLowerCase().includes(author.toLowerCase());
-
-    if (!check && names.length > 1) {
-        check = names.some( name => doc.first_name.toLowerCase().includes(name.toLowerCase()) );
-        if (!check) check = names.some( name => doc.last_name.toLowerCase().includes(name.toLowerCase()) );
-    }
-
-    return check;
-}
+const filterByAuthor = (doc, author) => `${doc.first_name.toLowerCase()} ${doc.last_name.toLowerCase()}`.includes(author.toLowerCase());
 
 function docsList(docs) {
     return (
