@@ -5,10 +5,6 @@ import { fileCard } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
 
-let titleSearch = "";
-let orgSearch = "";
-let authorSearch = "";
-
 export default function Library({ list, isCookie }) {
     let documents = Array.from(list).sort(compareDocs);
 
@@ -21,25 +17,27 @@ export default function Library({ list, isCookie }) {
 
     const handleChange = e => {
         e.preventDefault();
-        const inputField = e.target.name;
+        const field = e.target.name;
         const value = e.target.value;
 
-        switch (inputField) {
-            case "title": 
-                titleSearch = value;
-                break;
-            case "org": 
-                orgSearch = value;
-                break;
-            case "author": 
-                authorSearch = value;
-                break;
+        const t = field === "title" ? value : title;
+        const o = field === "org" ? value : org;
+        const a = field === "author" ? value : author;
+
+        let paramAdded = false;
+        let url = "/library";
+        if (t) {
+            url += `?title=${t}`;
+            paramAdded = true;
         }
+        if (o) {
+            url += `${paramAdded ? "&" : "?"}org=${o}`;
+            paramAdded = true;
+        }
+        if (a) url += `${paramAdded ? "&" : "?"}author=${a}`;
 
-        updateSearchParams();
+        router.push(url, undefined, { shallow: true });
     }
-
-    const updateSearchParams = () => router.push(`/library?title=${titleSearch}&org=${orgSearch}&author=${authorSearch}`, undefined, { shallow: true });
 
     return (
         <>

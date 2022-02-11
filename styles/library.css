@@ -57,7 +57,7 @@
 
 .author {
     text-align: center;
-    height: 20%;
+    padding-block: 1rem;
 }
 
 .title {
@@ -66,5 +66,4 @@
 
 .org {
     text-align: center;
-    height: 20%;
 }
