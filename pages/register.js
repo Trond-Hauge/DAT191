@@ -31,7 +31,8 @@ const Register = () => {
         await router.push('/user/login');
     }
     return (
-
+        <>
+        <main>
                  <div className="sign-in-form">
                      
            <form onSubmit={submit}>
@@ -66,6 +67,8 @@ const Register = () => {
             
             </form>
             </div>
+            </main>
+            </>
     );
 };
 
