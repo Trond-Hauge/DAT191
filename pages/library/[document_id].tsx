@@ -1,10 +1,11 @@
 "use strict";
 
 import Header from "../../components/header";
-import { useRouter } from "next/router";
-import { server } from "../../next.config";
+import dynamic from "next/dynamic";
 
-export default function Document({ document, isCookie }) {
+
+export default function DocumentPage({ isCookie }) {
+  /*
   const router = useRouter();
 
   const handleUpdate = async (event) => {
@@ -18,20 +19,35 @@ export default function Document({ document, isCookie }) {
     router.push(router.asPath, undefined, { shallow: false });
   };
 
-  return (
-    <div className="container">
-      {Header(isCookie)}
-      <main>
-        <form onSubmit={handleUpdate}>
+  <form onSubmit={handleUpdate}>
           <input name="newName" type="text" placeholder="New Name" />
           <button type="submit">Update document</button>
         </form>
+  */
+
+  const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
+    ssr: false
+  });
+
+  return (
+    <>
+      {Header(isCookie)}
+      <main>
+        <PDFViewer />
       </main>
-      Document page for: {document.document_name}
-    </div>
+    </>
   );
 }
 
+
+export async function getServerSideProps(context) {
+  const cookie = context.req?.headers.cookie;
+
+  const isCookie = cookie ? true : false;
+  return { props: { isCookie } };
+}
+
+/*
 Document.getInitialProps = async (context) => {
   const cookie = context.req?.headers.cookie;
   const document_id = context.query.document_id;
@@ -44,3 +60,4 @@ Document.getInitialProps = async (context) => {
   const json = await res.json();
   return { document: json, isCookie: isCookie };
 };
+*/
