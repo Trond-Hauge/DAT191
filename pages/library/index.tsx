@@ -80,9 +80,9 @@ function docsList(docs) {
         <>
             {docs.map((doc, index) => {
                 return (
-                    <>
+                    <div key={doc.document_id}>
                         {fileCard(doc)}
-                    </>
+                    </div>
                 );
             })}
         </>
