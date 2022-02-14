@@ -1,13 +1,19 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {db} from "../../../db.js";
+import { verify } from "jsonwebtoken";
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
-        const cookie = req.headers.cookie;
-        const id = 1; // TODO - Need to get member id or member email from request/api
-        const user = await db("members").where("member_id", id).first();
-        if (user) {
-            if (user.admin) {
+        let email = "";
+        verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
+            if (!err && decoded) {
+                if (decoded.memberEmail) email = decoded.memberEmail;
+            }
+        });
+
+        const member = await db("members").where("email",email).first();
+        if (member) {
+            if (member.admin) {
                 const documents = await db.select("*").from("documents")
                 .leftJoin("members", "documents.owner", "members.member_id")
                 .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
@@ -18,7 +24,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 .leftJoin("members", "documents.owner", "members.member_id")
                 .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
                 .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
-                .where("shared", true).orWhere("owner", id);
+                .where("shared", true).orWhere("owner", member.member_id);
                 res.json(documents);
             }
         } else {
