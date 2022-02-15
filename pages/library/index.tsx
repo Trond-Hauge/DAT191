@@ -1,16 +1,20 @@
 'use strict';
 
 import Header from "../../components/header";
-import { fileCard } from "../../components/library";
+import { fileCardList } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
 
 export default function Library({ list, isCookie }) {
+    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
     let documents = Array.from(list).sort(compareDocs);
 
     const router = useRouter();
     const {title, org, author} = router.query;
 
+    const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
+    const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
+    const filterByAuthor = (doc, author) => `${doc.first_name.toLowerCase()} ${doc.last_name.toLowerCase()}`.includes(author.toLowerCase());
     if (title) documents = documents.filter(doc => filterByTitle(doc, title));
     if (org) documents = documents.filter(doc => filterByOrg(doc, org));
     if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
@@ -63,28 +67,9 @@ export default function Library({ list, isCookie }) {
                     </form>
                 </div>
                 <div className="card-space">
-                    {docsList(documents)}
+                    {fileCardList(documents)}
                 </div>
             </main>
-        </>
-    );
-}
-
-const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
-const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
-const filterByAuthor = (doc, author) => `${doc.first_name.toLowerCase()} ${doc.last_name.toLowerCase()}`.includes(author.toLowerCase());
-
-function docsList(docs) {
-    return (
-        <>
-            {docs.map((doc, index) => {
-                return (
-                    <div key={doc.document_id}>
-                        {fileCard(doc)}
-                    </div>
-                );
-            })}
         </>
     );
 }
