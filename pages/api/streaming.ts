@@ -13,6 +13,7 @@ const authenticator = (fn: NextApiHandler) => async (
 
             // Do a query to check if user has anything scheduled. Use to make a countdown timer, or generally something useful.
             res.json({ context: "You are authenticated." });
+            console.log("Decoded: ", decoded);
             
             return await fn(req, res);
         }
