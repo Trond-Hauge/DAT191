@@ -82,7 +82,6 @@ export async function getServerSideProps(context) {
         headers: { cookie: cookie }
     });
 
-    if (!cookie || res.status === 401) return { redirect: { destination: "/user/login", permanent: false } };
     if (res.status === 405) return { redirect: { destination: "/", permanent: false } };
 
     const json = await res.json();

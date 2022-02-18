@@ -19,7 +19,8 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
                 .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
                 res.json(documents);
-            } else {
+            } 
+            else {
                 const documents = await db.select("*").from("documents")
                 .leftJoin("members", "documents.owner", "members.member_id")
                 .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
@@ -27,8 +28,14 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 .where("shared", true).orWhere("owner", member.member_id);
                 res.json(documents);
             }
-        } else {
-            res.status(401).send({ error: "Not authenticated" });
+        } 
+        else {
+            const documents = await db.select("*").from("documents")
+            .leftJoin("members", "documents.owner", "members.member_id")
+            .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
+            .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
+            .where("shared", true);
+            res.json(documents);
         }
     } else {
         res.status(405).send({ error: "Method not allowed" });
