@@ -11,7 +11,7 @@ const authenticator = (fn: NextApiHandler) => async (
         console.log("Am I logged in???");
         
         if (!err && decoded) {
-            res.json({ loggedIn: true });            
+            res.json({ loggedIn: true });
             return await fn(req, res);
         }
         res.json({ loggedIn: false });

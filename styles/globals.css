@@ -55,6 +55,9 @@ main {
   margin: 7rem;
 }
 
+.container-2-column {
+}
+
 .home-container-flex {
   display: flex;
   justify-content: center;

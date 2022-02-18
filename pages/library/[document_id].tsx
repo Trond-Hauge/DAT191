@@ -33,7 +33,12 @@ export default function DocumentPage({ isCookie }) {
     <>
       {Header(isCookie)}
       <main>
-        <PDFViewer />
+        <div className="container-2-column">
+          <div className="side-menu-container">
+            <a>PFD menu buttons go here</a>
+          </div>
+          <PDFViewer />
+        </div>
       </main>
     </>
   );
