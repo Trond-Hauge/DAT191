@@ -1,21 +1,47 @@
 .pdf-container {
-    position: absolute;
-    left: 33%;
+  position: absolute;
+  left: 33%;
 }
 
 .react-pdf__Page__canvas {
-    top: 0;
-    left: 0;
-    width: 100vw;   
-    transform: "";
- }
- 
- .react-pdf__Page__textContent {
-     top: 0;
-     left: 0;
-     width: 100vw;
-     transform: "";
- }
+  top: 0;
+  left: 0;
+  width: 100vw;
+  transform: "";
+}
+
+.react-pdf__Page__textContent {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  transform: "";
+}
+
+.side-menu-container {
+    color: var(--dark);
+    padding: 0;
+}
+
+.side-menu-container p {
+    padding: 1rem;
+}
+
+input {
+    padding: 0rem;
+}
+
+a {
+  cursor: pointer;
+  padding: calc(var(--nav-height) / 2);
+  min-width: 100%;
+  display: block;
+  padding: 1rem;
+}
+
+a:hover {
+  background-color: var(--light-select);
+  color: inherit;
+}
 
 /*
 .react-pdf__Page__canvas {
