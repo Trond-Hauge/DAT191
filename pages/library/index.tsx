@@ -6,8 +6,7 @@ import { useRouter } from "next/router";
 import { server } from "../../next.config";
 
 export default function Library({ list, isCookie }) {
-    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-    let documents = Array.from(list).sort(compareDocs);
+    let documents = Array.from(list);
 
     const router = useRouter();
     const {title, org, author} = router.query;
@@ -18,6 +17,9 @@ export default function Library({ list, isCookie }) {
     if (title) documents = documents.filter(doc => filterByTitle(doc, title));
     if (org) documents = documents.filter(doc => filterByOrg(doc, org));
     if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
+
+    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
+    documents.sort(compareDocs);
 
     const handleChange = e => {
         e.preventDefault();
@@ -40,7 +42,7 @@ export default function Library({ list, isCookie }) {
         }
         if (a) url += `${paramAdded ? "&" : "?"}author=${a}`;
 
-        router.push(url, undefined, { shallow: true });
+        router.replace(url, undefined, { shallow: true });
     }
 
     return (
