@@ -7,8 +7,7 @@ import { server } from "../../next.config";
 import { useEffect, useState } from "react";
 
 export default function Library({ list, isCookie }) {
-    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-    let documents = Array.from(list).sort(compareDocs);
+    let documents = Array.from(list);
 
     const router = useRouter();
     const {title, org, author} = router.query;
@@ -23,6 +22,9 @@ export default function Library({ list, isCookie }) {
     const clearSearches = () => {
         router.replace("/library", undefined, { shallow: false });
     }
+    
+    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
+    documents.sort(compareDocs);
 
     const handleChange = e => {
         e.preventDefault();
