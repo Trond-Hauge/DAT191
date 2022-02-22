@@ -19,10 +19,6 @@ export default function Library({ list, isCookie }) {
     if (org) documents = documents.filter(doc => filterByOrg(doc, org));
     if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
 
-    const clearSearches = () => {
-        router.replace("/library", undefined, { shallow: false });
-    }
-    
     const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
     documents.sort(compareDocs);
 
@@ -76,7 +72,6 @@ export default function Library({ list, isCookie }) {
                         />
 
                     </form>
-                    <a onClick={clearSearches}>Clear Searches</a>
                 </div>
                 <div className="card-space">
                     {fileCardList(documents)}
