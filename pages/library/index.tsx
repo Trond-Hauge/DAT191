@@ -4,6 +4,7 @@ import Header from "../../components/header";
 import { fileCardList } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
+import { useEffect, useState } from "react";
 
 export default function Library({ list, isCookie }) {
     const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
@@ -18,6 +19,10 @@ export default function Library({ list, isCookie }) {
     if (title) documents = documents.filter(doc => filterByTitle(doc, title));
     if (org) documents = documents.filter(doc => filterByOrg(doc, org));
     if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
+
+    const clearSearches = () => {
+        router.replace("/library", undefined, { shallow: false });
+    }
 
     const handleChange = e => {
         e.preventDefault();
@@ -40,7 +45,7 @@ export default function Library({ list, isCookie }) {
         }
         if (a) url += `${paramAdded ? "&" : "?"}author=${a}`;
 
-        router.push(url, undefined, { shallow: true });
+        router.replace(url, undefined, { shallow: true });
     }
 
     return (
@@ -53,18 +58,23 @@ export default function Library({ list, isCookie }) {
                             name="title"
                             type="text"
                             placeholder="Search by title"
+                            defaultValue={title}
                         />
                         <input
                             name="org"
                             type="text"
                             placeholder="Search by organisation"
+                            defaultValue={org}
                         />
                         <input
                             name="author"
                             type="text"
                             placeholder="Search by author"
+                            defaultValue={author}
                         />
+
                     </form>
+                    <a onClick={clearSearches}>Clear Searches</a>
                 </div>
                 <div className="card-space">
                     {fileCardList(documents)}
@@ -75,6 +85,8 @@ export default function Library({ list, isCookie }) {
 }
 
 export async function getServerSideProps(context) {
+    console.log("Running, running!");
+
     const cookie = context.req?.headers.cookie;
 
     const res = await fetch(`${server}/api/documents/documents`, {
