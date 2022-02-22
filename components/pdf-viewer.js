@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useRouter } from "next/router";
 import Router from "next/router";
-// import pdf worker as a url, see `next.config.js` and `pdf-worker.js`
 
 import workerSrc from "pdfjs-dist/build/pdf.worker.entry";
 
-//const workerSrc = require("pdfjs-dist/build/pdf.worker.min.js") ? require("pdfjs-dist/build/pdf.worker.js");
-
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+// This setup is using React instead of regular variables to provide a more responsive experience, with less stress on the server.
+// The downside of this setup is that the user may lose their progress when refreshing.
+// However, the PDF renderer seems to rerender each time without, potentially causing significant overhead.
+// TODO: See if using Router.replace will casue significant stress on server in terms of loading the PDF.
+
+// Potential solution: Copy link to clipboard. useState is already prepared to do queries.
 
 export default function PDFViewer() {
   const file = "/Document.pdf";
@@ -17,7 +21,7 @@ export default function PDFViewer() {
 
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
-  const [scale, setScale] = useState(Router.query.scale ? parseFloat(Router.query.scale) : 1);
+  const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);
 
   function onDocumentLoadSuccess({numPages}) {
     setNumPages(numPages);
@@ -25,25 +29,29 @@ export default function PDFViewer() {
 
   function nextPage() {
     if (pageNumber < numPages) {
-      Router.replace(`${url}?page=${pageNumber+1}&scale=${scale}`, undefined, {shallow: true});
+      setPageNumber((prevPage) => prevPage + 1);
+      //Router.replace(`${url}?page=${pageNumber+1}&scale=${scale}`, undefined, {shallow: true});
     }
   }
 
   function prevPage() {
     if (pageNumber > 1) {
-      Router.replace(`${url}?page=${pageNumber-1}&scale=${scale}`, undefined, {shallow: true});
+      setPageNumber((prevPage) => prevPage - 1);
+      //Router.replace(`${url}?page=${pageNumber-1}&scale=${scale}`, undefined, {shallow: true});
     }
   }
 
   function zoomIn() {
-    if (scale < 2) {
-      Router.replace(`${url}?page=${pageNumber}&scale=${scale+0.1}`, undefined, {shallow: true});
+    if (scale < 20) {
+      setScale((prevScale) => prevScale + 1);
+      //Router.replace(`${url}?page=${pageNumber}&scale=${scale+0.1}`, undefined, {shallow: true});
     }
   }
 
   function zoomOut() {
-    if (scale > 1.1) {
-      Router.replace(`${url}?page=${pageNumber}&scale=${scale-0.1}`, undefined, {shallow: true});
+    if (scale > 10) {
+      setScale((prevScale) => prevScale - 1);
+      //Router.replace(`${url}?page=${pageNumber}&scale=${scale-0.1}`, undefined, {shallow: true});
     }
   }
 
@@ -72,22 +80,10 @@ export default function PDFViewer() {
         </div>
         <div className="pdf-container">
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-            <Page pageNumber={pageNumber} scale={scale} />
+            <Page pageNumber={pageNumber} scale={scale/10} />
           </Document>
         </div>
       </div>
     </main>
   );
 }
-
-// Outdated
-/*
-{Array.from({ length: numPages }, (_, index) => (
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              renderAnnotationLayer={true}
-              renderTextLayer={true}
-            />
-          ))}
-*/
