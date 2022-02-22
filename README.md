@@ -15,7 +15,7 @@ Made by:
 ![Index page](https://github.com/h586634/DAT191/blob/main/public/Index.jpg?raw=true)
 
 ### Library Page
-The library utilizes client side rendering, with lightweight prefetching of documents let the user get realtime search results in the side menu.
+The library utilizes client side rendering, with lightweight prefetching of documents let the user get realtime search results in the side menu. The search is copied over to the URL to let the user easily share the result.
 ![Library page](https://github.com/h586634/DAT191/blob/main/public/Library_Default.jpg?raw=true)
 
 ![Library page with search](https://github.com/h586634/DAT191/blob/main/public/Library_Search.jpg?raw=true)
