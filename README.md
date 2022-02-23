@@ -1,4 +1,4 @@
-# Website for HEQED - Health Equity for a Sustainable Society through Education
+# Website for HEQED - Health Equality for a Sustainable Society through Education
 
 This is a bachelor project at Western Norway University of Applied Sciences (HVL) in Computer Science. As per 22nd of February, it's still very much work in progress.
 
