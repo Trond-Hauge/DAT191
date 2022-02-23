@@ -40,7 +40,6 @@ export default function DocumentPage({ isCookie }) {
 
 export async function getServerSideProps(context) {
   const cookie = context.req?.headers.cookie;
-
   const isCookie = cookie ? true : false;
   return { props: { isCookie } };
 }

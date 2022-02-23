@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Website for HEQED - Health Equality for a Sustainable Society through Education
 
-## Getting Started
+This is a bachelor project at Western Norway University of Applied Sciences (HVL) in Computer Science. As per 22nd of February, it's still very much work in progress.
 
-First, run the development server:
+The website uses the framework Next.js, together with PostgreSQL as database. The authentication is build on JWT, stored in a cookie to let the user browse without frequently having to logging in. User may, of course, log out if wanted.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Further work beyond the website is making a virtual meeting application, meant to be implemented on the Streaming page, which is hinted to in the image under "Home Page" below. The virtual application will be made with Unreal Engine. If Pixel Streaming is implemented, it will be streamed from a cloud computer, and may allow photo realistic, virtually no matter what device the user is on.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Made by:
+- Oliver Abraham O'Loughlin
+- Lars Emil Bjørnsen Norevik
+- Trond Hauge
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Home Page
+![Index page](https://github.com/h586634/DAT191/blob/main/public/Index.jpg?raw=true)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Library Page
+The library utilizes client side rendering, with lightweight prefetching of documents let the user get realtime search results in the side menu. The search is copied over to the URL to let the user easily share the result.
+![Library page](https://github.com/h586634/DAT191/blob/main/public/Library_Default.jpg?raw=true)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![Library page with search](https://github.com/h586634/DAT191/blob/main/public/Library_Search.jpg?raw=true)
 
-## Learn More
+### Document Page
 
-To learn more about Next.js, take a look at the following resources:
+![Index page](https://github.com/h586634/DAT191/blob/main/public/Document.jpg?raw=true)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### To dos
+- Polish usability and uploading tools
+- Finish login, and ensure safety in database and cookie/ JWT.
+- Continue ensuring that the server load is as little as possible
+- Finish administration tools for professional users

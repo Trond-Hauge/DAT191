@@ -4,6 +4,7 @@ import Header from "../../components/header";
 import { fileCardList } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
+import { useEffect, useState } from "react";
 
 export default function Library({ list, isCookie }) {
     let documents = Array.from(list);
@@ -55,17 +56,21 @@ export default function Library({ list, isCookie }) {
                             name="title"
                             type="text"
                             placeholder="Search by title"
+                            defaultValue={title}
                         />
                         <input
                             name="org"
                             type="text"
                             placeholder="Search by organisation"
+                            defaultValue={org}
                         />
                         <input
                             name="author"
                             type="text"
                             placeholder="Search by author"
+                            defaultValue={author}
                         />
+
                     </form>
                 </div>
                 <div className="card-space">
@@ -77,6 +82,8 @@ export default function Library({ list, isCookie }) {
 }
 
 export async function getServerSideProps(context) {
+    console.log("Running, running!");
+
     const cookie = context.req?.headers.cookie;
 
     const res = await fetch(`${server}/api/documents/documents`, {
