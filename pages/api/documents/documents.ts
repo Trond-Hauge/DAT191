@@ -1,5 +1,5 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {db} from "../../../db.js";
+import { NextApiRequest, NextApiResponse } from "next";
+import { db } from "../../../db.js";
 import { verify } from "jsonwebtoken";
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
@@ -12,29 +12,27 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
         });
 
         const member = await db("members").where("email",email).first();
-        if (member) {
-            if (member.admin) {
-                const documents = await db.select("*").from("documents")
-                .leftJoin("members", "documents.owner", "members.member_id")
-                .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
-                .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
-                res.json(documents);
-            } 
-            else {
-                const documents = await db.select("*").from("documents")
-                .leftJoin("members", "documents.owner", "members.member_id")
-                .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
-                .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
-                .where("shared", true).orWhere("owner", member.member_id);
-                res.json(documents);
-            }
-        } 
-        else {
+        if (!member || member.permission === "unverified") {
             const documents = await db.select("*").from("documents")
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
             .where("shared", true);
+            res.json(documents);
+        }
+        else if (member.permission === "admin") {
+                const documents = await db.select("*").from("documents")
+                .leftJoin("members", "documents.owner", "members.member_id")
+                .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
+                .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
+                res.json(documents);
+            }
+        else {
+            const documents = await db.select("*").from("documents")
+            .leftJoin("members", "documents.owner", "members.member_id")
+            .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
+            .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
+            .where("shared", true).orWhere("owner", member.member_id);
             res.json(documents);
         }
     } else {

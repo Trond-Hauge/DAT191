@@ -2,8 +2,10 @@ DROP TABLE IF EXISTS members_organisations;
 DROP TABLE IF EXISTS documents;
 DROP TABLE IF EXISTS organisations;
 DROP TABLE IF EXISTS members;
+DROP TYPE IF EXISTS member_permission;
 
 -- *** MEMBER STUFF *** --
+CREATE TYPE member_permission AS ENUM ('admin', 'verified', 'unverified');
 CREATE TABLE members (
     member_id SERIAL PRIMARY KEY,
     first_name VARCHAR(64) NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE members (
     email VARCHAR(64) NOT NULL UNIQUE,
     username VARCHAR(16) NOT NULL, -- may be ommitted
     password TEXT NOT NULL,
-    admin BOOLEAN NOT NULL
+    permission member_permission NOT NULL
 
     --password. Looking for necessary specs for SHA3-256
     --salt? -||-
@@ -46,10 +48,10 @@ CREATE TABLE documents(
 );
 
 -- *** GENERATING EXAMPLE ENTRIES *** --
-INSERT INTO members (first_name, last_name, email, username, password, admin)
-VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', true),
-    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', false),
-    ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', false);
+INSERT INTO members (first_name, last_name, email, username, password, permission)
+VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin'),
+    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'verified'),
+    ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'unverified');
 
 INSERT INTO organisations(organisation_name, fk_leader)
 VALUES ('University Institution', 1),
