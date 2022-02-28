@@ -39,6 +39,7 @@ CREATE TABLE documents(
     document_description TEXT,
     shared BOOLEAN NOT NULL,
     owner INTEGER,
+    file BYTEA,
     FOREIGN KEY(owner) REFERENCES members(member_id)
 
 	-- SERIAL REFERENCES members(member_id)

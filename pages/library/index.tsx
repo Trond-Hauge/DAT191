@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 import Header from "../../components/header";
 import { fileCardList } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
-import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Library({ list, isCookie }) {
     let documents = Array.from(list);
@@ -46,12 +46,26 @@ export default function Library({ list, isCookie }) {
         router.replace(url, undefined, { shallow: true });
     }
 
+    const uploadFile = async e => {
+        e.preventDefault();
+        const form = new FormData(e.target);
+
+        const options = {
+            headers: { 'content-type': 'multipart/form-data' },
+            onUploadProgress: (event) => {
+              console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+            }
+        };
+        
+        const res = await axios.post(`/api/library/upload`, form, options);
+    }
+
     return (
         <>
             {Header(isCookie)}
             <main>
                 <div className="side-menu-container">
-                    <form onChange={handleChange}>
+                    <form id="search-form" onChange={handleChange}>
                         <input
                             name="title"
                             type="text"
@@ -70,9 +84,24 @@ export default function Library({ list, isCookie }) {
                             placeholder="Search by author"
                             defaultValue={author}
                         />
+                    </form>
 
+                    <form id="upload-form" onSubmit={uploadFile}>
+                        <input
+                            name="file"
+                            type="file"
+                            accept=".pdf"
+                            required
+                        />
+                        <input
+                            name="fileDesc" 
+                            type="text"
+                            required
+                        />
+                        <button type="submit">Submit</button>
                     </form>
                 </div>
+                
                 <div className="card-space">
                     {fileCardList(documents)}
                 </div>
@@ -82,11 +111,9 @@ export default function Library({ list, isCookie }) {
 }
 
 export async function getServerSideProps(context) {
-    console.log("Running, running!");
-
     const cookie = context.req?.headers.cookie;
 
-    const res = await fetch(`${server}/api/documents/documents`, {
+    const res = await fetch(`${server}/api/library/documents`, {
         method: "GET",
         headers: { cookie: cookie }
     });
