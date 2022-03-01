@@ -8,9 +8,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
     if (req.method === "GET") {
         let email = "";
         verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
-            if (!err && decoded) {
-                if (decoded.memberEmail) email = decoded.memberEmail;
-            }
+            if (!err && decoded?.memberEmail) email = decoded.memberEmail;
         });
 
         const member = await db("members").where("email",email).first();

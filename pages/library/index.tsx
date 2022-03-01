@@ -1,12 +1,12 @@
 "use strict";
 
 import Header from "../../components/header";
-import { fileCardList } from "../../components/library";
+import { fileCardList, uploadForm } from "../../components/library";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
 import axios from "axios";
 
-export default function Library({ list, isCookie }) {
+export default function Library({ list, isCookie, isVerified}) {
     // Sets the initial array of all accessible documents.
     let documents = Array.from(list);
 
@@ -57,7 +57,8 @@ export default function Library({ list, isCookie }) {
         e.preventDefault();
         const form = new FormData(e.target);
         const res = await axios.post(`/api/library/upload`, form);
-        // TODO - Handle different responses
+        const { message } = res.data;
+        console.log(message);
     }
 
     // The actual page contents that are returned.
@@ -87,20 +88,7 @@ export default function Library({ list, isCookie }) {
                         />
                     </form>
 
-                    <form id="upload-form" onSubmit={uploadFile}>
-                        <input
-                            name="file"
-                            type="file"
-                            accept=".pdf"
-                            required
-                        />
-                        <input
-                            name="fileDesc" 
-                            type="text"
-                            required
-                        />
-                        <button type="submit">Submit</button>
-                    </form>
+                    {uploadForm(isVerified, uploadFile)}
                 </div>
                 
                 <div className="card-space">
@@ -113,18 +101,23 @@ export default function Library({ list, isCookie }) {
 
 // Runs on the server before delivering results to the client.
 // A GET request is sent to the documents API, which returns document contents based on the permission level of the user.
-// Authentication cookie and documents are then delivered as props to the client.
+// A GET request is then sent to the user/isVerified API, which responds with boolean value determining if the user is verified or not.
+// Documents, isCookie, and isVerified are then delivered as props to the client.
 export async function getServerSideProps(context) {
     const cookie = context.req?.headers.cookie;
 
-    const res = await fetch(`${server}/api/library/documents`, {
+    const docsRes = await fetch(`${server}/api/library/documents`, {
         method: "GET",
         headers: { cookie: cookie }
     });
+    const json = await docsRes.json();
 
-    if (res.status === 405) return { redirect: { destination: "/", permanent: false } };
-
-    const json = await res.json();
+    const veriRes = await fetch(`${server}/api/user/isVerified`, {
+        method: "GET",
+        headers: { cookie: cookie}
+    })
+    const { isVerified } = await veriRes.json();
+    
     const isCookie = cookie ? true : false;
-    return { props: { list: json, isCookie: isCookie } };
+    return { props: { list: json, isCookie: isCookie, isVerified: isVerified } };
 }
