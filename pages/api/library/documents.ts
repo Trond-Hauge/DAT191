@@ -13,7 +13,8 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
 
         const member = await db("members").where("email",email).first();
         if (!member || member.permission === "unverified") {
-            const documents = await db.select("*").from("documents")
+            const documents = await db.select("documents.document_name", "documents.document_description", "documents.document_id", "members.first_name", "members.last_name", "organisations.organisation_name")
+            .from("documents")
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
@@ -21,14 +22,16 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             res.json(documents);
         }
         else if (member.permission === "admin") {
-            const documents = await db.select("*").from("documents")
+            const documents = await db.select("documents.document_name", "documents.document_description", "documents.document_id", "members.first_name", "members.last_name", "organisations.organisation_name")
+            .from("documents")
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
             res.json(documents);
         }
         else {
-            const documents = await db.select("*").from("documents")
+            const documents = await db.select("documents.document_name", "documents.document_description", "documents.document_id", "members.first_name", "members.last_name", "organisations.organisation_name")
+            .from("documents")
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")

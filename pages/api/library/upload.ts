@@ -26,6 +26,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 }
                 else {
                     // Get relevant information from form
+                    const name = fields.fileName
                     const desc = fields.fileDesc;
                     const fileObject = files.file;
 
@@ -36,10 +37,10 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                         }
                         else {
                             db("documents").insert({
-                                document_name: "UPLOAD TEST",
+                                document_name: name,
                                 document_description: desc,
                                 shared: true,
-                                owner: 3,
+                                owner: member.member_id,
                                 file: data,
                             }).then( () => {
                                 // Successful upload.

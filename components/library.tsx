@@ -1,7 +1,6 @@
 "use strict";
 
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 export function fileCardList(documents) {
     return (
@@ -32,6 +31,11 @@ export function uploadForm(isVerified, uploadFile) {
                     name="file"
                     type="file"
                     accept=".pdf"
+                    required
+                />
+                <input
+                    name="fileName" 
+                    type="text"
                     required
                 />
                 <input
