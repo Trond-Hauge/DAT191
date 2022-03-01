@@ -7,11 +7,14 @@ import { server } from "../../next.config";
 import axios from "axios";
 
 export default function Library({ list, isCookie }) {
+    // Sets the initial array of all accessible documents.
     let documents = Array.from(list);
 
+    // Initial setup of router object and querying of URL parameters.
     const router = useRouter();
     const {title, org, author} = router.query;
 
+    // Simple filtering by document title, organisation and author. Not case sensitive.
     const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
     const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
     const filterByAuthor = (doc, author) => `${doc.first_name.toLowerCase()} ${doc.last_name.toLowerCase()}`.includes(author.toLowerCase());
@@ -19,9 +22,13 @@ export default function Library({ list, isCookie }) {
     if (org) documents = documents.filter(doc => filterByOrg(doc, org));
     if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
 
+    // Documents are sorted based on title.
     const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
     documents.sort(compareDocs);
 
+    // Handles changes to search input fields. Upon change, title, org and author URL parameters are updated.
+    // The URL is built iteratively, only including parameters that have a value.
+    // Then the client side of the page is reloaded, and the new URL replaces the old without adding a new entry to browser history.
     const handleChange = e => {
         e.preventDefault();
         const field = e.target.name;
@@ -49,17 +56,11 @@ export default function Library({ list, isCookie }) {
     const uploadFile = async e => {
         e.preventDefault();
         const form = new FormData(e.target);
-
-        const options = {
-            headers: { 'content-type': 'multipart/form-data' },
-            onUploadProgress: (event) => {
-              console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
-            }
-        };
-        
-        const res = await axios.post(`/api/library/upload`, form, options);
+        const res = await axios.post(`/api/library/upload`, form);
+        // TODO - Handle different responses
     }
 
+    // The actual page contents that are returned.
     return (
         <>
             {Header(isCookie)}
@@ -110,6 +111,9 @@ export default function Library({ list, isCookie }) {
     );
 }
 
+// Runs on the server before delivering results to the client.
+// A GET request is sent to the documents API, which returns document contents based on the permission level of the user.
+// Authentication cookie and documents are then delivered as props to the client.
 export async function getServerSideProps(context) {
     const cookie = context.req?.headers.cookie;
 
