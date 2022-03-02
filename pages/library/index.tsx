@@ -57,8 +57,7 @@ export default function Library({ list, isCookie, isVerified}) {
         e.preventDefault();
         const form = new FormData(e.target);
         const res = await axios.post(`/api/library/upload`, form);
-        const { message } = res.data;
-        console.log(message);
+        router.replace(router.asPath);
     }
 
     // The actual page contents that are returned.
