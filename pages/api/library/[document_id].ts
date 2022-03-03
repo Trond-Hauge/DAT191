@@ -3,7 +3,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from "../../../db.js";
 import { verify } from "jsonwebtoken";
-import fs from 'fs';
 
 export default async function getDocumentById(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {

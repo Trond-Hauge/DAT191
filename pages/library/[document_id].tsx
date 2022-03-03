@@ -10,6 +10,8 @@ export default function DocumentPage({ isCookie, doc, file}) {
     ssr: false
   });
 
+  // doc contains various document information, should be displayedonthis page somehow.
+
   return (
     <>
       {Header(isCookie)}
@@ -34,5 +36,11 @@ export async function getServerSideProps(context) {
   }
 
   const file = fs.readFileSync(doc.filepath);
+
+  if (!file) {
+    console.log("Error when reading file from server");
+    return { redirect: { destination: "/library", permanent: false } }
+  }
+
   return { props: { isCookie, doc, file: file.toJSON() } };
 }

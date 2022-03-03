@@ -1,10 +1,10 @@
 "use strict";
 
 import Header from "../../components/header";
-import { fileCardList, uploadForm } from "../../components/library";
+import UploadFileForm from "../../components/library/UploadFileForm";
+import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
-import axios from "axios";
 
 export default function Library({ list, isCookie, isVerified}) {
     // Sets the initial array of all accessible documents.
@@ -53,18 +53,6 @@ export default function Library({ list, isCookie, isVerified}) {
         router.replace(url, undefined, { shallow: true });
     }
 
-    const uploadFile = async e => {
-        e.preventDefault();
-        const form = new FormData(e.target);
-        const res = await axios.post(`/api/library/upload`, form);
-        const { message, error } = res.data;
-
-        if (error) console.log(error);
-        else console.log(message);
-
-        router.replace(router.asPath);
-    }
-
     // The actual page contents that are returned.
     return (
         <>
@@ -92,11 +80,11 @@ export default function Library({ list, isCookie, isVerified}) {
                         />
                     </form>
 
-                    {uploadForm(isVerified, uploadFile)}
+                    {UploadFileForm(isVerified)}
                 </div>
                 
                 <div className="card-space">
-                    {fileCardList(documents)}
+                    {FileCardList(documents)}
                 </div>
             </main>
         </>

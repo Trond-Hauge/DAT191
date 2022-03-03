@@ -1,30 +1,22 @@
 "use strict";
 
-import Link from "next/link";
+import axios from "axios";
+import Router from "next/router";
 
-export function fileCardList(documents) {
-    return (
-        <>
-            {documents.map( doc => {
-                return (
-                    <Link href={`/library/${doc.document_id}`} key={doc.document_id}>
-                        <div className="file-card">
-                            <div className="inner-card-container">
-                                <h2 className="org">{doc.organisation_name}</h2>
-                                <h2 className="author">{doc.first_name} {doc.last_name}</h2>
-                                <h3 className="title">{doc.document_name}</h3>
-                                <p className="desc">{doc.document_description}</p>
-                            </div>
-                        </div>
-                    </Link>
-                );
-            })}
-        </>
-    )
-}
-
-export function uploadForm(isVerified, uploadFile) {
+export default function UploadFileForm(isVerified) {
     if (isVerified) {
+        const uploadFile = async e => {
+            e.preventDefault();
+            const form = new FormData(e.target);
+            const res = await axios.post(`/api/library/upload`, form);
+            const { message, error } = res.data;
+    
+            if (error) console.log(error);
+            else console.log(message);
+    
+            Router.replace(Router.asPath);
+        }
+
         return (
             <form id="upload-form" onSubmit={uploadFile}>
                 <input
