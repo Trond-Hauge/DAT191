@@ -13,7 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // Potential solution: Copy link to clipboard. useState is already prepared to do queries.
 
-export default function PDFViewer({ filepath }) {
+export default function PDFViewer({ file }) {
   const {asPath} = useRouter();
   const url = asPath.split("?")[0];
 
@@ -77,7 +77,7 @@ export default function PDFViewer({ filepath }) {
           <a onClick={zoomOut}>Zoom out</a>
         </div>
         <div className="pdf-container">
-          <Document file={filepath} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
             <Page pageNumber={pageNumber} scale={scale/10} />
           </Document>
         </div>

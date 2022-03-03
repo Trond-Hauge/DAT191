@@ -3,6 +3,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from "../../../db.js";
 import { verify } from "jsonwebtoken";
+import { readFileSync } from 'fs';
 
 export default async function getDocumentById(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -26,7 +27,8 @@ export default async function getDocumentById(req: NextApiRequest, res: NextApiR
             res.status(403).json({ message: "User is not authorised to view content" });
         }
         else {
-            res.status(200).json(doc);
+            const file = readFileSync(doc.filepath);
+            res.status(200).json({ doc, file });
         }
     }
     else {

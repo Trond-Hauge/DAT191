@@ -3,8 +3,9 @@
 import Header from "../../components/header";
 import dynamic from "next/dynamic";
 import { server } from "../../next.config";
+import fs from "fs";
 
-export default function DocumentPage({ isCookie, doc}) {
+export default function DocumentPage({ isCookie, doc, file}) {
   const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
     ssr: false
   });
@@ -12,7 +13,7 @@ export default function DocumentPage({ isCookie, doc}) {
   return (
     <>
       {Header(isCookie)}
-      <PDFViewer filepath={doc.filepath}/>
+      <PDFViewer file={file}/>
     </>
   );
 }
@@ -25,7 +26,7 @@ export async function getServerSideProps(context) {
     method: "GET",
     headers: { cookie: cookie }
   });
-  const doc = await res.json();
+  const { doc, file } = await res.json();
 
-  return { props: { isCookie, doc } };
+  return { props: { isCookie, doc, file} };
 }
