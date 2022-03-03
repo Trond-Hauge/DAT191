@@ -15,14 +15,14 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
 
         const member = await db("members").where("email",email).first();
         if (!member || member.permission === "unverified") {
-            res.status(401).send( { message: "User is not authenticated/verified" });
+            res.status(401).send( { error: "User is not authenticated/verified" });
         }
         else {
             const form = new formidable.IncomingForm();
             form.parse(req, async (err, fields, files) => {
                 if (err || !files.file) {
                     // Handle error while parsing file.
-                    res.status(500).send({ message: "Error occured while parsing form" });
+                    res.status(500).send({ error: "Error occured while parsing form" });
                 }
                 else {
                     // Get relevant information from form
@@ -33,13 +33,13 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     fs.readFile(fileObject.filepath, (err, data) => {
                         if (err) {
                             // Handle error when reading file.
-                            res.status(500).send({ message: "Error occured while reading file" })
+                            res.status(500).send({ error: "Error occured while reading file" })
                         }
                         else {
                             const filepath = `files/${fileObject.newFilename}.pdf`;
                             fs.writeFile(filepath, data, (err) => {
                                 if (err) {
-                                    console.log("ERROR");
+                                    res.status(500).json( {error: "Error occured while writing file to server"} );
                                 }
                                 else {
                                     db("documents").insert({
@@ -53,7 +53,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                                         res.status(201).json( {message: "File was uploaded successfully"} );
                                     }).catch( err => {
                                         // Failed to upload.
-                                        res.status(500).json( {message: "File was not uploaded successfully"} );
+                                        res.status(500).json( {error: "Error occured when inserting document info to database"} );
                                     })
                                 }
                             });
