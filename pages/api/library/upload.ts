@@ -28,6 +28,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     // Get relevant information from form
                     const name = fields.fileName
                     const desc = fields.fileDesc;
+                    const _public = fields.public;
                     const fileObject = files.file;
 
                     fs.readFile(fileObject.filepath, (err, data) => {
@@ -45,7 +46,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                                     db("documents").insert({
                                         document_name: name,
                                         document_description: desc,
-                                        shared: true,
+                                        public: _public,
                                         filepath: filepath,
                                         owner: member.member_id
                                     }).then( () => {

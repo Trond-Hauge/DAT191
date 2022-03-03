@@ -36,11 +36,21 @@ export function uploadForm(isVerified, uploadFile) {
                 <input
                     name="fileName" 
                     type="text"
+                    placeholder="Document title"
                     required
                 />
                 <input
                     name="fileDesc" 
                     type="text"
+                    placeholder="Document description"
+                    required
+                />
+                <label>Public</label>
+                <input 
+                    name="public"
+                    value="true"
+                    type="checkbox"
+                    defaultChecked
                     required
                 />
                 <button type="submit">Submit</button>

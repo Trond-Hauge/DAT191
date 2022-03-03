@@ -18,7 +18,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
-            .where("shared", true);
+            .where("public", true);
             res.json(documents);
         }
         else if (member.permission === "admin") {
@@ -35,7 +35,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
-            .where("shared", true).orWhere("owner", member.member_id);
+            .where("public", true).orWhere("owner", member.member_id);
             res.json(documents);
         }
     }
