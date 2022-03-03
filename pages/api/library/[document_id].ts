@@ -24,7 +24,7 @@ export default async function getDocumentById(req: NextApiRequest, res: NextApiR
         .first();
 
         if (!doc.shared && (!member || member.permission !== "admin" || member.member_id !== doc.owner)) {
-            res.status(403).json({ message: "User is not authorised to view content" });
+            res.status(403).json({ error: "User is not authorised to view content" });
         }
         else {
             const file = readFileSync(doc.filepath);
@@ -32,6 +32,6 @@ export default async function getDocumentById(req: NextApiRequest, res: NextApiR
         }
     }
     else {
-        res.status(405).send({ message: "Method not allowed" });
+        res.status(405).send({ error: "Method not allowed" });
     }
 }
