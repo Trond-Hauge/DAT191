@@ -26,9 +26,12 @@ export async function getServerSideProps(context) {
     method: "GET",
     headers: { cookie: cookie }
   });
-  const { doc, file, error} = await res.json();
+  const { doc, file, error } = await res.json();
 
-  if (error) return { redirect: { destination: "/library", permanent: false } }
+  if (error) {
+    console.log(error);
+    return { redirect: { destination: "/library", permanent: false } }
+  }
 
   return { props: { isCookie, doc, file} };
 }
