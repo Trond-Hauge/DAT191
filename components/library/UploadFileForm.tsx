@@ -1,15 +1,18 @@
 "use strict";
 
-import axios from "axios";
 import Router from "next/router";
+import { server } from "../../next.config";
 
 export default function UploadFileForm(isVerified) {
     if (isVerified) {
         const uploadFile = async e => {
             e.preventDefault();
             const form = new FormData(e.target);
-            const res = await axios.post(`/api/library/upload`, form);
-            const { message, error } = res.data;
+            const res = await fetch(`${server}/api/library/upload`, {
+                method: "POST",
+                body: form
+            })
+            const { message, error } = await res.json();
     
             if (error) console.log(error);
             else console.log(message);

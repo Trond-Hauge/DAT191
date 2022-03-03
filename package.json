@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@types/node": "^17.0.13",
-    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cookie": "^0.4.2",
     "cookies-next": "^2.0.3",
