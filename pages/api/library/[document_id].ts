@@ -31,7 +31,7 @@ export default async function getDocumentById(req: NextApiRequest, res: NextApiR
             return;
         }
 
-        if (!doc.public && (!member || member.permission !== "admin" || member.member_id !== doc.owner)) {
+        if (!doc.public && (!member || (member.permission !== "admin" && member.member_id !== doc.owner))) {
             res.status(403).json({ error: "User is not authorised to view content" });
         }
         else {
