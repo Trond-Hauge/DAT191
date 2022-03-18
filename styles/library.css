@@ -72,3 +72,7 @@
 .org {
     text-align: center;
 }
+
+.upload-form {
+  text-align: left;
+}

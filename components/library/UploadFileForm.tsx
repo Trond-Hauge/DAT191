@@ -21,7 +21,7 @@ export default function UploadFileForm(isVerified) {
         }
 
         return (
-            <form id="upload-form" onSubmit={uploadFile}>
+            <form className="upload-form" onSubmit={uploadFile}>
                 <input
                     name="file"
                     type="file"
@@ -48,7 +48,8 @@ export default function UploadFileForm(isVerified) {
                     defaultChecked
                     required
                 />
-                <button type="submit">Submit</button>
+                <br></br>
+                <button type="submit">Upload Document</button>
             </form>
         )
     }
