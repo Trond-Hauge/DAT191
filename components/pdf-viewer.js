@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useRouter } from "next/router";
 import Router from "next/router";
@@ -21,6 +21,11 @@ export default function PDFViewer({ file }) {
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
   const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);
 
+  function handleKeyDown(e) {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") nextPage();
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") prevPage();
+  }
+
   function onDocumentLoadSuccess({numPages}) {
     setNumPages(numPages);
   }
@@ -39,6 +44,12 @@ export default function PDFViewer({ file }) {
     }
   }
 
+  function goToPage() {
+    const input = document.querySelector("input[name='page']");
+    const page = parseInt(input.value);
+    if (page) setPageNumber(page);
+  }
+
   function zoomIn() {
     if (scale < 20) {
       setScale((prevScale) => prevScale + 1);
@@ -54,7 +65,7 @@ export default function PDFViewer({ file }) {
   }
 
   return (
-    <main>
+    <main tabIndex={-1} onKeyDown={handleKeyDown}>
       <div className="container-2-column">
         <div className="side-menu-container">
           <p>
@@ -71,7 +82,7 @@ export default function PDFViewer({ file }) {
             min="1"
             max={numPages}
           />
-          <a>Go to page</a>
+          <a onClick={goToPage}>Go to page</a>
           <hr />
           <a onClick={zoomIn}>Zoom in</a>
           <a onClick={zoomOut}>Zoom out</a>

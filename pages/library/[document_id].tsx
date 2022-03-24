@@ -35,10 +35,17 @@ export async function getServerSideProps(context) {
     return { redirect: { destination: "/library", permanent: false } }
   }
 
-  const file = fs.readFileSync(doc.filepath);
+  let file;
+  try {
+    file = fs.readFileSync(doc.filepath);
+  }
+  catch (err) {
+    console.log(err);
+    return { redirect: { destination: "/library", permanent: false } }
+  }
 
   if (!file) {
-    console.log("Error when reading file from server");
+    console.log("Error while reading file from server");
     return { redirect: { destination: "/library", permanent: false } }
   }
 
