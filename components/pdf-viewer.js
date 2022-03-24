@@ -1,6 +1,7 @@
 import { useState, useEffect, Component } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Router from "next/router";
 import workerSrc from "pdfjs-dist/build/pdf.worker.entry";
 
@@ -47,7 +48,7 @@ export default function PDFViewer({ file }) {
   function goToPage() {
     const input = document.querySelector("input[name='page']");
     const page = parseInt(input.value);
-    if (page) setPageNumber(page);
+    if (page && page > 0 && page <= numPages) setPageNumber(page);
   }
 
   function zoomIn() {
@@ -81,11 +82,14 @@ export default function PDFViewer({ file }) {
             placeholder="Go to page"
             min="1"
             max={numPages}
+            style={{width: "40%"}}
           />
           <a onClick={goToPage}>Go to page</a>
           <hr />
           <a onClick={zoomIn}>Zoom in</a>
           <a onClick={zoomOut}>Zoom out</a>
+          <hr />
+          <Link href="/library"><a>Back to Library</a></Link>
         </div>
         <div className="pdf-container">
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
