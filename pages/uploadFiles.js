@@ -1,7 +1,6 @@
 "use strict"
 
 import { useState } from "react"
-import axios from "axios";
 import Header from "../components/header";
 
 export default function UploadFiles({ isCookie }) {
@@ -18,7 +17,10 @@ export default function UploadFiles({ isCookie }) {
 
         data.append('file', file);
 
-        axios.post('//localhost:3000/', data)
+        fetch('//localhost:3000/', {
+            method: "POST",
+            body: { data }
+        })
             .then((e) => {
                 console.log('Success')
             })

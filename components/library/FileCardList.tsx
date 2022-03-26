@@ -7,7 +7,7 @@ export default function FileCardList(documents) {
         <>
             {documents.map( doc => {
                 return (
-                    <Link href={`/library/${doc.document_id}`} key={doc.document_id}>
+                    <Link href={`/library/${doc.document_id}`} key={doc.document_id} passHref>
                         <div className="file-card">
                             <div className="inner-card-container">
                                 <h2 className="org">{doc.organisation_name}</h2>
