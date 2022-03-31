@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import Header from "../../components/header";
-
+import { server } from "../../next.config";
 
 export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -25,6 +25,17 @@ export default function Login({isCookie}) {
 
     // FOR TESTING!!
     console.log(message);
+  }
+
+  async function handleForgottenPassword() {
+    const res = await fetch(`${server}/api/user/requestPasswordReset`, {
+      method: "GET",
+      headers: {useremail: emailRef.current?.value}
+    })
+
+    const { error, message } = await res.json();
+    if (error) console.error(error);
+    else console.log(message);
   }
 
   return (
@@ -51,6 +62,7 @@ export default function Login({isCookie}) {
           Submit
         </button>
         <hr />
+        <a onClick={handleForgottenPassword}>Forgotten password?</a>
         <Link href="/register">
           <a>Create Account</a>
         </Link>
