@@ -7,6 +7,8 @@ import { passwordResetEmail } from "../../../messages/email";
 
 export default async function requestPasswordReset(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
+        const email = req.headers.useremail;
+
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -20,15 +22,16 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
         
         const mailConfigurations = {
             from: user,
-            to: req.headers.useremail,
+            to: email,
             subject: "Password Reset",
             text: passwordResetEmail
         };
 
         transporter.sendMail(mailConfigurations, (err, info) => {
-            if (err) res.status(400).json({ error: "Email was not sent successfully" });
-            else res.status(200).json({ message: "Password reset request has been sent to your email" });
+            // TODO - Create an instance for resetting password for this user that expires after a set amount of time
         });
+
+        res.status(200).json({ message: "An email for resetting your password has been sent." })
     }
     else {
         res.status(405).json({ error: "Method not allowed" });

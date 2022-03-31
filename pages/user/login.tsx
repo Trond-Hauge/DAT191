@@ -4,14 +4,17 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import Header from "../../components/header";
 import { server } from "../../next.config";
+import { emailCooldownSeconds } from "../../next.config";
 
 export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const forgottenPasswordRef = useRef<HTMLAnchorElement>(null);
   const [message, setMessage] = useState<any>(null);
+  const [time, setTime] = useState<any>(null);
 
   async function handleForm() {
-    const respt = await fetch("http://localhost:3000/api/user/login", {
+    const res = await fetch("http://localhost:3000/api/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -20,7 +23,7 @@ export default function Login({isCookie}) {
       }),
     });
 
-    const json = await respt.json();
+    const json = await res.json();
     setMessage(json);
 
     // FOR TESTING!!
@@ -28,14 +31,20 @@ export default function Login({isCookie}) {
   }
 
   async function handleForgottenPassword() {
-    const res = await fetch(`${server}/api/user/requestPasswordReset`, {
-      method: "GET",
-      headers: {useremail: emailRef.current?.value}
-    })
+    if (!time || (Date.now() - time) / 1000 >= emailCooldownSeconds) {
+      const res = await fetch(`${server}/api/user/requestPasswordReset`, {
+        method: "GET",
+        headers: { useremail: emailRef.current?.value }
+      })
+  
+      const { message } = await res.json();
+      forgottenPasswordRef.current.innerText = message;
 
-    const { error, message } = await res.json();
-    if (error) console.error(error);
-    else console.log(message);
+      setTime(Date.now());
+    }
+    else {
+      forgottenPasswordRef.current.innerText = "An email was already sent, please wait a bit before using this function again.";
+    }
   }
 
   return (
@@ -62,7 +71,7 @@ export default function Login({isCookie}) {
           Submit
         </button>
         <hr />
-        <a onClick={handleForgottenPassword}>Forgotten password?</a>
+        <a ref={forgottenPasswordRef} onClick={handleForgottenPassword}>Forgotten password?</a>
         <Link href="/register">
           <a>Create Account</a>
         </Link>
