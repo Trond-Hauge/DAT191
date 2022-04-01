@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS members_organisations;
 DROP TABLE IF EXISTS documents;
 DROP TABLE IF EXISTS organisations;
+DROP TABLE IF EXISTS password_reset;
 DROP TABLE IF EXISTS members;
 DROP TYPE IF EXISTS member_permission;
 
@@ -48,11 +49,19 @@ CREATE TABLE documents(
     --constraint for organisation??? Guessing it breaks the normalization, however, it may significantly increase query performance.
 );
 
+CREATE TABLE password_reset
+(
+	timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+	reset_key CHAR(20) PRIMARY KEY, -- Must match passwordResetKeyLength in app.config
+	member_id SERIAL REFERENCES members(member_id)
+);
+
 -- *** GENERATING EXAMPLE ENTRIES *** --
 INSERT INTO members (first_name, last_name, email, username, password, permission)
 VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin'),
     ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'verified'),
-    ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'unverified');
+    ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'unverified'),
+	('Olli', 'Bolli', 'oliveroloughlin@hotmail.com', 'olli', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin');
 
 INSERT INTO organisations(organisation_name, fk_leader)
 VALUES ('University Institution', 1),
@@ -61,7 +70,8 @@ VALUES ('University Institution', 1),
 INSERT INTO members_organisations (member_id, organisation_id)
 VALUES (1, 1),
     (2,2),
-    (3,2);
+    (3,2),
+	(4,1);
 
 INSERT INTO documents (document_name, document_description, public, filepath, owner)
 VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'public/Document.pdf', 1),
@@ -71,11 +81,11 @@ VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'public/Document.pdf
     ('File copy 1', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 1),
     ('File copy 2', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 3),
     ('File copy 3', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 1),
-    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 2),
+    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 4),
     ('File copy 5', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 2),
     ('File copy 6', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 3),
     ('File copy 7', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 2),
     ('File copy 8', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 1),
     ('File copy 9', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 1),
     ('File copy 10', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 3),
-    ('File copy 11', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 2);
+    ('File copy 11', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 4);

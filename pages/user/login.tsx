@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import Header from "../../components/header";
 import { server } from "../../next.config";
-import { emailCooldownSeconds } from "../../next.config";
+import { emailTimeoutSeconds } from "../../next.config";
 
 export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -31,7 +31,8 @@ export default function Login({isCookie}) {
   }
 
   async function handleForgottenPassword() {
-    if (!time || (Date.now() - time) / 1000 >= emailCooldownSeconds) {
+    const timeDiffSeconds = (Date.now() - time) / 1000;
+    if (!time || timeDiffSeconds >= emailTimeoutSeconds) {
       const res = await fetch(`${server}/api/user/requestPasswordReset`, {
         method: "GET",
         headers: { useremail: emailRef.current?.value }
