@@ -17,6 +17,7 @@ export default async function authenticatePasswordReset(req: NextApiRequest, res
 }
 
 function isValid(resetRequest) {
+    if (!resetRequest) return false;
     const timestamp = new Date(resetRequest.timestamp).valueOf();
     const ageInMinutes = (Date.now() - timestamp) / 1000 / 60;
     return ageInMinutes < passwordResetTimeoutMinutes;

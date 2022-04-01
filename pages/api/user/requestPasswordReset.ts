@@ -2,15 +2,20 @@
 
 import nodemailer from "nodemailer";
 import { NextApiRequest, NextApiResponse } from "next";
-import { user, pass, clientId, clientSecret, refreshToken } from "../../../email.config";
-import { passwordResetKeyLength } from "../../../next.config"
+import { passwordResetKeyLength } from "../../../next.config";
 import { passwordResetRequest } from "../../../messages/email";
-import { db } from "../../../db"
+import { db } from "../../../db";
 
 export default async function requestPasswordReset(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         const email = req.headers.useremail;
         const resetKey = createResetKey(passwordResetKeyLength);
+
+        const user = process.env.EMAIL_USERNAME;
+        const pass = process.env.EMAIL_PASSWORD;
+        const clientId = process.env.OAUTH_CLIENT_ID;
+        const clientSecret = process.env.OAUTH_CLIENT_SECRET;
+        const refreshToken = process.env.OAUTH_REFRESH_TOKEN;
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -50,9 +55,8 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
 function createResetKey(length) {
     let result = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return result;
 }
