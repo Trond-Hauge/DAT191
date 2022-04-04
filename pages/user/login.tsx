@@ -4,14 +4,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import Header from "../../components/header";
 import { server } from "../../next.config";
-import { emailTimeoutSeconds } from "../../next.config";
 
 export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const forgottenPasswordRef = useRef<HTMLAnchorElement>(null);
+  const pRef = useRef<HTMLParagraphElement>(null);
   const [message, setMessage] = useState<any>(null);
-  const [time, setTime] = useState<any>(null);
 
   async function handleForm() {
     const res = await fetch("http://localhost:3000/api/user/login", {
@@ -31,21 +29,16 @@ export default function Login({isCookie}) {
   }
 
   async function handleForgottenPassword() {
-    const timeDiffSeconds = (Date.now() - time) / 1000;
-    if (!time || timeDiffSeconds >= emailTimeoutSeconds) {
-      const res = await fetch(`${server}/api/user/requestPasswordReset`, {
-        method: "GET",
-        headers: { useremail: emailRef.current?.value }
-      })
-  
-      const { message } = await res.json();
-      forgottenPasswordRef.current.innerText = message;
+    const res = await fetch(`${server}/api/user/requestPasswordReset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailRef.current?.value,
+      }),
+    });
 
-      setTime(Date.now());
-    }
-    else {
-      forgottenPasswordRef.current.innerText = "An email was already sent, please wait a bit before using this function again.";
-    }
+    const { message } = await res.json();
+    pRef.current.innerText = message;
   }
 
   return (
@@ -72,7 +65,8 @@ export default function Login({isCookie}) {
           Submit
         </button>
         <hr />
-        <a ref={forgottenPasswordRef} onClick={handleForgottenPassword}>Forgotten password?</a>
+        <p ref={pRef}></p>
+        <a onClick={handleForgottenPassword}>Forgot password?</a>
         <Link href="/register">
           <a>Create Account</a>
         </Link>

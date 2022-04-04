@@ -6,14 +6,13 @@ import Router from "next/router";
 import { useRef } from "react";
 import { validatePassword } from "../../../utils/user";
 
-export default function Login({isCookie, reset_key }) {
+export default function Login({ isCookie }) {
   const passRef = useRef<HTMLInputElement>(null);
   const passRetypeRef = useRef<HTMLInputElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Doing stuff");
     const pass = passRef.current?.value;
     const passRetype = passRetypeRef.current?.value;
     const valid = validatePassword(pass);
@@ -28,10 +27,11 @@ export default function Login({isCookie, reset_key }) {
 
     const res = await fetch(`${server}/api/user/processPasswordReset`, {
       method: "PATCH",
-      body: {
-        reset_key,
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        reset_key: Router.query.reset_key,
         password: pass
-      }
+      })
     });
 
     const { message, error } = await res.json();
@@ -80,5 +80,5 @@ export async function getServerSideProps(context) {
   if (!authorised) return { redirect: { destination: "/error", permanent: false } }
 
   const isCookie = cookie ? true : false;
-  return { props: { isCookie, reset_key} };
+  return { props: { isCookie } };
 }
