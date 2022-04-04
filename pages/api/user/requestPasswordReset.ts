@@ -20,6 +20,7 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
             const valid = validatePasswordResetRequest(resetRequest);
 
             if (resetRequest && !valid) {
+                console.log("Problem here?");
                 await db("password_reset").where("reset_key", resetRequest.reset_key).del();
             }
 

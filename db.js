@@ -1,6 +1,7 @@
 "use strict";
 
 import knex from "knex";
+import fs from "fs";
 
 /*
 const {Pool} = require('pg');
@@ -23,6 +24,10 @@ export const db = knex({
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   },
   debug: false,
   pool: {min: 1, max: 5},

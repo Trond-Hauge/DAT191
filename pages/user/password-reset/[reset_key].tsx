@@ -5,6 +5,7 @@ import { server } from "../../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
 import { validatePassword } from "../../../utils/user";
+import { passwordRequirementsText } from "../../../messages/user";
 
 export default function Login({ isCookie }) {
   const passRef = useRef<HTMLInputElement>(null);
@@ -47,16 +48,22 @@ export default function Login({ isCookie }) {
     <>
       {Header(isCookie)}
       <main>
+        <text>
+          <strong>Password Requirements:</strong>
+          <p>{passwordRequirementsText}</p>
+        </text>
         <form onSubmit={handleSubmit}>
           <input
+            type="password"
             placeholder="New password"
             required
             ref={passRef}
           />
           <br/>
           <input
-          required
+            type="password"
             placeholder="Retype password"
+            required
             ref={passRetypeRef}
           />
           <br/>

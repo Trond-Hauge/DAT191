@@ -51,7 +51,7 @@ CREATE TABLE documents(
 
 CREATE TABLE password_reset
 (
-	timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+	timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	reset_key CHAR(20) PRIMARY KEY, -- Must match passwordResetKeyLength in app.config
 	email VARCHAR(64) REFERENCES members(email) NOT NULL UNIQUE
 );

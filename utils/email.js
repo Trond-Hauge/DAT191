@@ -3,7 +3,7 @@
 import nodemailer from "nodemailer";
 
 export function sendMail(receivingUser, subject, text, callbackFunc) {
-    const user = process.env.EMAIL_USERNAME;
+    const user = process.env.EMAIL_USER;
     const pass = process.env.EMAIL_PASSWORD;
     const clientId = process.env.OAUTH_CLIENT_ID;
     const clientSecret = process.env.OAUTH_CLIENT_SECRET;
