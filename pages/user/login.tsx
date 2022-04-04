@@ -12,7 +12,7 @@ export default function Login({isCookie}) {
   const [message, setMessage] = useState<any>(null);
 
   async function handleForm() {
-    const res = await fetch("http://localhost:3000/api/user/login", {
+    const res = await fetch(`${server}/api/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

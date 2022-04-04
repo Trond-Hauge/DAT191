@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Header from "../components/header";
+import { server } from "../next.config";
 
 export default function UploadFiles({ isCookie }) {
     const [file, setFile] = useState(null);
@@ -17,7 +18,7 @@ export default function UploadFiles({ isCookie }) {
 
         data.append('file', file);
 
-        fetch('//localhost:3000/', {
+        fetch(`${server}/`, {
             method: "POST",
             body: { data }
         })
