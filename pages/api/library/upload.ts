@@ -3,6 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db.js";
 import { verify } from "jsonwebtoken";
+import { maxFileSizeBytes } from "../../../app.config.js";
 import formidable from "formidable";
 import fs from "fs";
 
@@ -26,15 +27,21 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 }
                 else {
                     // Get relevant information from form
-                    const name = fields.fileName
+                    const name = fields.fileName;
                     const desc = fields.fileDesc;
                     const _public = fields.public;
                     const fileObject = files.file;
+                    const size = fileObject.size;
+
+                    if (size > maxFileSizeBytes) {
+                        res.status(207).json({ message: `File is too large. File size limit is ${maxFileSizeBytes / 1024}MB` })
+                        return;
+                    }
 
                     fs.readFile(fileObject.filepath, (err, data) => {
                         if (err) {
                             // Handle error when reading file.
-                            res.status(500).send({ error: "Error occured while reading file" })
+                            res.status(500).json({ error: "Error occured while reading file" })
                         }
                         else {
                             const filepath = `files/${fileObject.newFilename}.pdf`;

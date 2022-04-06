@@ -15,7 +15,7 @@
   color: var(--dark);
 }
 
-.side-menu-container input {
+.side-menu-container input, button, label {
   margin: 1rem 1rem 1rem 1rem;
 }
 
@@ -73,6 +73,11 @@
     text-align: center;
 }
 
-.upload-form {
-  text-align: left;
+.search-space {
+  margin-bottom: 6rem;
+  padding-inline: "1rem";
+}
+
+.upload-space {
+  margin-block: 6rem;
 }
