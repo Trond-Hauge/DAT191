@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { passwordResetKeyLength } from "../../../app.config";
-import { methodNotAllowed, passwordResetRequested } from "../../../messages/apiResponse";
+import { METHOD_NOT_ALLOWED, PASSWORD_RESET_REQUESTED } from "../../../messages/apiResponse";
 import { passwordResetRequest } from "../../../messages/email";
 import { sendMail } from "../../../utils/email";
 import { validatePasswordResetRequest } from "../../../utils/user";
@@ -36,10 +36,10 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
             console.error(error);
         }
 
-        res.status(200).json(passwordResetRequested);
+        res.status(200).json(PASSWORD_RESET_REQUESTED);
     }
     else {
-        res.status(405).json(methodNotAllowed);
+        res.status(405).json(METHOD_NOT_ALLOWED);
     }
 }
 

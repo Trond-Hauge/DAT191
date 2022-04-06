@@ -1,20 +1,6 @@
 "use strict";
 
 import knex from "knex";
-import fs from "fs";
-
-/*
-const {Pool} = require('pg');
-
-const pool = new Pool({
-    user: 'postgres',
-    password: 'postgres',
-    host: 'localhost',
-    database: 'dat191',
-    port: '5433',
-    maxConnect: '3'    
-});
-*/
 
 export const db = knex({
   client: "pg",
@@ -24,7 +10,7 @@ export const db = knex({
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT,
-    ssl: {
+    ssl: process.env.NODE_ENV === "development" ? false : {
       require: true,
       rejectUnauthorized: false
     }

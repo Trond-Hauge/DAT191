@@ -1,4 +1,5 @@
 module.exports = {
+    loginCookieMaxAge: 30, // Seconds 
     passwordResetTimeoutMinutes: 5,
     passwordResetKeyLength: 20,
     passwordSaltRounds: 10,
@@ -8,6 +9,6 @@ module.exports = {
         minUpperCase: 1,
         minLowerCase: 1,
         allowedChars: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-        bannedSequences: []
+        bannedSequences: ["123", "1234", "12345"]
     }
 }

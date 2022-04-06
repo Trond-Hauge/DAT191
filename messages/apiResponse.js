@@ -1,10 +1,5 @@
 "use strict";
 
-import { passwordResetTimeoutDays } from "../app.config";
+export const METHOD_NOT_ALLOWED = { error: "Method not allowed." };
 
-export const methodNotAllowed = { error: "Method not allowed." };
-
-export const passwordResetRequested = { message: 
-    `You should receive an email to reset your password shortly. Please note that you 
-    are only able to reset your password once every ${passwordResetTimeoutDays} days.` 
-};
+export const PASSWORD_RESET_REQUESTED = { message: "If this user exists you will receive an email shortly to reset your password." };

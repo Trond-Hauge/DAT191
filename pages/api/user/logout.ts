@@ -9,7 +9,7 @@ export default async function logout(req: NextApiRequest, res: NextApiResponse) 
         httpOnly: true,
         secure: process.env.NODE_ENV !== "development",
         sameSite: "strict",
-        maxAge: -1, //1h¨
+        maxAge: -1,
         path: "/", //root of domain
     }));
     res.send({});
