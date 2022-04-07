@@ -1,6 +1,5 @@
-import { useState, useEffect, Component } from "react";
+import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Router from "next/router";
 import workerSrc from "pdfjs-dist/build/pdf.worker.entry";
@@ -14,10 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // Potential solution: Copy link to clipboard. useState is already prepared to do queries.
 
-export default function PDFViewer({ file }) {
-  const {asPath} = useRouter();
-  const url = asPath.split("?")[0];
-
+export default function PDFViewer({file}) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
   const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);

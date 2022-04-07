@@ -34,7 +34,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     const size = fileObject.size;
 
                     if (size > maxFileSizeBytes) {
-                        res.status(207).json({ message: `File is too large. File size limit is ${maxFileSizeBytes / 1024}MB` })
+                        res.status(207).json({ message: `File is too large. File size limit is ${maxFileSizeBytes / 1024 / 1024}MB` })
                         return;
                     }
 

@@ -18,7 +18,7 @@ export default async function getDocumentById(req: NextApiRequest, res: NextApiR
         });
         const member = await db("members").where("email",email).first();
 
-        const doc = await db.select("documents.document_name", "documents.document_description", "documents.filepath", "documents.public", "documents.filepath","members.first_name", "members.last_name", "organisations.organisation_name")
+        const doc = await db.select("documents.document_name", "documents.owner", "documents.document_description", "documents.filepath", "documents.public", "documents.filepath","members.first_name", "members.last_name", "organisations.organisation_name")
             .from("documents")
             .where("documents.document_id", doc_id)
             .leftJoin("members", "documents.owner", "members.member_id")
