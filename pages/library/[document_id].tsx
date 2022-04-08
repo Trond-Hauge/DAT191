@@ -15,7 +15,7 @@ export default function DocumentPage({ isCookie, doc }) {
 
   if (!fetching) {
     setFetching(true);
-    fetch(`${server}/api/library/file?filepath=${doc.filepath}&public=${doc.public}&owner=${doc.owner}`, { method: "GET" })
+    fetch(`${server}/api/library/file?filename=${doc.filename}&public=${doc.public}&owner=${doc.owner}`, { method: "GET" })
     .then(res => res.json())
     .then(data => {
       const { error, file } = data;

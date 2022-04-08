@@ -88,7 +88,7 @@ export default function PDFViewer({file}) {
           <Link href="/library"><a>Back to Library</a></Link>
         </div>
         <div className="pdf-container">
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document file={file ? file : {}} onLoadSuccess={onDocumentLoadSuccess}>
             <Page pageNumber={pageNumber} scale={scale/10} />
           </Document>
         </div>

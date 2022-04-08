@@ -36,11 +36,11 @@ CREATE TABLE members_organisations (
 -- *** FILE STUFF *** --
 CREATE TABLE documents(
     document_id SERIAL PRIMARY KEY,
-    document_name VARCHAR(128) NOT NULL,
+    document_name VARCHAR(64) NOT NULL,
     document_description TEXT,
     public BOOLEAN NOT NULL,
     owner INTEGER,
-    filepath VARCHAR,
+    filename VARCHAR(68),
     FOREIGN KEY(owner) REFERENCES members(member_id)
 
 	-- SERIAL REFERENCES members(member_id)
@@ -73,19 +73,19 @@ VALUES (1, 1),
     (3,2),
 	(4,1);
 
-INSERT INTO documents (document_name, document_description, public, filepath, owner)
-VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'public/Document.pdf', 1),
-    ('Document 2', 'Blablabla, testign testing, another test, hello there yes you hi', true, 'public/Document.pdf', 2),
-    ('Doc Oc', 'This doc is verry oc. Simple description, not too long', false, 'public/Document.pdf', 1),
-    ('A Document Of Great Importance', 'Should be first in sorted list. This is a test document, and this is the description. A document description may be quite long, perhaps over 100 characters. Therefore it might be desireable to cut the contents when displayed on the website in a card. Maybe this limit should be at about 200 characters, but that is why we have this test', false, 'public/Document.pdf', 2),
-    ('File copy 1', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 1),
-    ('File copy 2', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 3),
-    ('File copy 3', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 1),
-    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 4),
-    ('File copy 5', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 2),
-    ('File copy 6', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 3),
-    ('File copy 7', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 2),
-    ('File copy 8', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 1),
-    ('File copy 9', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 1),
-    ('File copy 10', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'public/Document.pdf', 3),
-    ('File copy 11', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'public/Document.pdf', 4);
+INSERT INTO documents (document_name, document_description, public, filename, owner)
+VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'Document.pdf', 1),
+    ('Document 2', 'Blablabla, testign testing, another test, hello there yes you hi', true, 'Document.pdf', 2),
+    ('Doc Oc', 'This doc is verry oc. Simple description, not too long', false, 'Document.pdf', 1),
+    ('A Document Of Great Importance', 'Should be first in sorted list. This is a test document, and this is the description. A document description may be quite long, perhaps over 100 characters. Therefore it might be desireable to cut the contents when displayed on the website in a card. Maybe this limit should be at about 200 characters, but that is why we have this test', false, 'Document.pdf', 2),
+    ('File copy 1', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 1),
+    ('File copy 2', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 3),
+    ('File copy 3', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 1),
+    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 4),
+    ('File copy 5', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 2),
+    ('File copy 6', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 3),
+    ('File copy 7', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 2),
+    ('File copy 8', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 1),
+    ('File copy 9', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 1),
+    ('File copy 10', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 3),
+    ('File copy 11', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 4);
