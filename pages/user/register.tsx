@@ -2,10 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import Header from "../components/header";
-import { server } from "../next.config";
-import { validatePassword } from "../utils/user";
+import Header from "../../components/header";
+import { server } from "../../next.config";
+import { validatePassword } from "../../utils/user";
 
 export default function Register({ isCookie }) {
     const [firstName, setFirstName] = useState('');
@@ -15,7 +14,6 @@ export default function Register({ isCookie }) {
     const [password, setPassword] = useState('');
     const pRef = useRef<HTMLParagraphElement>(null);
     const router = useRouter();
-
 
      const submit = async (e) => {
         e.preventDefault();

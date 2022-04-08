@@ -13,10 +13,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // Potential solution: Copy link to clipboard. useState is already prepared to do queries.
 
-export default function PDFViewer({file}) {
+export default function PDFViewer({ file, filename }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
   const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);
+  const fileURL = file ? window.URL.createObjectURL(file) : null;
 
   function handleKeyDown(e) {
     switch (e.code) {
@@ -111,6 +112,7 @@ export default function PDFViewer({file}) {
           <a onClick={zoomIn}>Zoom in</a>
           <a onClick={zoomOut}>Zoom out</a>
           <hr />
+          <a href={fileURL} download={filename}>Download</a>
           <Link href="/library"><a>Back to Library</a></Link>
         </div>
         <div className="pdf-container">

@@ -14,20 +14,18 @@ export default function DocumentPage({ isCookie, doc }) {
   const [file, setFile] = useState(null);
 
   if (!fetching) {
-    console.log("Fetching...");
     setFetching(true);
     fetch(`${server}/api/library/file?filename=${doc.filename}&public=${doc.public}&owner=${doc.owner}`, { method: "GET" })
     .then(res => res.blob())
     .then(file => {
       setFile(file);
-      console.log(file);
     });
   }
 
   return (
     <>
     {Header(isCookie)}
-    <PDFViewer file={file}/>
+    <PDFViewer file={file} filename={doc.filename}/>
     </>
   );
 }

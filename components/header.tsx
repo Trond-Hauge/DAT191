@@ -122,7 +122,7 @@ function SignIn(isCookie) {
               Submit
             </a>
             <hr/>
-            <Link href="/register">
+            <Link href="/user/register">
               <a>Create Account</a>
             </Link>
           </div>
