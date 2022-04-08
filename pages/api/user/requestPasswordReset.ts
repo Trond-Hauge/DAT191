@@ -1,36 +1,53 @@
 "use strict";
 
-import nodemailer from "nodemailer";
 import { NextApiRequest, NextApiResponse } from "next";
-import { user, pass, clientId, clientSecret, refreshToken } from "../../../email.config";
-import { passwordResetEmail } from "../../../messages/email";
+import { passwordResetKeyLength } from "../../../app.config";
+import { METHOD_NOT_ALLOWED, PASSWORD_RESET_REQUESTED } from "../../../messages/apiResponse";
+import { passwordResetRequest } from "../../../messages/email";
+import { sendMail } from "../../../utils/email";
+import { validatePasswordResetRequest } from "../../../utils/user";
+import { db } from "../../../db";
 
 export default async function requestPasswordReset(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === "GET") {
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user,
-                pass,
-                clientId,
-                clientSecret,
-                refreshToken
-            }
-        });
-        
-        const mailConfigurations = {
-            from: user,
-            to: req.headers.useremail,
-            subject: "Password Reset",
-            text: passwordResetEmail
-        };
+    if (req.method === "POST") {
+        const userEmail = req.body.email as string;
+        const subject = "Password Reset";
+        const resetKey = createResetKey(passwordResetKeyLength);
+        const text = passwordResetRequest(resetKey);
 
-        transporter.sendMail(mailConfigurations, (err, info) => {
-            if (err) res.status(400).json({ error: "Email was not sent successfully" });
-            else res.status(200).json({ message: "Password reset request has been sent to your email" });
-        });
+        try {
+            const resetRequest = await db("password_reset").where("email", userEmail).first();
+            const valid = validatePasswordResetRequest(resetRequest);
+
+            if (resetRequest && !valid) {
+                console.log("Problem here?");
+                await db("password_reset").where("reset_key", resetRequest.reset_key).del();
+            }
+
+            if (!valid) {
+                db("password_reset").insert({
+                    reset_key: resetKey,
+                    email: userEmail
+                })
+                .then( () => sendMail(userEmail, subject, text) );
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+
+        res.status(200).json(PASSWORD_RESET_REQUESTED);
     }
     else {
-        res.status(405).json({ error: "Method not allowed" });
+        res.status(405).json(METHOD_NOT_ALLOWED);
     }
+}
+
+function createResetKey(length) {
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
 }

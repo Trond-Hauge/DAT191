@@ -1,6 +1,5 @@
-import { useState, useEffect, Component } from "react";
+import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Router from "next/router";
 import workerSrc from "pdfjs-dist/build/pdf.worker.entry";
@@ -14,18 +13,41 @@ pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // Potential solution: Copy link to clipboard. useState is already prepared to do queries.
 
-export default function PDFViewer({ file }) {
-  const {asPath} = useRouter();
-  const url = asPath.split("?")[0];
-
+export default function PDFViewer({file}) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
   const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);
 
   function handleKeyDown(e) {
-    if (e.key === "ArrowRight" || e.key === "ArrowDown") nextPage();
-    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") prevPage();
+    switch (e.code) {
+      case "ArrowRight": {
+        nextPage();
+      }
+      break;
+
+      case "ArrowDown": {
+        nextPage();
+      }
+      break;
+
+      case "ArrowLeft": {
+        prevPage();
+      }
+      break;
+
+      case "ArrowUp": {
+        prevPage();
+      }
+      break;
+    }
   }
+
+  useEffect( () => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  })
 
   function onDocumentLoadSuccess({numPages}) {
     setNumPages(numPages);
@@ -66,7 +88,7 @@ export default function PDFViewer({ file }) {
   }
 
   return (
-    <main tabIndex={-1} onKeyDown={handleKeyDown}>
+    <main>
       <div className="container-2-column">
         <div className="side-menu-container">
           <p>
@@ -92,7 +114,7 @@ export default function PDFViewer({ file }) {
           <Link href="/library"><a>Back to Library</a></Link>
         </div>
         <div className="pdf-container">
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document file={file ? file : {}} onLoadSuccess={onDocumentLoadSuccess}>
             <Page pageNumber={pageNumber} scale={scale/10} />
           </Document>
         </div>

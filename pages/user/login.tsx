@@ -8,10 +8,11 @@ import { server } from "../../next.config";
 export default function Login({isCookie}) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const pRef = useRef<HTMLParagraphElement>(null);
   const [message, setMessage] = useState<any>(null);
 
   async function handleForm() {
-    const respt = await fetch("http://localhost:3000/api/user/login", {
+    const res = await fetch(`${server}/api/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -20,7 +21,7 @@ export default function Login({isCookie}) {
       }),
     });
 
-    const json = await respt.json();
+    const json = await res.json();
     setMessage(json);
 
     // FOR TESTING!!
@@ -29,13 +30,15 @@ export default function Login({isCookie}) {
 
   async function handleForgottenPassword() {
     const res = await fetch(`${server}/api/user/requestPasswordReset`, {
-      method: "GET",
-      headers: {useremail: emailRef.current?.value}
-    })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailRef.current?.value,
+      }),
+    });
 
-    const { error, message } = await res.json();
-    if (error) console.error(error);
-    else console.log(message);
+    const { message } = await res.json();
+    pRef.current.innerText = message;
   }
 
   return (
@@ -62,7 +65,8 @@ export default function Login({isCookie}) {
           Submit
         </button>
         <hr />
-        <a onClick={handleForgottenPassword}>Forgotten password?</a>
+        <p ref={pRef}></p>
+        <a onClick={handleForgottenPassword}>Forgot password?</a>
         <Link href="/register">
           <a>Create Account</a>
         </Link>

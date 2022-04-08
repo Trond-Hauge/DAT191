@@ -59,28 +59,31 @@ export default function Library({ list, isCookie, isVerified}) {
             {Header(isCookie)}
             <main>
                 <div className="side-menu-container">
-                    <form id="search-form" onChange={handleChange}>
-                        <input
-                            name="title"
-                            type="text"
-                            placeholder="Search by title"
-                            defaultValue={title}
-                        />
-                        <input
-                            name="org"
-                            type="text"
-                            placeholder="Search by organisation"
-                            defaultValue={org}
-                        />
-                        <input
-                            name="author"
-                            type="text"
-                            placeholder="Search by author"
-                            defaultValue={author}
-                        />
-                    </form>
-                    <br></br>
-                    {UploadFileForm(isVerified)}
+                    <div className="search-space">
+                        <form onChange={handleChange}>
+                            <input
+                                name="title"
+                                type="text"
+                                placeholder="Search by title"
+                                defaultValue={title}
+                            />
+                            <input
+                                name="org"
+                                type="text"
+                                placeholder="Search by organisation"
+                                defaultValue={org}
+                            />
+                            <input
+                                name="author"
+                                type="text"
+                                placeholder="Search by author"
+                                defaultValue={author}
+                            />
+                        </form>
+                    </div>
+                    <div className="upload-space">
+                        {UploadFileForm(isVerified)}
+                    </div>
                 </div>
                 
                 <div className="card-space">
@@ -93,10 +96,10 @@ export default function Library({ list, isCookie, isVerified}) {
 
 // Runs on the server before delivering results to the client.
 // A GET request is sent to the documents API, which returns document contents based on the permission level of the user.
-// A GET request is then sent to the user/isVerified API, which responds with boolean value determining if the user is verified or not.
+// A GET request is then sent to the user/permission API, which responds with the permission level of the user.
 // Documents, isCookie, and isVerified are then delivered as props to the client.
-export async function getServerSideProps(context) {
-    const cookie = context.req?.headers.cookie;
+export async function getServerSideProps(ctx) {
+    const cookie = ctx.req?.headers.cookie;
 
     const docsRes = await fetch(`${server}/api/library/documents`, {
         method: "GET",
@@ -104,12 +107,13 @@ export async function getServerSideProps(context) {
     });
     const json = await docsRes.json();
 
-    const veriRes = await fetch(`${server}/api/user/isVerified`, {
+    const permRes = await fetch(`${server}/api/user/permission`, {
         method: "GET",
         headers: { cookie: cookie}
     })
-    const { isVerified } = await veriRes.json();
-    
+    const { permission } = await permRes.json();
+
+    const isVerified = permission === "verified" || permission === "admin";
     const isCookie = cookie ? true : false;
     return { props: { list: json, isCookie: isCookie, isVerified: isVerified } };
 }

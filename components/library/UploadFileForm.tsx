@@ -1,9 +1,12 @@
 "use strict";
 
 import Router from "next/router";
+import { useRef } from "react";
 import { server } from "../../next.config";
 
 export default function UploadFileForm(isVerified) {
+    const msgRef = useRef<HTMLParagraphElement>(null);
+
     if (isVerified) {
         const uploadFile = async e => {
             e.preventDefault();
@@ -14,14 +17,21 @@ export default function UploadFileForm(isVerified) {
             })
             const { message, error } = await res.json();
     
-            if (error) console.log(error);
-            else console.log(message);
-    
-            Router.replace(Router.asPath);
+            if (error) {
+                Router.push("/error");
+            }
+            else {
+                msgRef.current.innerText = message;
+                if (res.status === 201) {
+                    e.target.reset();
+                    Router.replace(Router.asPath, undefined, { shallow: false });
+                }
+            }
         }
 
         return (
-            <form className="upload-form" onSubmit={uploadFile}>
+            <>
+            <form onSubmit={uploadFile}>
                 <input
                     name="file"
                     type="file"
@@ -48,12 +58,15 @@ export default function UploadFileForm(isVerified) {
                     defaultChecked
                     required
                 />
-                <br></br>
                 <button type="submit">Upload Document</button>
             </form>
+            <p ref={msgRef}></p>
+            </>
         )
     }
     else {
-        return (<></>)
+        return (
+            <p>You must be a verified user to upload files to the library.</p>
+        )
     }
 }

@@ -1,4 +1,4 @@
 module.exports = {
   reactStrictMode: true,
-  server: "http://localhost:3000"
+  server: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://dat-191.vercel.app"
 }

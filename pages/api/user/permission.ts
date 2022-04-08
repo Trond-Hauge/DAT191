@@ -4,7 +4,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db.js";
 import { verify } from "jsonwebtoken";
 
-export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
+/**
+ * Returns the permission level of the user upon receiving a GET request.
+ * If user is not logged in, permission is set to 'false'.
+ * @param req 
+ * @param res 
+ */
+export default async function permission(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         let email = "";
         verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
@@ -12,11 +18,11 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
         });
 
         const member = await db("members").where("email",email).first();
-        if (!member || member.permission === "unverified") {
-            res.status(200).json({ isVerified: false });
+        if (!member) {
+            res.status(200).json({ permission: false })
         }
         else {
-            res.status(200).json({ isVerified: true });
+            res.status(200).json({ permission: member.permission });
         }
     }
     else {
