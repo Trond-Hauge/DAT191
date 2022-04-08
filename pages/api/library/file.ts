@@ -31,7 +31,8 @@ export default async function file(req: NextApiRequest, res: NextApiResponse) {
             try {
                 const response = await gc.bucket("heqed_house_test").file(filename).download();
                 const file = response[0];
-                res.status(200).json({file})
+                res.status(200).send(file);
+                console.log(file);
             }
             catch (err) {
                 res.status(500).json(INTERNAL_SERVER_ERROR);
