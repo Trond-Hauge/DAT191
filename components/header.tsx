@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import Router from "next/router";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { server } from "../next.config";
-
 
 export default function Header(isCookie) {
   return (
@@ -38,6 +37,27 @@ function SignIn(isCookie) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+
+  function handleKeyDown(e) {
+    switch (e.code) {
+      case "Enter": {
+        if (open) handleForm();
+      }
+      break;
+      
+      case "Escape": {
+        if (open) setOpen(false);
+      }
+      break;
+    }
+  }
+
+  useEffect( () => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  })
 
   async function handleForm() {
 
