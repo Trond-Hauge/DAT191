@@ -3,12 +3,12 @@
 import { server } from "../next.config"
 
 export function passwordResetRequest(key) {
-return `
-Click on this link to reset your password:
-${server}/user/password-reset/${key}
+    return `
+    Click on this link to reset your password:
+    ${server}/user/password-reset?reset_key=${key}
 
-If you have not requested a password reset, please ignore this email.
-`}
+    If you have not requested a password reset, please ignore this email.`
+}
 
 export const passwordReset = `
 Your password has been reset.

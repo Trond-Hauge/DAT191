@@ -1,11 +1,11 @@
 "use strict";
 
-import Header from "../../../components/header";
-import { server } from "../../../next.config";
+import Header from "../../components/header";
+import { server } from "../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
-import { validatePassword } from "../../../utils/user";
-import { passwordRequirementsText } from "../../../messages/user";
+import { validatePassword } from "../../utils/user";
+import { passwordRequirementsText } from "../../messages/user";
 
 export default function Login({ isCookie }) {
   const passRef = useRef<HTMLInputElement>(null);
@@ -75,14 +75,11 @@ export default function Login({ isCookie }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const cookie = context.req?.headers.cookie;
-  const reset_key = context.query.reset_key;
+export async function getServerSideProps(ctx) {
+  const cookie = ctx.req?.headers.cookie;
+  const reset_key = ctx.query.reset_key;
 
-  const res = await fetch(`${server}/api/user/authenticatePasswordReset`, {
-    method: "GET",
-    headers: { reset_key }
-  });
+  const res = await fetch(`${server}/api/user/authenticatePasswordReset?reset_key=${reset_key}`, { method: "GET" });
   const { authorised } = await res.json();
   if (!authorised) return { redirect: { destination: "/error", permanent: false } }
 

@@ -6,7 +6,7 @@ import { validatePasswordResetRequest } from "../../../utils/user";
 
 export default async function authenticatePasswordReset(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
-        const key = req.headers.reset_key;
+        const key = req.query.reset_key;
         const resetRequest = await db("password_reset").where("reset_key", key).first();
         const valid = validatePasswordResetRequest(resetRequest);
 
