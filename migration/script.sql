@@ -40,12 +40,11 @@ CREATE TABLE documents(
     document_description TEXT,
     public BOOLEAN NOT NULL,
     owner INTEGER,
-    filename VARCHAR(68),
+    filename VARCHAR(68), --Multiple files of the same name will cause issues, need to think of a good solution
     FOREIGN KEY(owner) REFERENCES members(member_id)
 
-	-- SERIAL REFERENCES members(member_id)
-	
     --categorisation! IMPORTANT, hear with users.
+    --Should contain more metadata, publish date for example.
     --constraint for organisation??? Guessing it breaks the normalization, however, it may significantly increase query performance.
 );
 

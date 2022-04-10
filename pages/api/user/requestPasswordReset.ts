@@ -20,7 +20,6 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
             const valid = validatePasswordResetRequest(resetRequest);
 
             if (resetRequest && !valid) {
-                console.log("Problem here?");
                 await db("password_reset").where("reset_key", resetRequest.reset_key).del();
             }
 
@@ -30,6 +29,7 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
                     email: userEmail
                 })
                 .then( () => sendMail(userEmail, subject, text) );
+                console.log("Should receive email ??");
             }
         }
         catch (error) {
@@ -43,7 +43,7 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
     }
 }
 
-function createResetKey(length) {
+function createResetKey(length: Number) {
     let result = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (let i = 0; i < length; i++) {

@@ -50,7 +50,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                         else {
                             try {
                                 // Save file to google storage and insert document information into database.
-                                await gc.bucket("heqed_house_test").file(`${name}.pdf`).save(data);
+                                await gc.file(`${name}.pdf`).save(data);
 
                                 await db("documents").insert({
                                     document_name: name,
