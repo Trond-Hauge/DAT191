@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Router from "next/router";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { server } from "../next.config";
+import LoginForm from "./LoginForm";
 
 export default function Header(isCookie) {
   return (
@@ -34,17 +35,10 @@ export default function Header(isCookie) {
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
 function SignIn(isCookie) {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
 
   function handleKeyDown(e) {
     switch (e.code) {
-      case "Enter": {
-        if (open) handleForm();
-      }
-      break;
-      
       case "Escape": {
         if (open) setOpen(false);
       }
@@ -59,29 +53,12 @@ function SignIn(isCookie) {
     }
   })
 
-  async function handleForm() {
-
-    const response = await fetch(`${server}/api/user/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: emailRef.current?.value,
-        password: passRef.current?.value
-      })
-    });
-
-    const json = await response.json();
-
-    if (json.loggedIn) {
-      Router.reload();
-    }
-  }
-
   async function logout() {
     await fetch(`${server}/api/user/logout`);
     Router.reload();
-    
   }
+
+  const loginForm = LoginForm();
 
   if (isCookie) {
     return (
@@ -105,27 +82,7 @@ function SignIn(isCookie) {
       <a className="dropdown-button" onClick={() => setOpen(!open)}>Sign In</a>
       {open &&
         <div className="dropdown-content">
-          <div className="sign-in-form">
-            <input
-              type="email"
-              name="email"
-              placeholder="Your email address"
-              ref={emailRef}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              ref={passRef}
-            />
-            <a onClick={handleForm} type="button">
-              Submit
-            </a>
-            <hr/>
-            <Link href="/user/register">
-              <a>Create Account</a>
-            </Link>
-          </div>
+          {loginForm}
         </div>
       }
     </div>

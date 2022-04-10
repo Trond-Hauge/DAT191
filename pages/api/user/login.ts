@@ -6,12 +6,16 @@ import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { loginCookieMaxAge } from "../../../app.config";
 import cookie from "cookie";
+import { INCORRECT_LOGIN, METHOD_NOT_ALLOWED } from "../../../messages/apiResponse";
 
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
-        const member = await db("members").where("email", req.body.email as string).select("*").first();
+        const member = await db("members").where("email", req.body.email as string).first();
+        if (!member) {
+            res.status(207).json(INCORRECT_LOGIN);
+            return;
+        }
                 
-        // ToDo: All the other logic. F.ex. catching empty return, where user was not found.
         compare(req.body.password, member.password, function (err, result) {
             if(!err && result) {
                 //consider adding more features to the claims, but not anything personal. Make a hash for this purpose?
@@ -25,13 +29,14 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                     maxAge: loginCookieMaxAge, 
                     path: "/", //root of domain
                 }));
-                res.json({ loggedIn: true });
-            } else {
-                res.json({ loggedIn: false });
+                res.status(200).json({ message: "Login successful." });
+            } 
+            else {
+                res.status(207).json(INCORRECT_LOGIN);
             }
         });
-
-    } else {
-        res.status(405).json({ message: "The request was not a POST request!" });
+    }
+    else {
+        res.status(405).json(METHOD_NOT_ALLOWED);
     }
 }

@@ -1,7 +1,9 @@
 "use strict";
 
 // Message responses
-export const PASSWORD_RESET_REQUESTED = { message: "If this user exists you will receive an email shortly to reset your password." };
+export const PASSWORD_RESET_REQUESTED = { message: "If this user exists an email will be sent to you shortly." };
+
+export const INCORRECT_LOGIN = { message: "Email or password incorrect" };
 
 // Error responses
 export const METHOD_NOT_ALLOWED = { error: "Method not allowed." };

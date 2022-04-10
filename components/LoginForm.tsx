@@ -2,70 +2,86 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
+import { server } from "../next.config";
+import Router from "next/router";
 
-//export default class LoginForm extends React.Component {
-export default function LoginForm() {
-  const emailRef = useRef < HTMLInputElement > (null);
-  const passRef = useRef < HTMLInputElement > (null);
-  const [message, setMessage] = useState < any > (null);
+export default function LoginForm(redirectPath?) {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+  const msgRef = useRef<HTMLParagraphElement>(null);
 
-  
-  const state = {
-    email: "",
-    password: "",
-  };
+  function handleKeyDown(e) {
+    switch (e.code) {
+      case "Enter": {
+        handleForm();
+      }
+      break;
+    }
+  }
 
-  const handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  useEffect( () => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  })
 
   async function handleForm() {
-    const respt = await fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      headers: { "Conent-type": "application/json" },
+    const res = await fetch(`${server}/api/user/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: emailRef.current?.value,
-        password: passRef.current?.value,
+        password: passRef.current?.value
+      })
+    });
+
+    const { message } = await res.json();
+
+    if (res.status === 200) {
+      if (redirectPath) Router.push(redirectPath);
+      else Router.reload();
+    }
+    else if (res.status === 207) {
+      msgRef.current.innerText = message;
+    }
+  }
+
+  async function handleForgottenPassword() {
+    const res = await fetch(`${server}/api/user/requestPasswordReset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailRef.current?.value,
       }),
     });
 
-    const json = await respt.json();
-    setMessage(json);
-
-    console.log(emailRef.current?.value, passRef.current?.value);
+    const { message } = await res.json();
+    msgRef.current.innerText = message;
   }
 
-  //<form className="sign-in-form" onSubmit={this.handleSubmit}>
-
-  // before the refs: onChange={this.handleChange}
   return (
     <form className="sign-in-form">
-      <div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Your email address"
-          ref={emailRef}
-        />
-      </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Your password"
-          ref={passRef}
-        />
-      </div>
-      <button className="submit-button" type="submit" onClick={handleForm}>
-        Submit
-      </button>
-      <hr />
-      <Link href="/register">
+      <p ref={msgRef}></p>
+      <input
+        type="email"
+        name="email"
+        placeholder="Your email address"
+        ref={emailRef}
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Your password"
+        ref={passRef}
+        required
+      />
+      <a onClick={handleForm} type="button">Submit</a>
+      <a onClick={handleForgottenPassword}>Forgot password?</a>
+      <hr/>
+      <Link href="/user/register">
         <a>Create Account</a>
       </Link>
     </form>
