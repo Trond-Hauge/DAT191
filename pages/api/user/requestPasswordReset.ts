@@ -29,7 +29,6 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
                     email: userEmail
                 })
                 .then( () => sendMail(userEmail, subject, text) );
-                console.log("Should receive email ??");
             }
         }
         catch (error) {

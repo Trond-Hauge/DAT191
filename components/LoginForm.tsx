@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { server } from "../next.config";
 import Router from "next/router";
 
@@ -10,6 +10,7 @@ export default function LoginForm(redirectPath?) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const msgRef = useRef<HTMLParagraphElement>(null);
+  const [lastResetEmail, setLastResetEmail] = useState(null);
 
   function handleKeyDown(e) {
     switch (e.code) {
@@ -49,11 +50,15 @@ export default function LoginForm(redirectPath?) {
   }
 
   async function handleForgottenPassword() {
+    const email = emailRef.current.value;
+    if (email === lastResetEmail) return;
+    setLastResetEmail(email);
+
     const res = await fetch(`${server}/api/user/requestPasswordReset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: emailRef.current?.value,
+        email: email,
       }),
     });
 
