@@ -39,13 +39,13 @@ export default function UploadFileForm(isVerified) {
                     required
                 />
                 <input
-                    name="fileName" 
+                    name="name" 
                     type="text"
                     placeholder="Document title"
                     required
                 />
                 <input
-                    name="fileDesc" 
+                    name="desc" 
                     type="text"
                     placeholder="Document description"
                     required

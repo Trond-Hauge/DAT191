@@ -29,12 +29,12 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                 }
                 else {
                     // Get relevant information from form.
-                    const name = fields.fileName;
-                    const filename = `${name}.pdf`;
-                    const desc = fields.fileDesc;
+                    const name = fields.name;
+                    const desc = fields.desc;
                     const _public = fields.public;
-                    const fileObject = files.file;
-                    const size = fileObject.size;
+                    const file = files.file;
+                    const size = file.size;
+                    const filename = file.originalFilename;
 
                     // Check if file size exceeds limit.
                     if (size > maxFileSizeBytes) {
@@ -43,24 +43,24 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     }
 
                     // Read the file into memory.
-                    fs.readFile(fileObject.filepath, async (err, data) => {
+                    fs.readFile(file.filepath, async (err, data) => {
                         if (err) {
                             res.status(500).json(INTERNAL_SERVER_ERROR);
                         }
                         else {
                             try {
                                 // Save file to google storage and insert document information into database.
-                                await gc.file(`${name}.pdf`).save(data);
+                                await gc.file(filename).save(data);
 
                                 await db("documents").insert({
                                     document_name: name,
                                     document_description: desc,
                                     public: _public,
-                                    filename,
+                                    filename: filename,
                                     owner: member.member_id
                                 });
 
-                                // Succesful repsonse.
+                                // Succesful response.
                                 res.status(201).json( {message: "File was uploaded successfully"} );
                             }
                             catch (err) {
