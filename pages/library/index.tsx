@@ -5,8 +5,9 @@ import UploadFileForm from "../../components/library/UploadFileForm";
 import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
+import { getMemberClaims } from "../../utils/server/user";
 
-export default function Library({ list, isCookie, isVerified}) {
+export default function Library({ list, permission, isVerified }) {
     // Sets the initial array of all accessible documents.
     let documents = Array.from(list);
 
@@ -56,7 +57,7 @@ export default function Library({ list, isCookie, isVerified}) {
     // The actual page contents that are returned.
     return (
         <>
-            {Header(isCookie)}
+            {Header(permission)}
             <main>
                 <div className="side-menu-container">
                     <div className="search-space">
@@ -99,21 +100,15 @@ export default function Library({ list, isCookie, isVerified}) {
 // A GET request is then sent to the user/permission API, which responds with the permission level of the user.
 // Documents, isCookie, and isVerified are then delivered as props to the client.
 export async function getServerSideProps(ctx) {
-    const cookie = ctx.req?.headers.cookie;
+    const cookie = ctx.req?.cookies.auth;
+    const { permission } = getMemberClaims(cookie);
+    const isVerified = permission === "admin" || permission === "verified";
 
-    const docsRes = await fetch(`${server}/api/library/documents`, {
+    const res = await fetch(`${server}/api/library/documents`, {
         method: "GET",
         headers: { cookie: cookie }
     });
-    const json = await docsRes.json();
+    const json = await res.json();
 
-    const permRes = await fetch(`${server}/api/user/permission`, {
-        method: "GET",
-        headers: { cookie: cookie}
-    })
-    const { permission } = await permRes.json();
-
-    const isVerified = permission === "verified" || permission === "admin";
-    const isCookie = cookie ? true : false;
-    return { props: { list: json, isCookie: isCookie, isVerified: isVerified } };
+    return { props: { list: json, permission, isVerified } };
 }

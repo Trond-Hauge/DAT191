@@ -4,12 +4,13 @@ import Header from "../../components/header";
 import dynamic from "next/dynamic";
 import { server } from "../../next.config";
 import { useState } from "react";
+import { getMemberClaims } from "../../utils/server/user";
 
 const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
   ssr: false
 });
 
-export default function DocumentPage({ isCookie, doc }) {
+export default function DocumentPage({ permission, doc }) {
   const [fetching, setFetching] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -24,15 +25,15 @@ export default function DocumentPage({ isCookie, doc }) {
 
   return (
     <>
-    {Header(isCookie)}
+    {Header(permission)}
     <PDFViewer file={file} filename={doc.filename}/>
     </>
   );
 }
 
 export async function getServerSideProps(ctx) {
-  const cookie = ctx.req?.headers.cookie;
-  const isCookie = cookie ? true : false;
+  const cookie = ctx.req?.cookies.auth;
+  const { permission } = getMemberClaims(cookie);
 
   const res = await fetch(`${server}/api/library/${ctx.query.document_id}`, {
     method: "GET",
@@ -44,5 +45,5 @@ export async function getServerSideProps(ctx) {
     return { redirect: { destination: "/library", permanent: false } }
   }
 
-  return { props: { isCookie, doc } };
+  return { props: { permission, doc } };
 }

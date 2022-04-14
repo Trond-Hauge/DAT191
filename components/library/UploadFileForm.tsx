@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useRef } from "react";
 import { server } from "../../next.config";
 
-export default function UploadFileForm(isVerified) {
+export default function UploadFileForm(isVerified: boolean) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
     if (isVerified) {

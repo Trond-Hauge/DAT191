@@ -2,18 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import Header from "../components/header";
-
+import { getMemberClaims } from "../utils/server/user";
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home({isCookie}) {
+export default function Home({permission}) {
   //console.log("Home: ", isCookie);
   
   return (
     <>
-    {Header(isCookie)}
+    {Header(permission)}
       <main>
         <div className="home-container-flex">
           <div className="container-inner">
@@ -52,9 +51,8 @@ export default function Home({isCookie}) {
   );
 }
 
-export async function getServerSideProps (context) {
-  const cookie = context.req?.headers.cookie;
-  
-  const isCookie = cookie ? true : false;  
-  return { props: {isCookie} };
+export async function getServerSideProps (ctx) {
+  const cookie = ctx.req?.cookies.auth;
+  const { permission } = getMemberClaims(cookie);
+  return { props: { permission } };
 }

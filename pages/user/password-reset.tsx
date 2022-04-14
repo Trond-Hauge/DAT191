@@ -4,10 +4,11 @@ import Header from "../../components/header";
 import { server } from "../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
-import { validatePassword } from "../../utils/user";
+import { validatePassword } from "../../utils/multi/user";
 import { passwordRequirementsText } from "../../messages/user";
+import { getMemberClaims } from "../../utils/server/user";
 
-export default function Login({ isCookie }) {
+export default function Login({ permission }) {
   const passRef = useRef<HTMLInputElement>(null);
   const passRetypeRef = useRef<HTMLInputElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
@@ -46,7 +47,7 @@ export default function Login({ isCookie }) {
 
   return (
     <>
-      {Header(isCookie)}
+      {Header(permission)}
       <main>
         <text>
           <strong>Password Requirements:</strong>
@@ -76,13 +77,13 @@ export default function Login({ isCookie }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const cookie = ctx.req?.headers.cookie;
+  const cookie = ctx.req?.cookies.auth;
+  const { permission } = getMemberClaims(cookie);
   const reset_key = ctx.query.reset_key;
 
   const res = await fetch(`${server}/api/user/authenticatePasswordReset?reset_key=${reset_key}`, { method: "GET" });
   const { authorised } = await res.json();
   if (!authorised) return { redirect: { destination: "/error", permanent: false } }
 
-  const isCookie = cookie ? true : false;
-  return { props: { isCookie } };
+  return { props: { permission } };
 }

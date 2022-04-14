@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { server } from "../next.config";
 import LoginForm from "./LoginForm";
 
-export default function Header(isCookie) {
+export default function Header(permission) {
   return (
     <div className="navbar">
       <div className="nav-container-left">
@@ -25,7 +25,7 @@ export default function Header(isCookie) {
       </div>
       <div className="nav-container-right">
         <ul className="nav-right">
-          {SignIn(isCookie)}
+          {SignIn(permission ? true : false)}
         </ul>
       </div >
     </div >
@@ -34,7 +34,7 @@ export default function Header(isCookie) {
 
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
-function SignIn(isCookie) {
+function SignIn(loggedIn) {
   const [open, setOpen] = useState(false);
 
   function handleKeyDown(e) {
@@ -60,7 +60,7 @@ function SignIn(isCookie) {
 
   const loginForm = LoginForm();
 
-  if (isCookie) {
+  if (loggedIn) {
     return (
       <div className="dropdown">
         <a className="dropdown-button" onClick={() => setOpen(!open)}>Account</a>

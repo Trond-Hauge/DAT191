@@ -1,17 +1,15 @@
 "use strict"; 
 
-import { NextPageContext } from "next";
+import { getMemberClaims } from "../utils/server/user";
 import { server } from "../next.config";
 
 import Header from "../components/header";
 
 
-export default function Streaming({ context, isCookie }: any) {
-  console.log("Streaming-cookie = ", isCookie);
-
+export default function Streaming({ context, permission }: any) {
   return (
     <>
-      {Header(isCookie)}
+      {Header(permission)}
       <main>
         <p>Page for streaming!</p>
         <p>{JSON.stringify(context)}</p>
@@ -20,9 +18,9 @@ export default function Streaming({ context, isCookie }: any) {
   );
 };
 
-Streaming.getInitialProps = async (ctx: NextPageContext) => {
-  const cookie = ctx.req?.headers.cookie;
-  const isCookie = cookie ? true : false;
+export async function getServerSideProps(ctx) {
+  const cookie = ctx.req?.cookies.auth;
+  const { permission } = getMemberClaims(cookie);
 
   const res = await fetch(`${server}/api/streaming`, {
     headers: {
@@ -40,8 +38,5 @@ Streaming.getInitialProps = async (ctx: NextPageContext) => {
   }
 
   const json = await res.json();
-  return {
-    context: json,
-    isCookie
-  };
+  return { props: { context: json, permission } };
 }

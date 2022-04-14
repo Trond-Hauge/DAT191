@@ -1,11 +1,10 @@
 "use strict";
 
-import { passwordResetTimeoutMinutes, passwordRequirements } from "../app.config";
+import { passwordResetTimeoutMinutes, passwordRequirements } from "../../app.config";
 
 /**
- * 
- * @param {*} pass Password to be validated
- * @returns true if password is valid
+ * @param pass Password to be validated
+ * @returns true if password is valid, false if not
  */
 export function validatePassword(pass) {
     if (!pass || pass.length < passwordRequirements.minLength || pass.length > passwordRequirements.maxLength) return false;
@@ -19,7 +18,7 @@ export function validatePassword(pass) {
         else if (isLowerCase(char)) lowerCount++;
     }
 
-    if (lowerCount < passwordRequirements.minLowerCase || upperCount < passwordRequirements.minUpperCase) {console.log("wut");  return false;}
+    if (lowerCount < passwordRequirements.minLowerCase || upperCount < passwordRequirements.minUpperCase) return false;
 
     for (let i = 0; i < passwordRequirements.bannedSequences.length; i++) {
         if ( pass.includes(passwordRequirements.bannedSequences[i]) ) return false;

@@ -3,7 +3,7 @@ import { db } from "../../../db";
 import { hash } from "bcrypt";
 import { INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED } from "../../../messages/apiResponse";
 import { passwordSaltRounds } from "../../../app.config";
-import { validatePassword } from "../../../utils/user";
+import { validatePassword } from "../../../utils/multi/user";
 
 export default async function registerUser(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {

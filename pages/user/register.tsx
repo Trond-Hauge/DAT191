@@ -4,9 +4,10 @@ import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { server } from "../../next.config";
-import { validatePassword } from "../../utils/user";
+import { validatePassword } from "../../utils/multi/user";
+import { getMemberClaims } from "../../utils/server/user";
 
-export default function Register({ isCookie }) {
+export default function Register({ permission }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -50,7 +51,7 @@ export default function Register({ isCookie }) {
     }
     return (
         <>
-        {Header(isCookie)}
+        {Header(permission)}
         <main>
             <div className="sign-in-form">        
            <form onSubmit={submit}>
@@ -92,7 +93,7 @@ export default function Register({ isCookie }) {
 };
 
 export async function getServerSideProps(ctx) {
-    const cookie = ctx.req?.headers.cookie;
-    const isCookie = cookie ? true : false;
-    return { props: { isCookie } };
+    const cookie = ctx.req?.cookies.auth;
+    const { permission } = getMemberClaims(cookie);
+    return { props: { permission } };
 }

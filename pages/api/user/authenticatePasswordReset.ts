@@ -2,7 +2,7 @@
 
 import { db } from "../../../db"
 import { NextApiRequest, NextApiResponse } from "next";
-import { validatePasswordResetRequest } from "../../../utils/user";
+import { validatePasswordResetRequest } from "../../../utils/multi/user";
 
 export default async function authenticatePasswordReset(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {

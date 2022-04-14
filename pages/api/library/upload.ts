@@ -12,7 +12,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED } from "../../..
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         let email = "";
-        verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
+        verify(req.cookies.auth!, process.env.JWT_SECRET, function (err, decoded) {
             if (!err && decoded?.memberEmail) email = decoded.memberEmail;
         });
 

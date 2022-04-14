@@ -4,8 +4,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { passwordResetKeyLength } from "../../../app.config";
 import { METHOD_NOT_ALLOWED, PASSWORD_RESET_REQUESTED } from "../../../messages/apiResponse";
 import { passwordResetRequest } from "../../../messages/email";
-import { sendMail } from "../../../utils/email";
-import { validatePasswordResetRequest } from "../../../utils/user";
+import { sendMail } from "../../../utils/server/email";
+import { validatePasswordResetRequest } from "../../../utils/multi/user";
 import { db } from "../../../db";
 
 export default async function requestPasswordReset(req: NextApiRequest, res: NextApiResponse) {

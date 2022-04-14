@@ -19,7 +19,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
         compare(req.body.password, member.password, function (err, result) {
             if(!err && result) {
                 //consider adding more features to the claims, but not anything personal. Make a hash for this purpose?
-                const claims =  {sub: member.member_id, memberEmail: member.email};
+                const claims =  {sub: member.member_id, memberEmail: member.email, permission: member.permission };
                 const jwt = sign(claims, process.env.JWT_SECRET, {expiresIn: "1h"});
 
                 res.setHeader("Set-Cookie", cookie.serialize("auth", jwt, {
