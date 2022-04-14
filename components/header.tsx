@@ -7,6 +7,8 @@ import { server } from "../next.config";
 import LoginForm from "./LoginForm";
 
 export default function Header(permission) {
+  const isAdmin = permission === "admin";
+
   return (
     <div className="navbar">
       <div className="nav-container-left">
@@ -24,14 +26,18 @@ export default function Header(permission) {
         </ul>
       </div>
       <div className="nav-container-right">
+        { isAdmin &&
+          <ul className="nav-right">
+            <Link href="/admin"><a>Admin Panel</a></Link>
+          </ul>
+        }
         <ul className="nav-right">
-          {SignIn(permission ? true : false)}
+            {SignIn(permission ? true : false)}
         </ul>
       </div >
     </div >
   );
 }
-
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
 function SignIn(loggedIn) {
