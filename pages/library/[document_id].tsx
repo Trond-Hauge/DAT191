@@ -41,8 +41,11 @@ export async function getServerSideProps(ctx) {
   });
   const { doc, error } = await res.json();
 
-  if (error || !doc) {
-    return { redirect: { destination: "/library", permanent: false } }
+  if (error || !doc) return { 
+    redirect: { 
+      destination: "/library", 
+      permanent: false 
+    } 
   }
 
   return { props: { permission, doc } };

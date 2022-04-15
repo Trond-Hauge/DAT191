@@ -21,6 +21,7 @@ export default function Streaming({ context, permission }: any) {
 export async function getServerSideProps(ctx) {
   const cookie = ctx.req?.cookies.auth;
   const { permission } = getMemberClaims(cookie);
+  const url = ctx.resolvedUrl;
 
   const res = await fetch(`${server}/api/streaming`, {
     headers: {
@@ -31,7 +32,7 @@ export async function getServerSideProps(ctx) {
   if (res.status === 401) {
     return {
       redirect: {
-        destination: "/user/login",
+        destination: `/user/login?next=${url}`,
         permanent: false
       }
     }
