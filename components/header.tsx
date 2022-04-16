@@ -26,13 +26,17 @@ export default function Header(permission) {
         </ul>
       </div>
       <div className="nav-container-right">
-        { isAdmin &&
-          <ul className="nav-right">
-            <Link href="/admin"><a>Admin Panel</a></Link>
-          </ul>
-        }
         <ul className="nav-right">
+          { isAdmin &&
+            <li>
+              <Link href="/admin">
+                <a>Admin Panel</a>
+              </Link>
+            </li>
+          }
+          <li>
             {SignIn(permission ? true : false)}
+          </li>
         </ul>
       </div >
     </div >
@@ -72,9 +76,9 @@ function SignIn(loggedIn) {
         <a className="dropdown-button" onClick={() => setOpen(!open)}>Account</a>
         {open &&
           <div className="dropdown-content">
-            <a>Account Settings</a>
-            <a>Your Publications</a>
-            <a>Meetings</a>
+            <Link href="/user"><a>Account Settings</a></Link>
+            <Link href="/user/publications"><a>Your Publications</a></Link>
+            <a>Meetings</a> 
             <hr/>
             <a onClick={logout}>Log out</a>
           </div>

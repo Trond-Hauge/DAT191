@@ -15,8 +15,17 @@
   color: var(--dark);
 }
 
-.side-menu-container input, button, label {
+.side-menu-container input, button, label, textarea {
   margin: 1rem 1rem 1rem 1rem;
+}
+
+.side-menu-container input[name='name'], textarea {
+  width: calc(var(--side-bar-width) - 2rem);
+}
+
+textarea {
+  resize: none;
+  background-color: inherit;
 }
 
 .card-space {
@@ -74,10 +83,10 @@
 }
 
 .search-space {
-  margin-bottom: 6rem;
+  margin-bottom: 4rem;
   padding-inline: "1rem";
 }
 
 .upload-space {
-  margin-block: 6rem;
+  margin-block: 4rem;
 }

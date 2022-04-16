@@ -44,9 +44,9 @@ export default function UploadFileForm(isVerified: boolean) {
                     placeholder="Document title"
                     required
                 />
-                <input
+                <textarea
                     name="desc" 
-                    type="text"
+                    rows={5}
                     placeholder="Document description"
                     required
                 />

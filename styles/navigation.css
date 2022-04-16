@@ -58,10 +58,10 @@ hr {
 }
 
 .nav-left,
-.nav-rigt {
+.nav-right {
   display: flex;
   flex-flow: row nowrap;
-  flex-basis: 15vw;
+  flex-basis: 20vw;
   justify-content: space-around;
   align-items: center;
   list-style: none;
