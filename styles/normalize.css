@@ -159,6 +159,7 @@
   input,
   optgroup,
   select,
+  select,
   textarea {
     font-family: inherit; /* 1 */
     font-size: 100%; /* 1 */

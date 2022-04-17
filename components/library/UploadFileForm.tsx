@@ -43,12 +43,14 @@ export default function UploadFileForm(isVerified: boolean) {
                     type="text"
                     placeholder="Document title"
                     required
+                    className="side-menu-elem-wide"
                 />
                 <textarea
                     name="desc" 
                     rows={5}
                     placeholder="Document description"
                     required
+                    className="side-menu-elem-wide"
                 />
                 <label>Public</label>
                 <input 

@@ -15,15 +15,15 @@
   color: var(--dark);
 }
 
-.side-menu-container input, button, label, textarea {
+.side-menu-container input, button, label, textarea, select {
   margin: 1rem 1rem 1rem 1rem;
 }
 
-.side-menu-container input[name='name'], textarea {
+.side-menu-elem-wide {
   width: calc(var(--side-bar-width) - 2rem);
 }
 
-textarea {
+.side-menu-container textarea {
   resize: none;
   background-color: inherit;
 }
