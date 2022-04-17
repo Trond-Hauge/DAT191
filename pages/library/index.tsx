@@ -6,6 +6,7 @@ import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
 import { server } from "../../next.config";
 import { getMemberClaims } from "../../utils/server/user";
+import { filterByDocument, filterByName, filterByOrganisation, sortByDocument } from "../../utils/multi/list";
 
 export default function Library({ list, permission, isVerified }) {
     // Sets the initial array of all accessible documents.
@@ -16,16 +17,12 @@ export default function Library({ list, permission, isVerified }) {
     const {title, org, author} = router.query;
 
     // Simple filtering by document title, organisation and author. Not case sensitive.
-    const filterByTitle = (doc, title) => doc.document_name.toLowerCase().includes(title.toLowerCase());
-    const filterByOrg = (doc, org) => doc.organisation_name.toLowerCase().includes(org.toLowerCase());
-    const filterByAuthor = (doc, author) => `${doc.first_name.toLowerCase()} ${doc.last_name.toLowerCase()}`.includes(author.toLowerCase());
-    if (title) documents = documents.filter(doc => filterByTitle(doc, title));
-    if (org) documents = documents.filter(doc => filterByOrg(doc, org));
-    if (author) documents = documents.filter(doc => filterByAuthor(doc, author));
+    if (title) documents = documents.filter(doc => filterByDocument(doc, title));
+    if (org) documents = documents.filter(doc => filterByOrganisation(doc, org));
+    if (author) documents = documents.filter(doc => filterByName(doc, author));
 
     // Documents are sorted based on title.
-    const compareDocs = (d1, d2) => (d1.document_name < d2.document_name) ? -1 : d1.document_name == d2.document_name ? 0 : 1;
-    documents.sort(compareDocs);
+    documents.sort(sortByDocument);
 
     // Handles changes to search input fields. Upon change, title, org and author URL parameters are updated.
     // The URL is built iteratively, only including parameters that have a value.

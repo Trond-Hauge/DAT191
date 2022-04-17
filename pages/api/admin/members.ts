@@ -16,8 +16,8 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
             return;
         }
 
-        const users = await db.select("first_name", "last_name", "member_id").from("members");
-        res.status(200).json({users});
+        const members = await db.select("first_name", "last_name", "member_id").from("members");
+        res.status(200).json({members});
     }
     else {
         res.status(405).json(METHOD_NOT_ALLOWED);
