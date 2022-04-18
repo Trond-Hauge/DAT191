@@ -16,7 +16,7 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
             return;
         }
 
-        const members = await db.select("first_name", "last_name", "member_id").from("members");
+        const members = await db.select("first_name", "last_name", "member_id", "email").from("members");
         res.status(200).json({members});
     }
     else {
