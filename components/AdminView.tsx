@@ -3,8 +3,9 @@
 export function UserView(user) {
     return (
         <>
-            <p>{user.first_name + " " + user.last_name}</p>
-            <p>{user.email}</p>
+            <h1>{user.first_name + " " + user.last_name}</h1>
+            <h1>{user.username}</h1>
+            <h1>{user.email}</h1>
         </>
     )
 }
@@ -12,7 +13,7 @@ export function UserView(user) {
 export function DocumentView(doc) {
     return (
         <>
-            <p>{doc.document_name}</p>
+            <h1>{doc.document_name}</h1>
         </>
     )
 }
@@ -20,7 +21,7 @@ export function DocumentView(doc) {
 export function OrganisationView(org) {
     return (
         <>
-            <p>{org.organisation_name}</p>
+            <h1>{org.organisation_name}</h1>
         </>
     )
 }

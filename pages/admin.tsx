@@ -3,71 +3,41 @@
 import Header from "../components/header";
 import { getMemberClaims } from "../utils/server/user";
 import { useState, useRef } from "react";
-import { server } from "../next.config";
 import AnchorListClick from "../components/AnchorListClick";
-import { useRouter } from "next/router";
 import { filterByDocument, filterByName, filterByOrganisation, sortByDocument, sortByName, sortByOrganisation } from "../utils/multi/list";
+import { db } from "../db";
+import { UserView, DocumentView, OrganisationView } from "../components/AdminView";
 
-export default function Login({ permission }) {
-    const [users, setUsers] = useState(null);
-    const [documents, setDocuments] = useState(null);
-    const [organisations, setOrganisations] = useState(null);
-    const [fetching, setFetching] = useState(false);
+export default function Login({ permission, users, documents, organisations }) {
     const [selectedList, setSelectedList] = useState(null);
     const [selectedView, setSelectedView] = useState(null);
+    const [init, setInit] = useState(true);
 
     const selectRef = useRef<HTMLSelectElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
 
-    const router = useRouter();
-
-    if (!fetching) {
-        setFetching(true);
-
-        fetch(`${server}/api/admin/members`).
-        then( res => res.json()).
-        then( json => {
-            const { members } = json;
-            members.sort(sortByName);
-            setUsers(members);
-            const aList = AnchorListClick(members, u => u.first_name + " " + u.last_name, "side-menu-elem-wide", handleClick, u => u.member_id);
-            setSelectedList(aList);
-        });
-
-        fetch(`${server}/api/admin/documents`).
-        then( res => res.json()).
-        then( json => {
-            const { documents } = json;
-            setDocuments(documents);
-        });
-
-        fetch(`${server}/api/admin/organisations`).
-        then( res => res.json()).
-        then( json => {
-            const { organisations } = json;
-            setOrganisations(organisations);
-        });
-    }
-
     function handleClick(e) {
         const a = e.target;
-        const value = a.querySelector("input[type='hidden']").value;
+        const id = parseInt(a.querySelector("input[type='hidden']").value);
         const val = selectRef.current?.value;
         const selected = val ? val : "users";
 
         switch (selected) {
             case "users": {
-
+                const user = users.find(u => u.member_id === id);
+                setSelectedView(UserView(user));
             }
             break;
 
-            case "documents": {
-
+            case "docs": {
+                const doc = documents.find(d => d.document_id === id);
+                setSelectedView(DocumentView(doc));
             }
             break;
 
-            case "organisations": {
-
+            case "orgs": {
+                const org = organisations.find(o => o.organisation_id === id);
+                setSelectedView(OrganisationView(org));
             }
             break;
         }
@@ -80,6 +50,7 @@ export default function Login({ permission }) {
 
     function handleSelectionChange() {
         searchRef.current.value = "";
+        setSelectedView(null);
         updateList();
     }
 
@@ -113,6 +84,11 @@ export default function Login({ permission }) {
             break;
         }
     }
+
+    if (init) {
+        setInit(false);
+        updateList();
+    }
     
     return (
         <>
@@ -134,8 +110,10 @@ export default function Login({ permission }) {
                 />
                 {selectedList}
             </div>
-            <div>
-                {selectedView}
+            <div className="view-space">
+                <div className="view-container">
+                    {selectedView}
+                </div>
             </div>
         </main>
         </>
@@ -156,10 +134,21 @@ export async function getServerSideProps(ctx) {
 
     if (permission !== "admin") return {
         redirect: {
-            destination: "/error",
+            destination: "/",
             permanent: false
         }
     }
 
-    return { props: { permission } };
+    const users = await db("members");
+    const documents = await db("documents");
+    const organisations = await db("organisations");
+
+    if (!users || !documents || !organisations) return {
+        redirect: {
+            destination: "/error",
+            permanent: false
+        }
+    }
+    
+    return { props: { permission, users, documents, organisations} };
 }

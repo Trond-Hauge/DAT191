@@ -1,0 +1,11 @@
+.view-space {
+    margin-top: var(--nav-height);
+    margin-left: var(--side-bar-width);
+    padding: 2rem;
+    text-align: center;
+}
+
+.view-container {
+    display: inline-block;
+    text-align: left;
+}
