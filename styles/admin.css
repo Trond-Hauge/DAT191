@@ -8,4 +8,43 @@
 .view-container {
     display: inline-block;
     text-align: left;
+    font-size: 2rem;
+}
+
+.view-container div {
+    padding: 1rem;
+}
+
+.view-header p {
+    padding: 0;
+    margin: 0;
+    display: inline;
+}
+
+.view-header {
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+.view-container button {
+    border: 1;
+    border-radius: 3px;
+    padding: .4rem;
+    color: white;
+}
+
+.btn-save-changes {
+    background-color: rgb(50,160,50);
+}
+
+.btn-save-changes:hover {
+    background-color: rgb(50,220,50);
+}
+
+.btn-delete {
+    background-color: rgb(160,50,50);
+}
+
+.btn-delete:hover {
+    background-color: rgb(220,50,50);
 }

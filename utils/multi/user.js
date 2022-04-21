@@ -1,6 +1,6 @@
 "use strict";
 
-import { passwordResetTimeoutMinutes, passwordRequirements } from "../../app.config";
+import { passwordResetTimeoutMinutes, passwordRequirements, firstNameRequirements, lastNameRequirements, usernameRequirements } from "../../app.config";
 
 /**
  * @param pass Password to be validated
@@ -32,6 +32,24 @@ export function validatePasswordResetRequest(resetRequest) {
     const timestamp = new Date(resetRequest.timestamp).valueOf();
     const ageInMinutes = (Date.now() - timestamp) / 1000 / 60;
     return ageInMinutes < passwordResetTimeoutMinutes;
+}
+
+export function validateFirstName(name) {
+    if (!name) return false;
+    const length = name.length;
+    return length >= firstNameRequirements.minLength && length <= firstNameRequirements.maxLength;
+}
+
+export function validateLastName(name) {
+    if (!name) return false;
+    const length = name.length;
+    return length >= lastNameRequirements.minLength && length <= lastNameRequirements.maxLength;
+}
+
+export function validateUsername(username) {
+    if (!username) return false;
+    const length = username.length;
+    return length >= usernameRequirements.minLength && length <= usernameRequirements.maxLength;
 }
 
 function isLowerCase(char) {
