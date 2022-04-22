@@ -76,23 +76,23 @@ export function UserView(user) {
             />
             <h1 className="view-header">User</h1>
             <div>
-                <p>First Name:</p>
-                <h3 id="firstName" contentEditable>{user.first_name}</h3>
+                <h3>First Name:</h3>
+                <p id="firstName" contentEditable>{user.first_name}</p>
             </div>
             <div>
-                <p>Last Name:</p>
-                <h3 id="lastName" contentEditable>{user.last_name}</h3>
+                <h3>Last Name:</h3>
+                <p id="lastName" contentEditable>{user.last_name}</p>
             </div>
             <div>
-                <p>Username:</p>
-                <h3 id="username" contentEditable>{user.username}</h3>
+                <h3>Username:</h3>
+                <p id="username" contentEditable>{user.username}</p>
             </div>
             <div>
-                <p>Email:</p>
-                <h3 id="email" contentEditable>{user.email}</h3>
+                <h3>Email:</h3>
+                <p id="email" contentEditable>{user.email}</p>
             </div>
             <div>
-                <p>Permission:</p>
+                <h3>Permission:</h3>
                 <select id="permission">
                     <option value="unverified" selected={user.permission === "unverified"}>Unverified</option>
                     <option value="verified" selected={user.permission === "verified"}>Verified</option>
@@ -127,6 +127,10 @@ export function DocumentView(doc) {
         if (res.status === 200) {
             Router.reload();
         }
+        else if (res.status === 207) {
+            const { message } = await res.json();
+            alert(message);
+        }
         else {
             alert("Something went wrong!");
         }
@@ -136,7 +140,7 @@ export function DocumentView(doc) {
         const root = document.getElementById("docRoot");
         const id = root.querySelector<HTMLInputElement>("*[id='docID']")?.value;
 
-        const answer = prompt("Are you sure you want to delete this document permanently? If yes, type: DLETE");
+        const answer = prompt("Are you sure you want to delete this document permanently? If yes, type: DELETE");
         if (answer === "DELETE") {
             const res = await fetch(`${server}/api/admin/documents`, {
                 method: "DELETE",
@@ -193,15 +197,93 @@ export function DocumentView(doc) {
     )
 }
 
-export function OrganisationView(org) {
+export function OrganisationView(org?) {
+    async function saveChanges() {
+        const root = document.getElementById("orgRoot");
+        const id = root.querySelector<HTMLInputElement>("*[id='orgID']")?.value;
+        const orgName = root.querySelector("*[id='name']")?.textContent;
+
+        const res = await fetch(`${server}/api/admin/organisations`, {
+            method: "PATCH",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id,
+                orgName
+            })
+        });
+
+        if (res.status === 200) {
+            Router.reload();
+        }
+        else if (res.status === 207) {
+            const { message } = await res.json();
+            alert(message);
+        }
+        else {
+            alert("Something went wrong!");
+        }
+    }
+
+    async function deleteOrg() {
+        const root = document.getElementById("orgRoot");
+        const id = root.querySelector<HTMLInputElement>("*[id='orgID']")?.value;
+
+        const answer = prompt("Are you sure you want to delete this organisation permanently? If yes, type: DELETE");
+        if (answer === "DELETE") {
+            const res = await fetch(`${server}/api/admin/organisations`, {
+                method: "DELETE",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id
+                })
+            });
+
+            if (res.status === 200) {
+                Router.reload();
+            }
+            else {
+                alert("Something went wrong!");
+            }
+        }
+    }
+
+    if (!org) {
+        return <>{AddOrgForm()}</>
+    }
+    else {
+        return (
+            <>
+                <div id="orgRoot">
+                    <input
+                        id="orgID"
+                        type="hidden"
+                        value={org.organisation_id}
+                    />
+                    <h1 className="view-header">Organisation</h1>
+                    <div>
+                        <h3>Organisation name:</h3>
+                        <p id="name" contentEditable>{org.organisation_name}</p>
+                    </div>
+                    <button onClick={saveChanges} className="btn-save-changes">Save Changes</button>
+                    <button onClick={deleteOrg} className="btn-delete">Delete Organisation</button>
+                </div>
+                <br></br>
+                {AddOrgForm()}
+            </>
+        )
+    }
+}
+
+function AddOrgForm() {
     return (
         <>
-            <h1 className="view-header"><strong>User: </strong><p>{org.organisation_name}</p></h1>
+            <h1 className="view-header">Add a new organisation</h1>
             <div>
-                <p>Organisation name:</p>
-                <h3 contentEditable>{org.organisation_name}</h3>
+                <input
+                    type="text"
+                    name="name"
+                />
             </div>
-            <button className="btn-save-changes">Save Changes</button>
         </>
     )
 }

@@ -1,18 +1,17 @@
 "use strict";
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../db.js";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse.js";
-import { validateFirstName, validateLastName, validateUsername } from "../../../utils/multi/user.js";
-import { getMemberClaims } from "../../../utils/server/user.js";
+import { db } from "../../../db";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
+import { validateFirstName, validateLastName, validateUsername } from "../../../utils/multi/user";
+import { authorisedAdmin } from "../../../utils/server/admin";
+import { getMemberClaims } from "../../../utils/server/user";
 
 export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         const cookie = req.cookies.auth;
-        const { email, permission } = getMemberClaims(cookie);
-        const member = await db("members").where("email", email).first();
-
-        if (!member || permission !== "admin") {
+        const authorised = await authorisedAdmin(cookie);
+        if (!authorised) {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -22,10 +21,8 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
     }
     else if (req.method === "PATCH") {
         const cookie = req.cookies.auth;
-        const { email, permission } = getMemberClaims(cookie);
-        const member = await db("members").where("email", email).first();
-
-        if (!member || permission !== "admin") {
+        const authorised = await authorisedAdmin(cookie);
+        if (!authorised) {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -62,7 +59,6 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
         const cookie = req.cookies.auth;
         const { email, permission } = getMemberClaims(cookie);
         const member = await db("members").where("email", email).first();
-
         if (!member || permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
@@ -78,6 +74,9 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
             await db("members_organisations").where("member_id", id).del();
             await db("documents").where("owner", id).update({
                 owner: member.member_id
+            });
+            await db("organisations").where("fk_leader", id).update({
+                fk_leader: member.member_id
             });
             await db("members").where("member_id", id).del();
             res.status(200).json({ message: "User has been deleted." });

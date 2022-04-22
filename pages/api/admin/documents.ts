@@ -9,7 +9,6 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
     if (req.method === "GET") {
         const cookie = req.cookies.auth;
         const authorised = await authorisedAdmin(cookie);
-
         if (!authorised) {
             res.status(401).json(NOT_AUTHORISED);
             return;
@@ -21,7 +20,6 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
     else if (req.method === "PATCH") {
         const cookie = req.cookies.auth;
         const authorised = await authorisedAdmin(cookie);
-
         if (!authorised) {
             res.status(401).json(NOT_AUTHORISED);
             return;
@@ -48,7 +46,6 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
     else if (req.method === "DELETE") {
         const cookie = req.cookies.auth;
         const authorised = await authorisedAdmin(cookie);
-
         if (!authorised) {
             res.status(401).json(NOT_AUTHORISED);
             return;

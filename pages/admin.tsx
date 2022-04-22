@@ -50,7 +50,12 @@ export default function Login({ permission, users, documents, organisations }) {
 
     function handleSelectionChange() {
         searchRef.current.value = "";
-        setSelectedView(null);
+        if (selectRef?.current?.value === "orgs") {
+            setSelectedView(OrganisationView());
+        }
+        else {
+            setSelectedView(null);
+        }
         updateList();
     }
 
