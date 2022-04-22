@@ -9,6 +9,7 @@
     display: inline-block;
     text-align: left;
     font-size: 2rem;
+    max-width: 80%;
 }
 
 .view-container div {
@@ -21,9 +22,21 @@
     display: inline;
 }
 
+.view-container select {
+    padding: 1px;
+    margin: 5px 0px 0px 0px;
+    display: inline;
+    font-weight: 700;
+}
+
+.view-container option {
+    font-weight: 700;
+}
+
 .view-header {
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
     text-align: center;
+    padding: 0.4rem;
 }
 
 .view-container button {
@@ -47,4 +60,15 @@
 
 .btn-delete:hover {
     background-color: rgb(220,50,50);
+}
+
+.btn-public {
+    background-color: rgb(100,100,100);
+    padding: 0;
+    margin: 0;
+    width: 8rem;
+}
+
+.btn-public:hover {
+    background-color: rgb(130,130,130);
 }

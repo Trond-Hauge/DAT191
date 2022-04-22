@@ -45,6 +45,20 @@ input {
   color: inherit;
 }
 
+select {
+  border-radius: 3px;
+  background-color: inherit;
+}
+
+select * {
+  background-color: inherit;
+}
+
+input[type=checkbox] {
+	width: 1em;
+  height: 1em;
+}
+
 /* MAIN BODY */
 main {
   margin-top: var(--nav-height);

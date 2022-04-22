@@ -34,6 +34,7 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
         const lastName = req.body.lastName;
         const username = req.body.username;
         const userEmail = req.body.email;
+        const perm = req.body.permission;
         const id = req.body.id;
 
         const valid = validateFirstName(firstName) && validateLastName(lastName) && validateUsername(username);
@@ -43,8 +44,9 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
                     first_name: firstName,
                     last_name: lastName,
                     username: username,
-                    email: userEmail
-                })
+                    email: userEmail,
+                    permission: perm
+                });
 
                 res.status(200).json({ message: "User has been updated." });
             }
