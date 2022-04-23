@@ -24,13 +24,16 @@ CREATE TABLE members (
 CREATE TABLE organisations (
     organisation_id SERIAL PRIMARY KEY,
     organisation_name VARCHAR(64) NOT NULL,
-	fk_leader SERIAL REFERENCES members(member_id)
+	fk_leader INTEGER,
+    FOREIGN KEY(fk_leader) REFERENCES members(member_id)
 );
 
 CREATE TABLE members_organisations (
-    member_id SERIAL REFERENCES members(member_id),
-    organisation_id SERIAL REFERENCES organisations(organisation_id),
-    PRIMARY KEY (member_id, organisation_id)
+    member_id INTEGER,
+    organisation_id INTEGER,
+    PRIMARY KEY(member_id, organisation_id),
+    FOREIGN KEY(member_id) REFERENCES members(member_id),
+    FOREIGN KEY(organisation_id) REFERENCES organisations(organisation_id)
 );
 
 -- *** FILE STUFF *** --
@@ -52,7 +55,8 @@ CREATE TABLE password_reset
 (
 	timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	reset_key CHAR(20) PRIMARY KEY, -- Must match passwordResetKeyLength in app.config
-	email VARCHAR(64) REFERENCES members(email) NOT NULL UNIQUE
+	email VARCHAR(64),
+    FOREIGN KEY(email) REFERENCES members(email)
 );
 
 -- *** GENERATING EXAMPLE ENTRIES *** --

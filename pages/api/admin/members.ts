@@ -5,7 +5,7 @@ import { db } from "../../../db";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
 import { validateFirstName, validateLastName, validateUsername } from "../../../utils/multi/user";
 import { authorisedAdmin } from "../../../utils/server/admin";
-import { getMemberClaims } from "../../../utils/server/user";
+import { deleteUser, getMemberClaims } from "../../../utils/server/user";
 
 export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -71,14 +71,8 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
         }
 
         try {
-            await db("members_organisations").where("member_id", id).del();
-            await db("documents").where("owner", id).update({
-                owner: member.member_id
-            });
-            await db("organisations").where("fk_leader", id).update({
-                fk_leader: member.member_id
-            });
-            await db("members").where("member_id", id).del();
+            const member = await db("members").where("member_id", id).first();
+            await deleteUser(member);
             res.status(200).json({ message: "User has been deleted." });
         }
         catch (error) {

@@ -17,6 +17,12 @@
     margin: 0;
 }
 
+.view-container a {
+    color: blue;
+    padding: 0;
+    margin: 0;
+}
+
 .view-container div {
     padding: 1rem;
 }
