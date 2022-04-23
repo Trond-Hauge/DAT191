@@ -197,7 +197,7 @@ export function DocumentView(doc) {
     )
 }
 
-export function OrganisationView(org?) {
+export function OrganisationView(org) {
     async function saveChanges() {
         const root = document.getElementById("orgRoot");
         const id = root.querySelector<HTMLInputElement>("*[id='orgID']")?.value;
@@ -247,43 +247,75 @@ export function OrganisationView(org?) {
         }
     }
 
-    if (!org) {
-        return <>{AddOrgForm()}</>
-    }
-    else {
-        return (
-            <>
-                <div id="orgRoot">
-                    <input
-                        id="orgID"
-                        type="hidden"
-                        value={org.organisation_id}
-                    />
-                    <h1 className="view-header">Organisation</h1>
-                    <div>
-                        <h3>Organisation name:</h3>
-                        <p id="name" contentEditable>{org.organisation_name}</p>
-                    </div>
-                    <button onClick={saveChanges} className="btn-save-changes">Save Changes</button>
-                    <button onClick={deleteOrg} className="btn-delete">Delete Organisation</button>
-                </div>
-                <br></br>
-                {AddOrgForm()}
-            </>
-        )
-    }
+    return (
+        <div id="orgRoot">
+            <input
+                id="orgID"
+                type="hidden"
+                value={org.organisation_id}
+            />
+            <h1 className="view-header">Organisation</h1>
+            <div>
+                <h3>Organisation name:</h3>
+                <p id="name" contentEditable>{org.organisation_name}</p>
+            </div>
+            <button onClick={saveChanges} className="btn-save-changes">Save Changes</button>
+            <button onClick={deleteOrg} className="btn-delete">Delete Organisation</button>
+        </div>
+    )
 }
 
-function AddOrgForm() {
+export function AddOrgView(users) {
+    async function addOrg() {
+        const root = document.getElementById("addOrgRoot");
+        const orgName = root.querySelector<HTMLInputElement>("*[id='orgName']")?.value;
+        const leaderID = parseInt(root.querySelector<HTMLSelectElement>("*[id='leaderID']")?.value);
+
+        if (orgName && leaderID) {
+            const res = await fetch(`${server}/api/admin/organisations`, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    orgName,
+                    leaderID
+                })
+            });
+
+            if (res.status === 200) {
+                Router.reload();
+            }
+            else {
+                alert("Something went wrong!");
+            }
+        }
+        else {
+            alert("Organisation name and leader are required.");
+        }
+    }
+
     return (
-        <>
+        <div id="addOrgRoot">
             <h1 className="view-header">Add a new organisation</h1>
             <div>
+                <label><strong>Organisation name:</strong></label>
                 <input
+                    id="orgName"
                     type="text"
                     name="name"
                 />
             </div>
-        </>
+            <div>
+                <label><strong>Organisation leader:</strong></label>
+                <select id="leaderID">
+                    <option disabled selected>-- select an option --</option>
+                    {users.map( (user, index) => {
+                        return (
+                            <option key={index} value={user.member_id}>{`${user.first_name} ${user.last_name}`}</option>
+                        )
+                    })}
+                </select>
+            </div>
+            <button onClick={addOrg} className="btn-add-org">Add Organisation</button>
+        </div>
     )
 }

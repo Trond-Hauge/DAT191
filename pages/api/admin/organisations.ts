@@ -68,6 +68,30 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
             res.status(500).json(INTERNAL_SERVER_ERROR);
         }
     }
+    else if (req.method === "POST") {
+        const cookie = req.cookies.auth;
+        const authorised = await authorisedAdmin(cookie);
+        if (!authorised) {
+            res.status(401).json(NOT_AUTHORISED);
+            return;
+        }
+
+        const orgName = req.body.orgName;
+        const leaderID = req.body.leaderID;
+
+        try {
+            await db("organisations").insert({
+                organisation_name: orgName,
+                fk_leader: leaderID
+            });
+
+            res.status(200).json({ message: "Organisation was updated." });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(INTERNAL_SERVER_ERROR);
+        }
+    }
     else {
         res.status(405).json(METHOD_NOT_ALLOWED);
     }

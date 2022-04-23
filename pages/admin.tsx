@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 import AnchorListClick from "../components/AnchorListClick";
 import { filterByDocument, filterByName, filterByOrganisation, sortByDocument, sortByName, sortByOrganisation } from "../utils/multi/list";
 import { db } from "../db";
-import { UserView, DocumentView, OrganisationView } from "../components/AdminView";
+import { UserView, DocumentView, OrganisationView, AddOrgView } from "../components/AdminView";
 
 export default function Login({ permission, users, documents, organisations }) {
     const [selectedList, setSelectedList] = useState(null);
@@ -51,7 +51,7 @@ export default function Login({ permission, users, documents, organisations }) {
     function handleSelectionChange() {
         searchRef.current.value = "";
         if (selectRef?.current?.value === "orgs") {
-            setSelectedView(OrganisationView());
+            setSelectedView(AddOrgView(users));
         }
         else {
             setSelectedView(null);

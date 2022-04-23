@@ -12,6 +12,11 @@
     max-width: 80%;
 }
 
+.view-container label {
+    padding-right: 1rem;
+    margin: 0;
+}
+
 .view-container div {
     padding: 1rem;
 }
@@ -61,9 +66,17 @@
     background-color: rgb(100,100,100);
     padding: 0;
     margin: 0;
-    width: 8rem;
+    min-width: 8rem;
 }
 
 .btn-public:hover {
     background-color: rgb(130,130,130);
+}
+
+.btn-add-org {
+    background-color: rgb(50,160,50);
+}
+
+.btn-add-org:hover {
+    background-color: rgb(50,220,50);
 }
