@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { server } from "../../next.config";
 import { useRouter } from "next/router";
 
-export default function Home({ permission, user }) {
+export default function UserAccount({ permission, user }) {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const usernameRef = useRef(null);
@@ -29,7 +29,7 @@ export default function Home({ permission, user }) {
   }
 
   async function saveChanges() {
-    const res = await fetch(`${server}/api/user/user`, {
+    const res = await fetch(`${server}/api/user/userAccount`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -56,7 +56,7 @@ export default function Home({ permission, user }) {
   async function deleteAccount() {
     const answer = prompt("Are you sure you want to permanently delete your account? Type DELETE to confirm.");
     if (answer === "DELETE") {
-      const res = await fetch(`${server}/api/user/user`, {
+      const res = await fetch(`${server}/api/user/userAccount`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

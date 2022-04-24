@@ -1,8 +1,9 @@
 "use strict";
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../db.js";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse.js";
+import { db } from "../../../db";
+import { gc } from "../../../gc";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
 import { authorisedAdmin } from "../../../utils/server/admin";
 
 export default async function AdminPublicationsAPI(req: NextApiRequest, res: NextApiResponse) {
@@ -58,10 +59,13 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
         }
 
         try {
+            const document = await db("documents").where("document_id", id).first();
             await db("documents").where("document_id", id).del();
-            res.status(200).json({ message: "Document was deleted." })
+            res.status(200).json({ message: "Document was deleted." });
+            await gc.file(document?.filename).delete();
         }
         catch (error) {
+            console.error(error);
             res.status(500).json(INTERNAL_SERVER_ERROR);
         }
     }

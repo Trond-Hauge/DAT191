@@ -38,8 +38,12 @@ export async function deleteUser(member) {
         if (documents) {
             for (let i = 0; i < documents.length; i++) {
                 const doc = documents.at(i);
-                const exists = await gc.file(doc.filename).exists();
-                if (exists) gc.file(doc.filename).delete();
+                try {
+                    await gc.file(doc.filename).delete();
+                }
+                catch (error) {
+                    console.error(error);
+                }
             }
         }
 

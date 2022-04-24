@@ -61,6 +61,10 @@ export function UserView(user) {
             if (res.status === 200) {
                 Router.reload();
             }
+            else if (res.status === 207) {
+                await fetch(`${server}/api/user/logout`);
+                Router.reload();
+            }
             else {
                 alert("Something went wrong!");
             }

@@ -115,7 +115,7 @@ export default function Login({ permission, users, documents, organisations }) {
                 />
                 {selectedList}
             </div>
-            <div className="view-space">
+            <div className="view-space-side-menu">
                 <div className="view-container">
                     {selectedView}
                 </div>

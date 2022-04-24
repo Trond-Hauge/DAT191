@@ -71,9 +71,14 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
         }
 
         try {
-            const member = await db("members").where("member_id", id).first();
-            await deleteUser(member);
-            res.status(200).json({ message: "User has been deleted." });
+            const user = await db("members").where("member_id", id).first();
+            await deleteUser(user);
+            if (member.member_id === parseInt(id)) {
+                res.status(207).json({ message: "User has been deleted." });
+            }
+            else {
+                res.status(200).json({ message: "User has been deleted." });
+            }
         }
         catch (error) {
             res.status(500).json(INTERNAL_SERVER_ERROR);

@@ -1,4 +1,9 @@
 .view-space {
+    padding: 2rem;
+    text-align: center;
+}
+
+.view-space-side-menu {
     margin-top: var(--nav-height);
     margin-left: var(--side-bar-width);
     padding: 2rem;
@@ -52,6 +57,10 @@
     color: white;
 }
 
+.side-menu-elem {
+    padding: 1rem;
+}
+
 .btn-save-changes {
     background-color: rgb(50,160,50);
 }
@@ -80,9 +89,9 @@
 }
 
 .btn-add-org {
-    background-color: rgb(50,160,50);
+    background-color: rgb(50,50,160);
 }
 
 .btn-add-org:hover {
-    background-color: rgb(50,220,50);
+    background-color: rgb(50,50,220);
 }
