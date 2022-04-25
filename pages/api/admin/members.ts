@@ -81,6 +81,7 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
             }
         }
         catch (error) {
+            console.error(error);
             res.status(500).json(INTERNAL_SERVER_ERROR);
         }
     }

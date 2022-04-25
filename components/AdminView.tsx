@@ -56,7 +56,7 @@ export function UserView(user) {
                 body: JSON.stringify({
                     id
                 })
-            })
+            });
 
             if (res.status === 200) {
                 Router.reload();
