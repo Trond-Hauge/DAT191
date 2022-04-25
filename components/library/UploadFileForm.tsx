@@ -58,7 +58,6 @@ export default function UploadFileForm(isVerified: boolean) {
                     value="true"
                     type="checkbox"
                     defaultChecked
-                    required
                 />
                 <button type="submit">Upload Document</button>
             </form>
@@ -68,7 +67,7 @@ export default function UploadFileForm(isVerified: boolean) {
     }
     else {
         return (
-            <p>You must be a verified user to upload files to the library.</p>
+            <p className="side-menu-elem-wide">You must be a verified user to upload files to the library.</p>
         )
     }
 }

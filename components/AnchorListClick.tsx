@@ -1,6 +1,6 @@
 "use strict";
 
-export default function AnchorListClick(list: any[], viewSelector, className, clickAction, valueSelector?) {
+export default function AnchorListClick(list: any[], viewSelector, clickAction, valueSelector?, className?) {
     if (list) {
         return (
             <>

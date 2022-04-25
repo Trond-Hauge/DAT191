@@ -13,4 +13,5 @@ export const db = knex({
   },
   debug: false,
   pool: {min: 1, max: 5},
+  ssl: process.env.NODE_ENV === "production"
 });

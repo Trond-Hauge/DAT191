@@ -16,12 +16,12 @@ export default function Publications({ permission, documents }) {
     const descRef = useRef<HTMLParagraphElement>(null);
     const publicRef = useRef<HTMLButtonElement>(null);
     const [document, setDocument] = useState(null);
-    const [aList, setAList] = useState(AnchorListClick(documents, d => d.document_name, "side-menu-elem-wide", updateDoc, d => d.document_id));
+    const [aList, setAList] = useState(AnchorListClick(documents, d => d.document_name, updateDoc, d => d.document_id));
 
     function handleSearch() {
         const search = searchRef.current?.value;
         const list = search ? documents.filter( d => filterByDocument(d, search) ) : documents;
-        const aList = AnchorListClick(list, d => d.document_name, "side-menu-elem-wide", updateDoc, d => d.document_id);
+        const aList = AnchorListClick(list, d => d.document_name, updateDoc, d => d.document_id);
         setAList(aList);
     }
 
@@ -100,18 +100,18 @@ export default function Publications({ permission, documents }) {
         <>
         {Header(permission)}
         <main>
-            <div className="side-menu-container">
-                <h3 className="side-menu-elem">Your Publications</h3>
+            <div className="wide-side-menu-container">
+                <h4>Your Publications</h4>
                 <input
                     type="text"
-                    className="side-menu-elem-wide"
+
                     placeholder="Search"
                     onChange={handleSearch}
                     ref={searchRef}
                 />
                 {aList}
             </div>
-            <div className="view-space-side-menu">
+            <div className="view-space-wide-menu">
                 <div className="view-container">
                     {document &&
                         <>

@@ -1,11 +1,50 @@
-.view-space {
+:root {
+    --wide-side-bar-width: 30rem;
+}
+  
+.wide-side-menu-container {
+    width: var(--wide-side-bar-width);
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    padding: 2rem;
+    background-color: var(--glass);
+    color: var(--dark);
+}
+
+.wide-side-menu-container * {
+    margin: 0 0 1rem 0;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    resize: none;
+}
+
+.wide-side-menu-container h4 {
+    font-size: 2rem;
+}
+  
+.wide-side-menu-container select {
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+}
+
+.view-space-wide-menu {
+    margin-top: var(--nav-height);
+    margin-left: var(--wide-side-bar-width);
     padding: 2rem;
     text-align: center;
 }
 
-.view-space-side-menu {
+.view-space-menu {
     margin-top: var(--nav-height);
     margin-left: var(--side-bar-width);
+    padding: 2rem;
+    text-align: center;
+}
+
+.view-space {
+    margin-top: var(--nav-height);
     padding: 2rem;
     text-align: center;
 }
@@ -55,10 +94,6 @@
     border-radius: 3px;
     padding: .4rem;
     color: white;
-}
-
-.side-menu-elem {
-    padding: 1rem;
 }
 
 .btn-save-changes {

@@ -67,7 +67,7 @@ export default function Login({ permission, users, documents, organisations }) {
             case "users": {
                 const list = search ? users.filter( u => filterByName(u, search) ) : users;
                 list.sort(sortByName);
-                const aList = AnchorListClick(list, u => u.first_name + " " + u.last_name, "side-menu-elem-wide", handleClick, u => u.member_id);
+                const aList = AnchorListClick(list, u => u.first_name + " " + u.last_name, handleClick, u => u.member_id);
                 setSelectedList(aList);
             }
             break;
@@ -75,7 +75,7 @@ export default function Login({ permission, users, documents, organisations }) {
             case "docs": {
                 const list = search ? documents.filter( d => filterByDocument(d, search) ) : documents;
                 list.sort(sortByDocument);
-                const aList = AnchorListClick(list, d => d.document_name, "side-menu-elem-wide", handleClick, d => d.document_id);
+                const aList = AnchorListClick(list, d => d.document_name, handleClick, d => d.document_id);
                 setSelectedList(aList);
             }
             break;
@@ -83,7 +83,7 @@ export default function Login({ permission, users, documents, organisations }) {
             case "orgs": {
                 const list = search ? organisations.filter( o => filterByOrganisation(o, search) ) : organisations;
                 list.sort(sortByOrganisation);
-                const aList = AnchorListClick(list, o => o.organisation_name, "side-menu-elem-wide", handleClick, o => o.organisation_id);
+                const aList = AnchorListClick(list, o => o.organisation_name, handleClick, o => o.organisation_id);
                 setSelectedList(aList);
             }
             break;
@@ -99,8 +99,8 @@ export default function Login({ permission, users, documents, organisations }) {
         <>
         {Header(permission)}
         <main>
-            <div className="side-menu-container">
-                <select className="side-menu-elem-wide" defaultValue={"users"} ref={selectRef} onChange={handleSelectionChange}>
+            <div className="wide-side-menu-container">
+                <select defaultValue={"users"} ref={selectRef} onChange={handleSelectionChange}>
                     <option value="users">Users</option>
                     <option value="docs">Documents</option>
                     <option value="orgs">Organisations</option>
@@ -109,13 +109,12 @@ export default function Login({ permission, users, documents, organisations }) {
                     type="text"
                     name="search"
                     placeholder="Search"
-                    className="side-menu-elem-wide"
                     onChange={handleSearch}
                     ref={searchRef}
                 />
                 {selectedList}
             </div>
-            <div className="view-space-side-menu">
+            <div className="view-space-wide-menu">
                 <div className="view-container">
                     {selectedView}
                 </div>
