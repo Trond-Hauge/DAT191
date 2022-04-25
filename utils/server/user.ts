@@ -10,9 +10,9 @@ import { gc } from "../../gc";
  */
 export function getMemberClaims(cookie) {
     let claims = {
-        permission: "",
-        email: "",
-        id: ""
+        permission: null,
+        email: null,
+        id: null
     };
 
     if (!cookie) return claims;
