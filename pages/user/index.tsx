@@ -29,7 +29,7 @@ export default function UserAccount({ permission, user }) {
   }
 
   async function saveChanges() {
-    const res = await fetch(`${server}/api/user/userAccount`, {
+    const res = await fetch(`${server}/api/user/account`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -56,7 +56,7 @@ export default function UserAccount({ permission, user }) {
   async function deleteAccount() {
     const answer = prompt("Are you sure you want to permanently delete your account? Type DELETE to confirm.");
     if (answer === "DELETE") {
-      const res = await fetch(`${server}/api/user/userAccount`, {
+      const res = await fetch(`${server}/api/user/account`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

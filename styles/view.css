@@ -1,5 +1,6 @@
+/*Let side menu shrink to a minimum of 15rem on narrow displays*/
 :root {
-    --wide-side-bar-width: 30rem;
+    --wide-side-bar-width: max(20vw, 15rem);
 }
   
 .wide-side-menu-container {
@@ -16,11 +17,12 @@
     margin: 0 0 1rem 0;
     width: 100%;
     padding: 1rem;
-    font-size: 1.2rem;
+    font-size: 120%;
     resize: none;
 }
 
 .wide-side-menu-container h4 {
+    text-align: center;
     font-size: 2rem;
 }
   
@@ -53,7 +55,7 @@
     display: inline-block;
     text-align: left;
     font-size: 2rem;
-    max-width: 80%;
+    max-width: 90%;
 }
 
 .view-container label {
