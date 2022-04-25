@@ -35,17 +35,14 @@ export async function deleteUser(member) {
         const documents = await db("documents").where("owner", member.member_id);
         const organisations = await db("organisations").where("fk_leader", member.member_id);
 
-        if (documents) {
-            for (let i = 0; i < documents.length; i++) {
-                const doc = documents.at(i);
-                try {
-                    await gc.file(doc.filename).delete();
-                }
-                catch (error) {
-                    console.error(error);
-                }
+        documents.forEach( async doc => {
+            try {
+                await gc.file(doc.filename).delete();
             }
-        }
+            catch (error) {
+                console.error(error);
+            }
+        });
 
         if (organisations) {
             for (let i = 0; i < organisations.length; i++) {

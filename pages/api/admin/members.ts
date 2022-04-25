@@ -64,7 +64,7 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
             return;
         }
 
-        const id = req.body.id;
+        const id = parseInt(req.body.id);
         if (!id) {
             res.status(400).json(BAD_REQUEST);
             return;
@@ -73,7 +73,7 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
         try {
             const user = await db("members").where("member_id", id).first();
             await deleteUser(user);
-            if (member.member_id === parseInt(id)) {
+            if (member.member_id === id) {
                 res.status(207).json({ message: "User has been deleted." });
             }
             else {
