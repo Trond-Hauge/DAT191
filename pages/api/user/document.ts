@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { gc } from "../../../gc";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
+import { deleteDocument } from "../../../utils/server/document";
 import { getMemberClaims } from "../../../utils/server/user";
 
 export default async function UserPublicationAPI(req: NextApiRequest, res: NextApiResponse) {
@@ -60,9 +61,8 @@ export default async function UserPublicationAPI(req: NextApiRequest, res: NextA
                 return;
             }
 
-            await db("documents").where("document_id", docID).del();
+            await deleteDocument(document);
             res.status(200).json({ message: "Document was deleted" });
-            await gc.file(document?.filename).delete();
         }
         catch (error) {
             res.status(500).json(INTERNAL_SERVER_ERROR);

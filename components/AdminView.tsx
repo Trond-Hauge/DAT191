@@ -62,7 +62,9 @@ export function UserView(user) {
                 Router.reload();
             }
             else if (res.status === 207) {
-                await fetch(`${server}/api/user/logout`);
+                await fetch(`${server}/api/user/logout`, {
+                    method: "POST",
+                });
                 Router.reload();
             }
             else {

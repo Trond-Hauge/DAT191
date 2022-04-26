@@ -65,7 +65,9 @@ export default function UserAccount({ permission, user }) {
       });
 
       if (res.status === 200) {
-        await fetch(`${server}/api/user/logout`);
+        await fetch(`${server}/api/user/logout`, {
+          method: "POST",
+        });
         router.reload();
       }
       else {

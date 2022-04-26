@@ -5,6 +5,7 @@ import { db } from "../../../db";
 import { gc } from "../../../gc";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
 import { authorisedAdmin } from "../../../utils/server/admin";
+import { deleteDocument } from "../../../utils/server/document";
 
 export default async function AdminPublicationsAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -60,9 +61,8 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
 
         try {
             const document = await db("documents").where("document_id", id).first();
-            await db("documents").where("document_id", id).del();
+            await deleteDocument(document);
             res.status(200).json({ message: "Document was deleted." });
-            await gc.file(document?.filename).delete();
         }
         catch (error) {
             console.error(error);
