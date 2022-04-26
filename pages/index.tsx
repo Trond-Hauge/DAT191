@@ -7,9 +7,7 @@ import { getMemberClaims } from "../utils/server/user";
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home({permission}) {
-  //console.log("Home: ", isCookie);
-  
+export default function Home({ permission }) {
   return (
     <>
     {Header(permission)}

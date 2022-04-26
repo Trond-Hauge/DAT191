@@ -5,7 +5,7 @@
   --light-select: rgba(230, 230, 230, 0.9);
   --glass: rgba(255, 255, 255, 0.5);
   --glass-select: rgba(230, 230, 230, 0.5);
-  --bgGradient: linear-gradient(-43deg, #ffffff, #d0dff0);
+  --bgGradient: linear-gradient(-90deg, #dfe7f1, #d0dff0);
   --bgShadow: #a9b5c4;
   --nav-height: 3rem;
 }
