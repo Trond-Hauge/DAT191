@@ -4,6 +4,8 @@ import { db } from "../../db";
 import { gc } from "../../gc";
 
 export async function deleteDocument(document) {
+    if (!document) return false;
+    
     try {
         await db("documents").where("document_id",  document.document_id).del();
         const existsList = await gc.file(document.filename).exists();

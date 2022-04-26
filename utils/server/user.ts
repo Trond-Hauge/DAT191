@@ -36,13 +36,11 @@ export async function deleteUser(member) {
         const documents = await db("documents").where("owner", member.member_id);
         const organisations = await db("organisations").where("fk_leader", member.member_id);
 
-        for (let i = 0; i < documents.length; i++) {
-            await deleteDocument(documents.at(i));
-        }
+        const deleteDocs = documents.map( async doc => await deleteDocument(doc) );
+        await Promise.all(deleteDocs);
 
-        for (let i = 0; i < organisations.length; i++) {
-            await db("members_organisations").where("organisation_id", organisations.at(i).organisation_id).del();
-        }
+        const deleteOrgs = organisations.map( async org => await db("members_organisations").where("organisation_id", org.organisation_id).del() );
+        await Promise.all(deleteOrgs);
 
         await db("password_reset").where("email", member.email).del();
         await db("members_organisations").where("member_id", member.member_id).del();
