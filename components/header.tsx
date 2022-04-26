@@ -64,7 +64,9 @@ function SignIn(loggedIn) {
   })
 
   async function logout() {
-    await fetch(`${server}/api/user/logout`);
+    await fetch(`${server}/api/user/logout`, {
+      method: "POST",
+    });
     Router.reload();
   }
 
