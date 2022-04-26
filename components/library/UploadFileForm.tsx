@@ -11,6 +11,7 @@ export default function UploadFileForm(isVerified: boolean) {
         const uploadFile = async e => {
             e.preventDefault();
             const form = new FormData(e.target);
+            e.target.reset();
             const res = await fetch(`${server}/api/library/upload`, {
                 method: "POST",
                 body: form

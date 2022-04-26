@@ -272,48 +272,41 @@ export function OrganisationView(org) {
 }
 
 export function AddOrgView(users) {
-    async function addOrg() {
-        const root = document.getElementById("addOrgRoot");
-        const orgName = root.querySelector<HTMLInputElement>("*[id='orgName']")?.value;
-        const leaderID = parseInt(root.querySelector<HTMLSelectElement>("*[id='leaderID']")?.value);
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const form = Object.fromEntries(new FormData(e.target).entries());
+        e.target.reset();
+        
+        const res = await fetch(`${server}/api/admin/organisations`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(form)
+        });
 
-        if (orgName && leaderID) {
-            const res = await fetch(`${server}/api/admin/organisations`, {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    orgName,
-                    leaderID
-                })
-            });
-
-            if (res.status === 200) {
-                Router.reload();
-            }
-            else {
-                alert("Something went wrong!");
-            }
+        if (res.status === 200) {
+            Router.reload();
         }
         else {
-            alert("Organisation name and leader are required.");
+            alert("Something went wrong!");
         }
     }
 
     return (
-        <div id="addOrgRoot">
-            <h1 className="view-header">Add a new organisation</h1>
+        <>
+        <h1 className="view-header">Add a new organisation</h1>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label><strong>Organisation name:</strong></label>
                 <input
-                    id="orgName"
                     type="text"
-                    name="name"
+                    name="orgName"
+                    required
                 />
             </div>
             <div>
                 <label><strong>Organisation leader:</strong></label>
-                <select id="leaderID">
-                    <option disabled selected>-- select an option --</option>
+                <select name="leaderID" required>
+                    <option selected value="">-- select an option --</option>
                     {users.map( (user, index) => {
                         return (
                             <option key={index} value={user.member_id}>{`${user.first_name} ${user.last_name}`}</option>
@@ -321,7 +314,8 @@ export function AddOrgView(users) {
                     })}
                 </select>
             </div>
-            <button onClick={addOrg} className="btn-add-org">Add Organisation</button>
-        </div>
+            <button type="submit" className="btn-add-org">Add Organisation</button>
+        </form>
+        </>
     )
 }

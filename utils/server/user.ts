@@ -2,7 +2,6 @@
 
 import { verify } from "jsonwebtoken";
 import { db } from "../../db";
-import { gc } from "../../gc";
 import { deleteDocument } from "./document";
 
 /**
