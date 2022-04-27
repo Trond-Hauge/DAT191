@@ -7,7 +7,7 @@ import { server } from "../../next.config";
 export default function UploadFileForm(permission) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
-    if (permission === "verified" && permission === "admin") {
+    if (permission === "verified" || permission === "admin") {
         const uploadFile = async e => {
             e.preventDefault();
             const form = new FormData(e.target);
