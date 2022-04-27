@@ -4,23 +4,19 @@ import Header from "../../components/header";
 import dynamic from "next/dynamic";
 import { server } from "../../next.config";
 import { getMemberClaims } from "../../utils/server/user";
-import useSWR from "swr";
+import { useDocument } from "../../utils/client/fetchers";
 
 const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
   ssr: false
 });
 
-const fetcher = url => fetch(url, { method: "GET" }).then( res => res.blob() );
-
 export default function DocumentPage({ permission, doc }) {
-  const {data, error} = useSWR(`${server}/api/library/file?filename=${doc.filename}&public=${doc.public}&owner=${doc.owner}`, fetcher);
-
-  if (error) return (<h1>Error loading document</h1>)
+  const { file } = useDocument(doc);
 
   return (
     <>
     {Header(permission)}
-    <PDFViewer file={data} filename={doc.filename}/>
+    <PDFViewer file={file} filename={doc.filename}/>
     </>
   );
 }
