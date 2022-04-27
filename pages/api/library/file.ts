@@ -1,41 +1,37 @@
 "use strict";
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from "../../../db.js";
-import { verify } from "jsonwebtoken";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED } from '../../../messages/apiResponse.js';
-import { maxFileSizeBytes } from '../../../app.config.js';
-import { gc } from '../../../gc.js';
+import { db } from "../../../db";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED } from '../../../messages/apiResponse';
+import { maxFileSizeBytes } from '../../../app.config';
+import { gc } from '../../../gc';
+import { getMemberClaims } from '../../../utils/server/user';
 
 export default async function file(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
-        const filename = req.query.filename as string;
-        const _public = req.query.public;
-        const owner = req.query.owner;
+        const docID = parseInt(req.query.id as string);
+        const cookie = req.cookies.auth;
+        const { id, permission } = getMemberClaims(cookie);
 
-        if (!filename || !_public || !owner) {
+        if (!docID) {
             res.status(400).json(BAD_REQUEST);
             return;
         }
 
-        let email = "";
-        verify(req.cookies.auth!, process.env.JWT_SECRET, async function (err, decoded) {
-            if (!err && decoded?.memberEmail) email = decoded.memberEmail;
-        });
-        const member = await db("members").where("email", email).first();
+        try {
+            const doc = await db.select("owner", "public", "filename").from("documents").where("document_id", docID).first();
+            if (!doc?.public && permission !== "admin" && doc?.owner !== id) {
+                res.status(403).json({ error: "User is not authorised to view content" });
+                return;
+            }
 
-        if (!_public && (member?.permission !== "admin" && member.member_id !== owner)) {
-            res.status(403).json({ error: "User is not authorised to view content" });
+            const response = await gc.file(doc?.filename).download();
+            const file = response[0];
+            res.status(200).send(file);
         }
-        else {
-            try {
-                const response = await gc.file(filename).download();
-                const file = response[0];
-                res.status(200).send(file);
-            }
-            catch (err) {
-                res.status(500).json(INTERNAL_SERVER_ERROR);
-            }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(INTERNAL_SERVER_ERROR);
         }
     }
     else {

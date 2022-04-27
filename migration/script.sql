@@ -64,7 +64,7 @@ INSERT INTO members (first_name, last_name, email, username, password, permissio
 VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin'),
     ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'verified'),
     ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'unverified'),
-	('Olli', 'Bolli', 'oliveroloughlin@hotmail.com', 'olli', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin');
+	('Oliver', 'OLoughlin', 'oliveroloughlin@hotmail.com', 'olli', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin');
 
 INSERT INTO organisations(organisation_name, fk_leader)
 VALUES ('University Institution', 1),
@@ -2999,4 +2999,12 @@ VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'Document.pdf', 1),
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 3),
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 3),
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 3);
+    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 3),
+	('Haskell Book', 'This is a book on functional programming in Haskell. This file has been uploaded to test larger file sizes. This particular pdf is about 4MBs in size. At the moment the maximum file zie is set to 10MBs.', true, 'Programming in Haskell.pdf', 4);
+	
+	
+	
+	
+	
+	
+	

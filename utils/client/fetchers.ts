@@ -3,9 +3,9 @@
 import useSWR from "swr";
 import { server } from "../../next.config";
 
-export function useDocument(document) {
+export function useDocument(id) {
     const fetcher = url => fetch(`${server}${url}`).then( res => res.blob() );
-    const { data, error } = useSWR(`/api/library/file?filename=${document.filename}&public=${document.public}&owner=${document.owner}`, fetcher);
+    const { data, error } = useSWR(`/api/library/file?id=${id}`, fetcher);
 
     return {
         file: data,

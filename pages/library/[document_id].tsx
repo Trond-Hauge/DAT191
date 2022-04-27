@@ -11,7 +11,7 @@ const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
 });
 
 export default function DocumentPage({ permission, doc }) {
-  const { file } = useDocument(doc);
+  const { file } = useDocument(doc.document_id);
 
   return (
     <>
