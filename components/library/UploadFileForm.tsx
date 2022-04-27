@@ -4,10 +4,10 @@ import Router from "next/router";
 import { useRef } from "react";
 import { server } from "../../next.config";
 
-export default function UploadFileForm(isVerified: boolean) {
+export default function UploadFileForm(permission) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
-    if (isVerified) {
+    if (permission === "verified" && permission === "admin") {
         const uploadFile = async e => {
             e.preventDefault();
             const form = new FormData(e.target);

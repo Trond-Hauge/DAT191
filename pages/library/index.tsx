@@ -4,29 +4,15 @@ import Header from "../../components/header";
 import UploadFileForm from "../../components/library/UploadFileForm";
 import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
-import { server } from "../../next.config";
 import { getMemberClaims } from "../../utils/server/user";
 import { filterByDocument, filterByName, filterByOrganisation, sortByDocument } from "../../utils/multi/list";
+import { useDocuments } from "../../utils/client/fetchers";
 
-export default function Library({ list, permission, isVerified }) {
-    // Sets the initial array of all accessible documents.
-    let documents = Array.from(list);
-
-    // Initial setup of router object and querying of URL parameters.
+export default function Library({ permission }) {
+    const { documents, loading, error } = useDocuments();
     const router = useRouter();
     const {title, org, author} = router.query;
 
-    // Simple filtering by document title, organisation and author. Not case sensitive.
-    if (title) documents = documents.filter(doc => filterByDocument(doc, title));
-    if (org) documents = documents.filter(doc => filterByOrganisation(doc, org));
-    if (author) documents = documents.filter(doc => filterByName(doc, author));
-
-    // Documents are sorted based on title.
-    documents.sort(sortByDocument);
-
-    // Handles changes to search input fields. Upon change, title, org and author URL parameters are updated.
-    // The URL is built iteratively, only including parameters that have a value.
-    // Then the client side of the page is reloaded, and the new URL replaces the old without adding a new entry to browser history.
     const handleChange = e => {
         e.preventDefault();
         const field = e.target.name;
@@ -51,7 +37,6 @@ export default function Library({ list, permission, isVerified }) {
         router.replace(url, undefined, { shallow: true });
     }
 
-    // The actual page contents that are returned.
     return (
         <>
             {Header(permission)}
@@ -80,32 +65,32 @@ export default function Library({ list, permission, isVerified }) {
                         </form>
                     </div>
                     <div className="upload-space">
-                        {UploadFileForm(isVerified)}
+                        {UploadFileForm(permission)}
                     </div>
                 </div>
                 
                 <div className="card-space">
-                    {FileCardList(documents)}
+                    {function(){
+                        if (error) return <h2>Error loading documents</h2>
+                        if (loading) return <h2>Loading...</h2>
+
+                        if (documents) {
+                            let docs = documents;
+                            if (title) docs = documents.filter(doc => filterByDocument(doc, title));
+                            if (org) docs = documents.filter(doc => filterByOrganisation(doc, org));
+                            if (author) docs = documents.filter(doc => filterByName(doc, author));
+                            docs.sort(sortByDocument);
+                            return FileCardList(docs);
+                        }
+                    }()}
                 </div>
             </main>
         </>
     );
 }
 
-// Runs on the server before delivering results to the client.
-// A GET request is sent to the documents API, which returns document contents based on the permission level of the user.
-// A GET request is then sent to the user/permission API, which responds with the permission level of the user.
-// Documents, isCookie, and isVerified are then delivered as props to the client.
 export async function getServerSideProps(ctx) {
     const cookie = ctx.req?.cookies.auth;
     const { permission } = getMemberClaims(cookie);
-    const isVerified = permission === "admin" || permission === "verified";
-
-    const res = await fetch(`${server}/api/library/documents`, {
-        method: "GET",
-        headers: { cookie: cookie }
-    });
-    const json = await res.json();
-
-    return { props: { list: json, permission, isVerified } };
+    return { props: { permission } };
 }

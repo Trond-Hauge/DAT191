@@ -13,3 +13,14 @@ export function useDocument(id) {
         error: error
     }
 }
+
+export function useDocuments() {
+    const fetcher = url => fetch(`${server}${url}`).then( res => res.json() );
+    const { data, error } = useSWR<any[],any>("/api/library/documents", fetcher);
+
+    return {
+        documents: data,
+        loading: !error && !data,
+        error: error
+    }
+}

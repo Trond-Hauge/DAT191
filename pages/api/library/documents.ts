@@ -7,7 +7,7 @@ import { METHOD_NOT_ALLOWED } from "../../../messages/apiResponse";
 
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
-        const cookie = req.headers.cookie;
+        const cookie = req.cookies.auth;
         const { id, permission } = getMemberClaims(cookie);
 
         if (permission === "admin") {
@@ -16,7 +16,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
-            res.json(documents);
+            res.status(200).json(documents);
         }
         else {
             const documents = await db.select("documents.document_name", "documents.document_description", "documents.document_id", "members.first_name", "members.last_name", "organisations.organisation_name")
@@ -25,10 +25,10 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
             .where("public", true).orWhere("owner", id);
-            res.json(documents);
+            res.status(200).json(documents);
         }
     }
     else {
-        res.status(405).send(METHOD_NOT_ALLOWED);
+        res.status(405).json(METHOD_NOT_ALLOWED);
     }
 }
