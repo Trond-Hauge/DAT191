@@ -59,9 +59,8 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
         }
 
         try {
-            await db("members_organisations").where("organisation_id", id).del();
             await db("organisations").where("organisation_id", id).del();
-            res.status(200).json({ message: "Organisation was updated." });
+            res.status(200).json({ message: "Organisation was deleted." });
         }
         catch (error) {
             console.error(error);
@@ -85,7 +84,7 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
                 fk_leader: leaderID
             });
 
-            res.status(200).json({ message: "Organisation was updated." });
+            res.status(200).json({ message: "Organisation was added." });
         }
         catch (error) {
             console.error(error);

@@ -25,15 +25,15 @@ CREATE TABLE organisations (
     organisation_id SERIAL PRIMARY KEY,
     organisation_name VARCHAR(64) NOT NULL,
 	fk_leader INTEGER,
-    FOREIGN KEY(fk_leader) REFERENCES members(member_id)
+    FOREIGN KEY(fk_leader) REFERENCES members(member_id) ON DELETE CASCADE
 );
 
 CREATE TABLE members_organisations (
     member_id INTEGER,
     organisation_id INTEGER,
     PRIMARY KEY(member_id, organisation_id),
-    FOREIGN KEY(member_id) REFERENCES members(member_id),
-    FOREIGN KEY(organisation_id) REFERENCES organisations(organisation_id)
+    FOREIGN KEY(member_id) REFERENCES members(member_id) ON DELETE CASCADE,
+    FOREIGN KEY(organisation_id) REFERENCES organisations(organisation_id) ON DELETE CASCADE
 );
 
 -- *** FILE STUFF *** --
@@ -44,7 +44,7 @@ CREATE TABLE documents(
     public BOOLEAN NOT NULL,
     owner INTEGER,
     filename VARCHAR(68), --Multiple files of the same name will cause issues, need to think of a good solution
-    FOREIGN KEY(owner) REFERENCES members(member_id)
+    FOREIGN KEY(owner) REFERENCES members(member_id) ON DELETE CASCADE
 
     --categorisation! IMPORTANT, hear with users.
     --Should contain more metadata, publish date for example.
@@ -56,7 +56,7 @@ CREATE TABLE password_reset
 	timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	reset_key CHAR(20) PRIMARY KEY, -- Must match passwordResetKeyLength in app.config
 	email VARCHAR(64),
-    FOREIGN KEY(email) REFERENCES members(email)
+    FOREIGN KEY(email) REFERENCES members(email) ON DELETE CASCADE
 );
 
 -- *** GENERATING EXAMPLE ENTRIES *** --

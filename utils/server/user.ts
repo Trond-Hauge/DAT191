@@ -2,7 +2,7 @@
 
 import { verify } from "jsonwebtoken";
 import { db } from "../../db";
-import { deleteDocument } from "./document";
+import { deleteFile } from "./document";
 
 /**
  * @param {*} cookie Serialized cookie, without name prefix.
@@ -32,18 +32,16 @@ export function getMemberClaims(cookie) {
 
 export async function deleteUser(member) {
     if (member) {
-        const documents = await db("documents").where("owner", member.member_id);
-        const organisations = await db("organisations").where("fk_leader", member.member_id);
-
-        const deleteDocs = documents.map( async doc => await deleteDocument(doc) );
-        await Promise.all(deleteDocs);
-
-        const deleteOrgs = organisations.map( async org => await db("members_organisations").where("organisation_id", org.organisation_id).del() );
-        await Promise.all(deleteOrgs);
-
-        await db("password_reset").where("email", member.email).del();
-        await db("members_organisations").where("member_id", member.member_id).del();
-        await db("organisations").where("fk_leader", member.member_id).del();
-        await db("members").where("member_id", member.member_id).del();
+        try {
+            const documents = await db("documents").where("owner", member.member_id);
+            documents.forEach( doc => {
+                deleteFile(doc);
+            })
+            
+            await db("members").where("member_id", member.member_id).del();
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
 }
