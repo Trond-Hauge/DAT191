@@ -2,7 +2,7 @@
 
 import Router from "next/router";
 import { server } from "../next.config";
-import { validateFirstName, validateLastName, validateUsername } from "../utils/multi/user";
+import { validateFirstName, validateLastName, validateUsername, validateEmail } from "../utils/multi/user";
 
 export function UserView(user) {
     async function saveChanges() {
@@ -14,7 +14,11 @@ export function UserView(user) {
         const permission = root.querySelector<HTMLSelectElement>("select[id='permission']")?.value;
         const id = root.querySelector<HTMLInputElement>("input[id='userID']")?.value;
     
-        const valid = validateFirstName(firstName) && validateLastName(lastName) && validateUsername(username);
+        const valid = validateFirstName(firstName)
+            && validateLastName(lastName)
+            && validateUsername(username)
+            && validateEmail(email);
+
         if (valid) {
             const res = await fetch(`${server}/api/admin/members`, {
                 method: "PATCH",

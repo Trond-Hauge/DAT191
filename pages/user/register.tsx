@@ -1,39 +1,40 @@
 "use strict"
 
-import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { server } from "../../next.config";
-import { validatePassword } from "../../utils/multi/user";
+import PasswordRequirements from "../../components/PasswordRequirements";
+import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../utils/multi/user";
 import { getMemberClaims } from "../../utils/server/user";
 
 export default function Register({ permission }) {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const pRef = useRef<HTMLParagraphElement>(null);
     const router = useRouter();
 
-     const submit = async (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
+        const formData = new FormData(e.target);
+        const form = Object.fromEntries(formData.entries());
 
-        const valid = validatePassword(password);
+        const valid = validatePassword(form.password)
+            && validateFirstName(form.firstName)
+            && validateLastName(form.lastName)
+            && validateUsername(form.username)
+            && validateEmail(form.email);
+
         if (!valid) {
-            pRef.current.innerText = "Password does not match requirements.";
+            alert("One or more of the details entered do not match requirements.");
             return;
         }
 
-        const res = await fetch(`${server}/api/user/registerUser`, {
+        const res = await fetch(`${server}/api/user/account`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                username,
-                password
+                firstName: form.firstName,
+                lastName: form.lastName,
+                email: form.email,
+                username: form.username,
+                password: form.password
             })
         });
 
@@ -43,7 +44,7 @@ export default function Register({ permission }) {
             router.push("/error");
         }
         else if (res.status === 207) {
-            pRef.current.innerText = message;
+            alert(message);
         }
         else {
             router.push('/user/login');
@@ -53,39 +54,57 @@ export default function Register({ permission }) {
         <>
         {Header(permission)}
         <main>
-            <div className="sign-in-form">        
-           <form onSubmit={submit}>
-                <h1>Create Account</h1>
-            <div>
-                <input className="sign-in-form" placeholder="Enter first name" required
-                       onChange={e => setFirstName(e.target.value)}
-                />
-            </div>
-            <div>
-                <input className="sign-in-form" placeholder="Enter last name" required
-                       onChange={e => setLastName(e.target.value)}
-                />
-            </div>
-            <div>
-                <input type="email" className="sign-in-form" placeholder="Enter email" required
-                       onChange={e => setEmail(e.target.value)}
-                />
-            </div>
-            <div>
-                <input className="sign-in-form" placeholder="Create a username" required
-                       onChange={e => setUsername(e.target.value)}
-                />
-            </div>
-            <div>
-                <input type="password" className="sign-in-form" placeholder="Create a password" required
-                       onChange={e => setPassword(e.target.value)}
-                />
-            </div>
-            <div>
-                <button className="button" type="submit">Submit</button>
-                <p ref={pRef}></p>
-            </div>
-            </form>
+            <div className="view-space">
+                <div className="view-container">
+                    <h1 className="view-header">Create Account</h1>       
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <input
+                                name="firstName"
+                                type="text" 
+                                placeholder="Enter first name" 
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                name="lastName"
+                                type="text" 
+                                placeholder="Enter last name" 
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                name="email"
+                                type="email" 
+                                placeholder="Enter email" 
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input 
+                                name="username"
+                                type="text"
+                                placeholder="Create a username" 
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                name="password" 
+                                type="password" 
+                                placeholder="Create a password" 
+                                required
+                            />
+                        </div>
+                        <div className="narrow-container">
+                            <h3>Password Requirements:</h3>
+                            {PasswordRequirements()}
+                        </div>
+                        <button className="btn-submit" type="submit">Submit</button>
+                    </form>
+                </div>
             </div>
         </main>
         </>

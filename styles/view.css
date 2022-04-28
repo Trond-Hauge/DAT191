@@ -2,6 +2,10 @@
 :root {
     --wide-side-bar-width: max(20vw, 15rem);
 }
+
+.narrow-container {
+    max-width: max(30vw,30rem)
+}
   
 .wide-side-menu-container {
     width: var(--wide-side-bar-width);
@@ -73,6 +77,12 @@
     padding: 1rem;
 }
 
+.view-header {
+    border-bottom: 2px solid black;
+    text-align: center;
+    padding: 0.4rem;
+}
+
 .view-header p {
     padding: 0;
     margin: 0;
@@ -83,12 +93,6 @@
     padding: 1px;
     margin: 5px 0px 0px 0px;
     display: inline;
-}
-
-.view-header {
-    border-bottom: 2px solid black;
-    text-align: center;
-    padding: 0.4rem;
 }
 
 .view-container button {
@@ -131,4 +135,12 @@
 
 .btn-add-org:hover {
     background-color: rgb(50,50,220);
+}
+
+.btn-submit {
+    background-color: rgb(70,85,100);
+}
+
+.btn-submit:hover {
+    background-color: rgb(90,110,140);
 }

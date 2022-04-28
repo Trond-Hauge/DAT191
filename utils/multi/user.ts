@@ -1,5 +1,6 @@
 "use strict";
 
+import EmailValidator from "email-validator";
 import { passwordResetTimeoutMinutes, passwordRequirements, firstNameRequirements, lastNameRequirements, usernameRequirements } from "../../app.config";
 
 /**
@@ -32,6 +33,10 @@ export function validatePasswordResetRequest(resetRequest) {
     const timestamp = new Date(resetRequest.timestamp).valueOf();
     const ageInMinutes = (Date.now() - timestamp) / 1000 / 60;
     return ageInMinutes < passwordResetTimeoutMinutes;
+}
+
+export function validateEmail(email) {
+    return EmailValidator.validate(email);
 }
 
 export function validateFirstName(name) {

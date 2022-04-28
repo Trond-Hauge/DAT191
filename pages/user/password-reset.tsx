@@ -5,13 +5,12 @@ import { server } from "../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
 import { validatePassword } from "../../utils/multi/user";
-import { passwordRequirementsText } from "../../messages/user";
+import PasswordRequirements from "../../components/PasswordRequirements";
 import { getMemberClaims } from "../../utils/server/user";
 
 export default function Login({ permission }) {
   const passRef = useRef<HTMLInputElement>(null);
   const passRetypeRef = useRef<HTMLInputElement>(null);
-  const pRef = useRef<HTMLParagraphElement>(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -19,11 +18,11 @@ export default function Login({ permission }) {
     const passRetype = passRetypeRef.current?.value;
     const valid = validatePassword(pass);
     if (pass !== passRetype) {
-      pRef.current.innerText = "Passwords do not match.";
+      alert("Passwords do not match.");
       return;
     }
     else if (!valid) {
-      pRef.current.innerText = "Password does not match requirements.";
+      alert("Password does not match requirements.");
       return;
     }
 
@@ -38,7 +37,7 @@ export default function Login({ permission }) {
 
     const { message, error } = await res.json();
     if (res.status === 207) {
-      pRef.current.innerText = message;
+      alert(message);
     }
     else {
       Router.push("/user/login");
@@ -49,28 +48,33 @@ export default function Login({ permission }) {
     <>
       {Header(permission)}
       <main>
-        <text>
-          <strong>Password Requirements:</strong>
-          <p>{passwordRequirementsText}</p>
-        </text>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            placeholder="New password"
-            required
-            ref={passRef}
-          />
-          <br/>
-          <input
-            type="password"
-            placeholder="Retype password"
-            required
-            ref={passRetypeRef}
-          />
-          <br/>
-          <button type="submit">Reset password</button>
-        </form>
-        <p ref={pRef}></p>
+        <div className="view-space">
+          <div className="view-container">
+            <div className="narrow-container">
+              <h3>Password Requirements:</h3>
+              {PasswordRequirements()}
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div>
+                <input
+                  type="password"
+                  placeholder="New password"
+                  required
+                  ref={passRef}
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Retype password"
+                  required
+                  ref={passRetypeRef}
+                />
+              </div>
+              <button className="btn-submit" type="submit">Reset password</button>
+            </form>
+          </div>
+        </div>
       </main>
     </>
   );

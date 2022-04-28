@@ -6,6 +6,7 @@ import { db } from "../../db";
 import { useRef } from "react";
 import { server } from "../../next.config";
 import { useRouter } from "next/router";
+import { validateEmail, validateFirstName, validateLastName, validateUsername } from "../../utils/multi/user";
 
 export default function UserAccount({ permission, user }) {
   const firstNameRef = useRef(null);
@@ -29,27 +30,43 @@ export default function UserAccount({ permission, user }) {
   }
 
   async function saveChanges() {
-    const res = await fetch(`${server}/api/user/account`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: firstNameRef.current?.textContent,
-        lastName: lastNameRef.current?.textContent,
-        username: usernameRef.current?.textContent,
-        email: emailRef.current?.textContent,
-        userID: user.member_id
-      })
-    });
+    const firstName = firstNameRef.current?.textContent;
+    const lastName = lastNameRef.current?.textContent;
+    const username = usernameRef.current?.textContent;
+    const email = emailRef.current?.textContent;
+    const userID = user.member_id;
 
-    if (res.status === 200) {
-      router.reload();
-    }
-    else if (res.status === 207) {
-      const { message } = await res.json();
-      alert(message);
+    const valid = validateFirstName(firstName)
+    && validateLastName(lastName)
+    && validateUsername(username)
+    && validateEmail(email);
+
+    if (valid) {
+      const res = await fetch(`${server}/api/user/account`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          username,
+          email,
+          userID,
+        })
+      });
+
+      if (res.status === 200) {
+        router.reload();
+      }
+      else if (res.status === 207) {
+        const { message } = await res.json();
+        alert(message);
+      }
+      else {
+        alert("Something went wrong!");
+      }
     }
     else {
-      alert("Something went wrong!");
+      alert("Some of the entered details do not match requirements.");
     }
   }
 
