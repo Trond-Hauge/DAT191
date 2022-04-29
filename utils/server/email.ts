@@ -3,12 +3,11 @@
 import nodemailer from "nodemailer";
 
 /**
- * @param {*} receivingUser Email of the receiving user
+ * @param {*} receivingUser Email address of the receiving user
  * @param {*} subject Email subject
  * @param {*} text Email text
- * @param {*} callbackFunc Optional, function to be run after email is sent
  */
-export function sendMail(receivingUser, subject, text, callbackFunc?) {
+export async function sendMail(receivingUser, subject, text) {
     const user = process.env.EMAIL_USER;
     const pass = process.env.EMAIL_PASSWORD;
     const clientId = process.env.OAUTH_CLIENT_ID;
@@ -32,6 +31,17 @@ export function sendMail(receivingUser, subject, text, callbackFunc?) {
         subject,
         text
     };
-    
-    transporter.sendMail(mailConfigurations, callbackFunc);
+
+    await new Promise( (resolve, reject) => {
+        transporter.sendMail(mailConfigurations, (err, info) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+            else {
+                console.log(info);
+                resolve(info);
+            }
+        });
+    });
 }

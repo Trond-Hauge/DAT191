@@ -16,11 +16,12 @@ export default async function requestPasswordReset(req: NextApiRequest, res: Nex
         const text = passwordResetRequest(resetKey);
 
         try {
-            db("password_reset").insert({
+            await db("password_reset").insert({
                 reset_key: resetKey,
                 email: userEmail
-            })
-            .then( () => sendMail(userEmail, subject, text) );
+            });
+
+            await sendMail(userEmail, subject, text);
 
             const resetRequests = await db("password_reset").where("email", userEmail);
             resetRequests.forEach( request => {
