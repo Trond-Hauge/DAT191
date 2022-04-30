@@ -1,7 +1,6 @@
 "use strict";
 
 import { Storage } from "@google-cloud/storage";
-import { bucket } from "./next.config";
 
 const private_key = process.env.GC_PRIVATE_KEY.split(`\\n`).join("\n");
 
@@ -13,4 +12,4 @@ const storage = new Storage({
     }
 });
 
-export const gc = storage.bucket(bucket);
+export const gc = storage.bucket(process.env.GC_BUCKET);
