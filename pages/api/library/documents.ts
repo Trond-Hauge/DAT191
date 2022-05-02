@@ -15,7 +15,8 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .from("documents")
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
-            .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id");
+            .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
+            .orderBy("documents.document_name", "asc");
             res.status(200).json(documents);
         }
         else {
@@ -24,7 +25,8 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
             .leftJoin("members", "documents.owner", "members.member_id")
             .leftJoin("members_organisations", "documents.owner", "members_organisations.member_id")
             .leftJoin("organisations", "members_organisations.organisation_id", "organisations.organisation_id")
-            .where("public", true).orWhere("owner", id);
+            .where("public", true).orWhere("owner", id)
+            .orderBy("documents.document_name", "asc");
             res.status(200).json(documents);
         }
     }

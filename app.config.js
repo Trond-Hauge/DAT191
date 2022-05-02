@@ -9,8 +9,8 @@ module.exports = {
         maxLength: 64,
         minUpperCase: 1,
         minLowerCase: 1,
-        allowedChars: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-        bannedSequences: ["123", "1234", "12345", "password"]
+        allowedChars: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/",
+        bannedSequences: ["12345", "password"]
     },
     firstNameRequirements: {
         minLength: 1,

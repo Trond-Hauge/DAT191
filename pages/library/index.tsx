@@ -5,7 +5,7 @@ import UploadFileForm from "../../components/library/UploadFileForm";
 import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
 import { getMemberClaims } from "../../utils/server/user";
-import { filterByDocument, filterByName, filterByOrganisation, sortByDocument } from "../../utils/multi/list";
+import { filterByDocument, filterByName, filterByOrganisation } from "../../utils/multi/list";
 import { useDocuments } from "../../utils/client/fetchers";
 
 export default function Library({ permission }) {
@@ -73,15 +73,7 @@ export default function Library({ permission }) {
                     {function(){
                         if (error) return <h2>Error loading documents</h2>
                         if (loading) return <h2>Loading...</h2>
-
-                        if (documents) {
-                            let docs = documents;
-                            if (title) docs = documents.filter(doc => filterByDocument(doc, title));
-                            if (org) docs = documents.filter(doc => filterByOrganisation(doc, org));
-                            if (author) docs = documents.filter(doc => filterByName(doc, author));
-                            docs.sort(sortByDocument);
-                            return FileCardList(docs);
-                        }
+                        if (documents) return FileCardList(documents.filter( doc => filterByDocument(doc, title) && filterByOrganisation(doc, org) && filterByName(doc, author) ));
                     }()}
                 </div>
             </main>
