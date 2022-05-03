@@ -2,97 +2,82 @@
 
 import Header from "../components/header";
 import { getMemberClaims } from "../utils/server/user";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import AnchorListClick from "../components/AnchorListClick";
-import { filterByDocument, filterByName, filterByOrganisation, sortByDocument, sortByName, sortByOrganisation } from "../utils/multi/list";
+import { filterByDocument, filterByName, filterByOrganisation } from "../utils/multi/list";
 import { db } from "../db";
 import { UserView, DocumentView, OrganisationView, AddOrgView } from "../components/AdminView";
 
 export default function Login({ permission, users, documents, organisations }) {
-    const [selectedList, setSelectedList] = useState(null);
-    const [selectedView, setSelectedView] = useState(null);
-    const [init, setInit] = useState(true);
+    const [usersList, setUsersList] = useState(<></>);
+    const [documentsList, setDocumentsList] = useState(<></>);
+    const [organisationsList, setOrganisationsList] = useState(<></>);
+    const [selectedList, setSelectedList] = useState(<></>);
+    const [view, setView] = useState(<></>);
+    const [search, setSearch] = useState("");
 
     const selectRef = useRef<HTMLSelectElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
 
-    function handleClick(e) {
-        const a = e.target;
-        const id = parseInt(a.querySelector("input[type='hidden']").value);
-        const val = selectRef.current?.value;
-        const selected = val ? val : "users";
-
-        switch (selected) {
-            case "users": {
-                const user = users.find(u => u.member_id === id);
-                setSelectedView(UserView(user));
-            }
-            break;
-
-            case "docs": {
-                const doc = documents.find(d => d.document_id === id);
-                setSelectedView(DocumentView(doc));
-            }
-            break;
-
-            case "orgs": {
-                const org = organisations.find(o => o.organisation_id === id);
-                setSelectedView(OrganisationView(org));
-            }
-            break;
+    useEffect( () => {
+        const list = AnchorListClick(users.filter(u => filterByName(u, search)), u => u.first_name + " " + u.last_name, handleClick, u => u.member_id);
+        setUsersList(list);
+        const selected = selectRef.current?.value;
+        if (!selected || selected === "users") {
+            setSelectedList(list);
         }
-    }
+    }, [users, search]);
 
-    function handleSearch() {
-        const search = searchRef.current?.value;
-        updateList(search);
-    }
+    useEffect( () => {
+        const list = AnchorListClick(documents.filter(d => filterByDocument(d, search)), d => d.document_name, handleClick, d => d.document_id);
+        setDocumentsList(list);
+        const selected = selectRef.current?.value;
+        if (selected === "docs") {
+            setSelectedList(list);
+        }
+    }, [documents, search]);
 
-    function handleSelectionChange() {
-        searchRef.current.value = "";
-        if (selectRef?.current?.value === "orgs") {
-            setSelectedView(AddOrgView(users));
+    useEffect( () => {
+        const list = AnchorListClick(organisations.filter(o => filterByOrganisation(o, search)), o => o.organisation_name, handleClick, o => o.organisation_id);
+        setOrganisationsList(list);
+        const selected = selectRef.current?.value;
+        if (selected === "orgs") {
+            setSelectedList(list);
+        }
+    }, [organisations, search]);
+
+    async function handleClick(e) {
+        const id = parseInt(e.target.querySelector("input[type='hidden']")?.value);
+        const selected = selectRef.current?.value;
+        if (selected === "docs") {
+            const doc = documents.find(d => d.document_id === id);
+            setView(DocumentView(doc))
+        }
+        else if (selected === "orgs") {
+            const org = organisations.find(o => o.organisation_id === id);
+            setView(OrganisationView(org));
         }
         else {
-            setSelectedView(null);
-        }
-        updateList();
-    }
-
-    function updateList(search?) {
-        const val = selectRef.current?.value;
-        const selected = val ? val : "users";
-
-        switch (selected) {
-            case "users": {
-                const list = search ? users.filter( u => filterByName(u, search) ) : users;
-                list.sort(sortByName);
-                const aList = AnchorListClick(list, u => u.first_name + " " + u.last_name, handleClick, u => u.member_id);
-                setSelectedList(aList);
-            }
-            break;
-
-            case "docs": {
-                const list = search ? documents.filter( d => filterByDocument(d, search) ) : documents;
-                list.sort(sortByDocument);
-                const aList = AnchorListClick(list, d => d.document_name, handleClick, d => d.document_id);
-                setSelectedList(aList);
-            }
-            break;
-
-            case "orgs": {
-                const list = search ? organisations.filter( o => filterByOrganisation(o, search) ) : organisations;
-                list.sort(sortByOrganisation);
-                const aList = AnchorListClick(list, o => o.organisation_name, handleClick, o => o.organisation_id);
-                setSelectedList(aList);
-            }
-            break;
+            const user = users.find(u => u.member_id === id);
+            setView(UserView(user));
         }
     }
 
-    if (init) {
-        setInit(false);
-        updateList();
+    async function handleSelectionChange() {
+        searchRef.current.value = "";
+        const selected = selectRef.current?.value;
+        if (selected === "docs") {
+            setSelectedList(documentsList);
+            setView(<></>)
+        }
+        else if (selected === "orgs") {
+            setSelectedList(organisationsList);
+            setView(AddOrgView(users));
+        }
+        else {
+            setSelectedList(usersList);
+            setView(<></>)
+        }
     }
     
     return (
@@ -109,14 +94,14 @@ export default function Login({ permission, users, documents, organisations }) {
                     type="text"
                     name="search"
                     placeholder="Search"
-                    onChange={handleSearch}
+                    onChange={() => setSearch(searchRef.current?.value)}
                     ref={searchRef}
                 />
                 {selectedList}
             </div>
             <div className="view-space-wide-menu">
                 <div className="view-container">
-                    {selectedView}
+                    {view}
                 </div>
             </div>
         </main>
@@ -125,6 +110,7 @@ export default function Login({ permission, users, documents, organisations }) {
 }
 
 export async function getServerSideProps(ctx) {
+    console.log("SERVER FETCHING");
     const cookie = ctx.req?.cookies.auth;
     const { permission } = getMemberClaims(cookie);
     const url = ctx.resolvedUrl;
@@ -143,9 +129,9 @@ export async function getServerSideProps(ctx) {
         }
     }
 
-    const users = await db("members");
-    const documents = await db("documents");
-    const organisations = await db("organisations");
+    const users = await db("members").orderBy("last_name", "asc").orderBy("first_name", "asc");
+    const documents = await db("documents").orderBy("document_name", "asc");
+    const organisations = await db("organisations").orderBy("organisation_name", "asc");
 
     if (!users || !documents || !organisations) return {
         redirect: {

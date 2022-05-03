@@ -34,7 +34,7 @@ export function UserView(user) {
             });
     
             if (res.status === 200) {
-                Router.reload();
+                Router.replace(Router.asPath);
             }
             else if (res.status === 207) {
                 const { message } = await res.json();
@@ -63,7 +63,7 @@ export function UserView(user) {
             });
 
             if (res.status === 200) {
-                Router.reload();
+                Router.replace(Router.asPath);
             }
             else if (res.status === 207) {
                 await fetch(`${server}/api/user/logout`, {
@@ -135,7 +135,7 @@ export function DocumentView(doc) {
         });
 
         if (res.status === 200) {
-            Router.reload();
+            Router.replace(Router.asPath);
         }
         else if (res.status === 207) {
             const { message } = await res.json();
@@ -161,7 +161,7 @@ export function DocumentView(doc) {
             });
 
             if (res.status === 200) {
-                Router.reload();
+                Router.replace(Router.asPath);
             }
             else {
                 alert("Something went wrong!");
@@ -223,7 +223,7 @@ export function OrganisationView(org) {
         });
 
         if (res.status === 200) {
-            Router.reload();
+            Router.replace(Router.asPath);
         }
         else if (res.status === 207) {
             const { message } = await res.json();
@@ -249,7 +249,7 @@ export function OrganisationView(org) {
             });
 
             if (res.status === 200) {
-                Router.reload();
+                Router.replace(Router.asPath);
             }
             else {
                 alert("Something went wrong!");
@@ -288,7 +288,7 @@ export function AddOrgView(users) {
         });
 
         if (res.status === 200) {
-            Router.reload();
+            Router.replace(Router.asPath);
         }
         else {
             alert("Something went wrong!");
