@@ -26,7 +26,7 @@ export default function UserAccount({ permission, user }) {
       }),
     });
 
-    passMsgRef.current.innerText = "An email will be sent to you to reset your password."
+    passMsgRef.current.innerText = "An email will be sent to you shortly."
   }
 
   async function saveChanges() {
@@ -37,9 +37,9 @@ export default function UserAccount({ permission, user }) {
     const userID = user.member_id;
 
     const valid = validateFirstName(firstName)
-    && validateLastName(lastName)
-    && validateUsername(username)
-    && validateEmail(email);
+      && validateLastName(lastName)
+      && validateUsername(username)
+      && validateEmail(email);
 
     if (valid) {
       const res = await fetch(`${server}/api/user/account`, {
@@ -55,7 +55,7 @@ export default function UserAccount({ permission, user }) {
       });
 
       if (res.status === 200) {
-        router.reload();
+        router.replace(router.asPath, undefined, { shallow: true });
       }
       else if (res.status === 207) {
         const { message } = await res.json();
@@ -134,6 +134,7 @@ export default function UserAccount({ permission, user }) {
 }
 
 export async function getServerSideProps (ctx) {
+  console.log("SERVER");
   const cookie = ctx.req?.cookies.auth;
   const { email, permission } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;
