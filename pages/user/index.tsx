@@ -30,10 +30,10 @@ export default function UserAccount({ permission, user }) {
   }
 
   async function saveChanges() {
-    const firstName = firstNameRef.current?.textContent;
-    const lastName = lastNameRef.current?.textContent;
-    const username = usernameRef.current?.textContent;
-    const email = emailRef.current?.textContent;
+    const firstName = firstNameRef.current?.value;
+    const lastName = lastNameRef.current?.value;
+    const username = usernameRef.current?.value;
+    const email = emailRef.current?.value;
     const userID = user.member_id;
 
     const valid = validateFirstName(firstName)
@@ -102,19 +102,35 @@ export default function UserAccount({ permission, user }) {
             <h1 className="view-header">Account Settings</h1>
             <div>
                 <h3>First Name</h3>
-                <p contentEditable ref={firstNameRef}>{user.first_name}</p>
+                <input
+                  type="text"
+                  defaultValue={user.first_name}
+                  ref={firstNameRef}
+                />
             </div>
             <div>
                 <h3>Last Name</h3>
-                <p contentEditable ref={lastNameRef}>{user.last_name}</p>
+                <input
+                  type="text"
+                  defaultValue={user.last_name}
+                  ref={lastNameRef}
+                />
             </div>
             <div>
                 <h3>Username</h3>
-                <p contentEditable ref={usernameRef}>{user.username}</p>
+                <input
+                  type="text"
+                  defaultValue={user.username}
+                  ref={usernameRef}
+                />
             </div>
             <div>
                 <h3>Email</h3>
-                <p contentEditable ref={emailRef}>{user.email}</p>
+                <input
+                  type="text"
+                  defaultValue={user.email}
+                  ref={emailRef}
+                />
             </div>
             <div>
                 <h3>Permission</h3>
@@ -134,7 +150,6 @@ export default function UserAccount({ permission, user }) {
 }
 
 export async function getServerSideProps (ctx) {
-  console.log("SERVER");
   const cookie = ctx.req?.cookies.auth;
   const { email, permission } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;

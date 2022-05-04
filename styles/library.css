@@ -23,11 +23,6 @@
   width: calc(var(--side-bar-width) - 2rem);
 }
 
-.side-menu-container textarea {
-  resize: none;
-  background-color: inherit;
-}
-
 .card-space {
   margin-top: var(--nav-height);
   min-height: calc(100vh - var(--nav-height));
