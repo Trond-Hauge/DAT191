@@ -4,14 +4,14 @@ import Header from "../../components/header";
 import dynamic from "next/dynamic";
 import { server } from "../../next.config";
 import { getMemberClaims } from "../../utils/server/user";
-import { useDocument } from "../../utils/client/fetchers";
+import { useFile } from "../../utils/client/fetchers";
 
 const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
   ssr: false
 });
 
 export default function DocumentPage({ permission, doc }) {
-  const { file } = useDocument(doc.document_id);
+  const { file } = useFile(doc.document_id);
 
   return (
     <>
