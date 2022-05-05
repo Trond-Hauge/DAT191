@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function FileCardList(documents) {
+export default function FileCardList({ documents }) {
     return (
         <>
             {documents.map( doc => {

@@ -6,7 +6,7 @@ import { useRef, useEffect } from "react";
 import { server } from "../next.config";
 import Router from "next/router";
 
-export default function LoginForm(redirectPath?) {
+export default function LoginForm({ redirectPath }) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const msgRef = useRef<HTMLParagraphElement>(null);

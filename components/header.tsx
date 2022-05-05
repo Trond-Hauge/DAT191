@@ -70,8 +70,6 @@ function SignIn(loggedIn) {
     Router.reload();
   }
 
-  const loginForm = LoginForm();
-
   if (loggedIn) {
     return (
       <div className="dropdown">
@@ -94,7 +92,7 @@ function SignIn(loggedIn) {
       <a className="dropdown-button" onClick={() => setOpen(!open)}>Sign In</a>
       {open &&
         <div className="dropdown-content">
-          {loginForm}
+          <LoginForm redirectPath={null}/>
         </div>
       }
     </div>

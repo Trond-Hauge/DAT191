@@ -110,7 +110,6 @@ export default function Login({ permission, users, documents, organisations }) {
 }
 
 export async function getServerSideProps(ctx) {
-    console.log("SERVER FETCHING");
     const cookie = ctx.req?.cookies.auth;
     const { permission } = getMemberClaims(cookie);
     const url = ctx.resolvedUrl;

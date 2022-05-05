@@ -125,3 +125,21 @@ textarea {
   resize: none;
   background-color: inherit;
 }
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  width: 5em;
+  height: 5em;
+  border: 1em solid var(--light);
+  border-top: 1em solid var(--dark);
+  border-radius: 5em;
+  animation: spinner 1.5s linear infinite;
+}

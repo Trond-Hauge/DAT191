@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { getMemberClaims } from "../../utils/server/user";
 import { filterByDocument, filterByName, filterByOrganisation } from "../../utils/multi/list";
 import { useDocuments } from "../../utils/client/fetchers";
+import Spinner from "../../components/Spinner";
 
 export default function Library({ permission }) {
     const { documents, loading, error } = useDocuments();
@@ -65,15 +66,15 @@ export default function Library({ permission }) {
                         </form>
                     </div>
                     <div className="upload-space">
-                        {UploadFileForm(permission)}
+                        <UploadFileForm permission={permission}/>
                     </div>
                 </div>
                 
                 <div className="card-space">
                     {function(){
                         if (error) return <h2>Error loading documents</h2>
-                        if (loading) return <h2>Loading...</h2>
-                        if (documents) return FileCardList(documents.filter( doc => filterByDocument(doc, title) && filterByOrganisation(doc, org) && filterByName(doc, author) ));
+                        if (loading) return <Spinner />;
+                        if (documents) return <FileCardList documents={documents.filter( doc => filterByDocument(doc, title) && filterByOrganisation(doc, org) && filterByName(doc, author) )} />
                     }()}
                 </div>
             </main>

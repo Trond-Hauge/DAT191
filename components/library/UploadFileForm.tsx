@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useRef } from "react";
 import { server } from "../../next.config";
 
-export default function UploadFileForm(permission) {
+export default function UploadFileForm({ permission }) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
     if (permission === "verified" || permission === "admin") {

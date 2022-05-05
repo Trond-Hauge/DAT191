@@ -13,7 +13,7 @@ export default function Login({ permission }) {
     <>
       {Header(permission)}
       <main>
-        {LoginForm(redirect)}
+        <LoginForm redirectPath={redirect}/>
       </main>
     </>
   );
