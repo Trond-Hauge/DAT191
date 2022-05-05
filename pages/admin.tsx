@@ -129,7 +129,7 @@ export async function getServerSideProps(ctx) {
     }
 
     const users = await db("members").orderBy("last_name", "asc").orderBy("first_name", "asc");
-    const documents = await db("documents").orderBy("document_name", "asc");
+    const documents = await db("documents").distinctOn("document_name").orderBy("document_name", "asc");
     const organisations = await db("organisations").orderBy("organisation_name", "asc");
 
     if (!users || !documents || !organisations) return {

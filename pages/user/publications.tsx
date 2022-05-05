@@ -179,7 +179,7 @@ export async function getServerSideProps (ctx) {
   }
 
   try {
-    const documents = await db("documents").where("owner", id).orderBy("document_name", "asc");
+    const documents = await db("documents").where("owner", id).distinctOn("document_name").orderBy("document_name", "asc");
     return { props: { permission, documents } };
   }
   catch (error) {
