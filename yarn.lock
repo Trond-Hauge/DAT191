@@ -50,10 +50,10 @@
   "resolved" "https://registry.npmjs.org/@google-cloud/promisify/-/promisify-2.0.4.tgz"
   "version" "2.0.4"
 
-"@google-cloud/storage@^5.19.1":
-  "integrity" "sha512-bRTf/AD00+lPTamJdpihXC3AFtAnJFWNh/zQAor972VpuATF7u4V1anwWp0V6rKuKE3BwNM+xWxuuW/nAwEgTA=="
-  "resolved" "https://registry.npmjs.org/@google-cloud/storage/-/storage-5.19.1.tgz"
-  "version" "5.19.1"
+"@google-cloud/storage@^5.19.4":
+  "integrity" "sha512-Jz7ugcPHhsEmMVvIxM9uoBsdEbKIYwDkh3u07tifsIymEWs47F4/D6+/Tv/W7kLhznqjyOjVJ/0frtBeIC0lJA=="
+  "resolved" "https://registry.npmjs.org/@google-cloud/storage/-/storage-5.19.4.tgz"
+  "version" "5.19.4"
   dependencies:
     "@google-cloud/paginator" "^3.0.7"
     "@google-cloud/projectify" "^2.0.0"

@@ -45,7 +45,7 @@ hr {
 .nav-container-right {
   display: flex;
   flex-flow: row nowrap;
-  width: 20vw;
+  width: 20rem;
   z-index: 1;
 }
 
@@ -61,7 +61,7 @@ hr {
 .nav-right {
   display: flex;
   flex-flow: row nowrap;
-  flex-basis: 20vw;
+  flex-basis: 10rem;
   justify-content: space-around;
   align-items: center;
   list-style: none;
@@ -85,13 +85,19 @@ hr {
 .dropdown-content {
   color: var(--dark);
   background-color: var(--light);
-  width: 15vw;
+  width: 15rem;
   padding-top: 1rem;
+  padding-right: 1rem;
   padding-bottom: 1rem;
   z-index: 1;
   position: fixed;
   display: block;
   top: var(--nav-height);
+}
+@media (max-aspect-ratio: 1/1) {
+  .dropdown-content {
+    right: 0;
+  }
 }
 
 .dropdown-content a {
