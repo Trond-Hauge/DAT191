@@ -18,7 +18,7 @@ const app = initializeApp(config);
 const storage = getStorage(app);
 
 function getStorageRef(fileRef) {
-    return ref(storage, `${IS_PRODUCTION ? "prodcution/" : "development/"}${fileRef}`);
+    return ref(storage, `${IS_PRODUCTION ? "production/" : "development/"}${fileRef}`);
 }
 
 export async function uploadFile(fileRef, file) {
