@@ -2,7 +2,7 @@
 
 import { verify } from "jsonwebtoken";
 import { db } from "../../db";
-import { deleteFile } from "./document";
+import { deleteFile } from "../../firebase";
 
 /**
  * @param {*} cookie Serialized cookie, without name prefix.
@@ -34,8 +34,8 @@ export async function deleteUser(member) {
     if (member) {
         try {
             const documents = await db("documents").where("owner", member.member_id);
-            documents.forEach( doc => {
-                deleteFile(doc);
+            documents.forEach( async doc => {
+                await deleteFile(doc.fileref);
             })
             
             await db("members").where("member_id", member.member_id).del();

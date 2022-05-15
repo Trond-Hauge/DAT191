@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
-import { deleteFile } from "../../../utils/server/document";
+import { deleteFile } from "../../../firebase";
 import { getMemberClaims } from "../../../utils/server/user";
 
 export default async function UserPublicationAPI(req: NextApiRequest, res: NextApiResponse) {
@@ -53,13 +53,13 @@ export default async function UserPublicationAPI(req: NextApiRequest, res: NextA
                 return;
             }
 
-            const document = await db("documents").where("document_id", docID).first();
-            if (document?.owner !== id) {
+            const doc = await db("documents").where("document_id", docID).first();
+            if (doc?.owner !== id) {
                 res.status(401).json(NOT_AUTHORISED);
                 return;
             }
 
-            deleteFile(document);
+            await deleteFile(doc.fileref);
             await db("documents").where("document_id", docID).del();
             res.status(200).json({ message: "Document was deleted" });
         }

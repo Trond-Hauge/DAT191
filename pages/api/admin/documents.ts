@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
 import { authorisedAdmin } from "../../../utils/server/admin";
-import { deleteFile } from "../../../utils/server/document";
+import { deleteFile } from "../../../firebase";
 
 export default async function AdminPublicationsAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -59,8 +59,8 @@ export default async function AdminPublicationsAPI(req: NextApiRequest, res: Nex
         }
 
         try {
-            const document = await db("documents").where("document_id", id).first();
-            deleteFile(document);
+            const doc = await db("documents").where("document_id", id).first();
+            await deleteFile(doc.fileref);
             await db("documents").where("document_id", id).del();
             res.status(200).json({ message: "Document was deleted." });
         }

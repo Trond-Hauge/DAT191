@@ -121,6 +121,7 @@ export default function Publications({ permission, documents }) {
             });
 
             if (res.status === 200) {
+                setView(null);
                 router.replace(router.asPath);
             }
             else {
