@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
-import { maxFileSizeBytes } from "../../../app.config.js";
+import { maxFileSize } from "../../../app.config.js";
 import formidable from "formidable";
 import fs from "fs";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse.js";
@@ -34,8 +34,8 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     const fileRef = `${id}/${Date.now().valueOf()}:${filename}`;
 
                     // Check if file size exceeds limit.
-                    if (size > maxFileSizeBytes) {
-                        res.status(207).json({ message: `File is too large. File size limit is ${maxFileSizeBytes / 1024 / 1024}MB` })
+                    if (size > maxFileSize) {
+                        res.status(207).json({ message: `File is too large. File size limit is ${maxFileSize}MBs` });
                         return;
                     }
 
