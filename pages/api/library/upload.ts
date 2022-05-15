@@ -31,7 +31,7 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     const file = files.file;
                     const size = file.size;
                     const filename = file.originalFilename;
-                    const fileRef = `${id}/${filename}`;
+                    const fileRef = `${id}/${Date.now().valueOf()}:${filename}`;
 
                     // Check if file size exceeds limit.
                     if (size > maxFileSizeBytes) {

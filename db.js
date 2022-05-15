@@ -1,7 +1,11 @@
 "use strict";
 
 import knex from "knex";
-import { useCA } from "./app.config";
+
+const sslConfig = {
+  require: true,
+  rejectUnauthorized: false
+}
 
 export const db = knex({
   client: "pg",
@@ -11,10 +15,7 @@ export const db = knex({
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT,
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
+    ssl: process.env.NODE_ENV === "production" ? sslConfig : false,
   },
   debug: false,
   pool: {min: 1, max: 5},
