@@ -10,7 +10,7 @@ import { useDocuments } from "../../utils/client/fetchers";
 import Spinner from "../../components/Spinner";
 
 export default function Library({ permission }) {
-    const { documents, loading, error } = useDocuments();
+    const { documents, loading, error, mutate } = useDocuments();
     const router = useRouter();
     const {title, org, author} = router.query;
 
@@ -66,7 +66,7 @@ export default function Library({ permission }) {
                         </form>
                     </div>
                     <div className="upload-space">
-                        <UploadFileForm permission={permission}/>
+                        <UploadFileForm permission={permission} onUpload={mutate}/>
                     </div>
                 </div>
                 

@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useRef } from "react";
 import { server } from "../../next.config";
 
-export default function UploadFileForm({ permission }) {
+export default function UploadFileForm({ permission, onUpload }) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
     if (permission === "verified" || permission === "admin") {
@@ -24,8 +24,7 @@ export default function UploadFileForm({ permission }) {
             else {
                 msgRef.current.innerText = message;
                 if (res.status === 201) {
-                    e.target.reset();
-                    Router.replace(Router.asPath, undefined, { shallow: false });
+                    if (onUpload) onUpload();
                 }
             }
         }
@@ -48,7 +47,7 @@ export default function UploadFileForm({ permission }) {
                 />
                 <textarea
                     name="desc" 
-                    rows={5}
+                    rows={8}
                     placeholder="Document description"
                     required
                     className="side-menu-elem-wide"
