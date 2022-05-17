@@ -27,15 +27,9 @@ export default function Header(permission) {
       </div>
       <div className="nav-container-right">
         <ul className="nav-right">
-          { isAdmin &&
-            <li>
-              <Link href="/admin">
-                <a>Admin Panel</a>
-              </Link>
-            </li>
-          }
+          
           <li>
-            {SignIn(permission ? true : false)}
+            {SignIn(permission ? true : false, isAdmin)}
           </li>
         </ul>
       </div >
@@ -44,7 +38,7 @@ export default function Header(permission) {
 }
 
 // Watch: https://www.youtube.com/watch?v=IF6k0uZuypA&ab_channel=Fireship
-function SignIn(loggedIn) {
+function SignIn(loggedIn, isAdmin) {
   const [open, setOpen] = useState(false);
 
   function handleKeyDown(e) {
@@ -78,7 +72,9 @@ function SignIn(loggedIn) {
           <div className="dropdown-content">
             <Link href="/user"><a>Account Settings</a></Link>
             <Link href="/user/publications"><a>Your Publications</a></Link>
-            <a>Meetings</a> 
+            { isAdmin && 
+            <Link href="/admin"><a>Admin Panel</a></Link>
+            }
             <hr/>
             <a onClick={logout}>Log out</a>
           </div>
