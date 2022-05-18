@@ -1,6 +1,6 @@
 module.exports = {
     loginCookieMaxAge: 3600,         // Seconds 
-    maxFileSize: 10,                 // 10MBs
+    maxFileSize: 25,                 // 25MBs
     passwordResetTimeoutMinutes: 30,
     passwordResetKeyLength: 20,
     passwordSaltRounds: 10,

@@ -100,5 +100,5 @@ VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'Document.pdf', 'Doc
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
     ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-	('Haskell Book', 'This is a book on functional programming in Haskell. This file has been uploaded to test larger file sizes. This particular pdf is about 4MBs in size. At the moment the maximum file zie is set to 10MBs.', true, 'Programming in Haskell.pdf', 'Programming in Haskell.pdf', 4);
+	('Haskell Book', 'This is a book on functional programming in Haskell (A very interesting prorgamming language). This file has been uploaded to test larger file sizes. This particular pdf is about 4MBs in size. At the moment the maximum file size is set to 25MBs.', true, 'Programming in Haskell.pdf', 'Programming in Haskell.pdf', 4);
 	
