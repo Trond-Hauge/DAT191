@@ -2,7 +2,7 @@
 
 import { db } from "../../../db"
 import { NextApiRequest, NextApiResponse } from "next";
-import { validatePassword, validatePasswordResetRequest } from "../../../utils/multi/user";
+import { validatePassword, validatePasswordResetRequest } from "../../../utils/multi/validation";
 import { passwordSaltRounds } from "../../../app.config";
 import { hash } from "bcrypt";
 

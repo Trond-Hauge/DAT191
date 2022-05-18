@@ -1,10 +1,8 @@
 "use strict"; 
 
 import { getMemberClaims } from "../utils/server/user";
-import { server } from "../next.config";
 import React, {useEffect} from "react";
 import Unity, {UnityContext} from "react-unity-webgl";
-
 import Header from "../components/header";
 
 const unityContext = new UnityContext({
@@ -14,7 +12,7 @@ const unityContext = new UnityContext({
   codeUrl: "Build/Unity_Build.wasm",
 });
 
-export default function Streaming({ context, permission }: any) {
+export default function Streaming({  permission }) {
 
   function updatePermission(permission){
     let perm = 0;
@@ -29,7 +27,7 @@ export default function Streaming({ context, permission }: any) {
   }
 
   useEffect(function () {
-    unityContext.on("loaded", () => updatePermission(permission))
+     unityContext.on("loaded", () => updatePermission(permission))
   }, []);
 
   return (
@@ -48,21 +46,12 @@ export async function getServerSideProps(ctx) {
   const { permission } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;
 
-  const res = await fetch(`${server}/api/streaming`, {
-    headers: {
-      cookie: cookie!
-    }
-  });
-
-  if (res.status === 401) {
-    return {
-      redirect: {
-        destination: `/user/login?next=${url}`,
-        permanent: false
-      }
+  if (!permission) return {
+    redirect: {
+      destination: `/user/login?next=${url}`,
+      permanent: false
     }
   }
 
-  const json = await res.json();
-  return { props: { context: json, permission } };
+  return { props: { permission } };
 }

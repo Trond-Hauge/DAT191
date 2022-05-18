@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { server } from "../../next.config";
 import PasswordRequirements from "../../components/PasswordRequirements";
-import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../utils/multi/user";
+import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../utils/multi/validation";
 import { getMemberClaims } from "../../utils/server/user";
 
 export default function Register({ permission }) {

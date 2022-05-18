@@ -3,14 +3,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
-import { authorisedAdmin } from "../../../utils/server/admin";
 import { INTERNAL_SERVER_ERROR, BAD_REQUEST } from "../../../messages/apiResponse";
+import { getMemberClaims } from "../../../utils/server/user";
 
 export default async function AdminOrganisationsAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -20,8 +20,8 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
     }
     else if (req.method === "PATCH") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -46,8 +46,8 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
     }
     else if (req.method === "DELETE") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -69,8 +69,8 @@ export default async function AdminOrganisationsAPI(req: NextApiRequest, res: Ne
     }
     else if (req.method === "POST") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
