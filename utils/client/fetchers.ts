@@ -21,6 +21,17 @@ export function useFileURL(fileref) {
     }
 }
 
+export function useFile(id) {
+    const fetcher = url => fetch(url).then( res => res.blob() );
+    const { data, error } = useSWR(`/api/library/file?id=${id}`);
+
+    return {
+        documents: data,
+        loading: !error && !data,
+        error,
+    }
+}
+
 export function useDocuments() {
     const fetcher = url => fetch(url).then( res => res.json() );
     const { data, error, mutate } = useSWR<any[],any>("/api/library/documents", fetcher);
