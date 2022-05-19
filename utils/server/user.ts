@@ -9,10 +9,16 @@ import { deleteFile } from "../../firebase";
  * @returns claims object containing all member claims. Upon no cookie or error, values are null.
  */
 export function getMemberClaims(cookie) {
+    let claims = {
+        permission: null,
+        email: null,
+        id: null
+    }
+
     if (cookie) {
         verify(cookie, process.env.JWT_SECRET, function (err, decoded) {       
             if (!err && decoded) {
-                return {
+                claims = {
                     permission: decoded.permission,
                     email: decoded.memberEmail,
                     id: decoded.sub
@@ -21,11 +27,7 @@ export function getMemberClaims(cookie) {
         });
     }
 
-    return {
-        permission: null,
-        email: null,
-        id: null
-    };
+    return claims;
 }
 
 /**
