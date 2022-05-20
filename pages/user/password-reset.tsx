@@ -4,7 +4,7 @@ import Header from "../../components/header";
 import { server } from "../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
-import { validatePassword } from "../../utils/multi/user";
+import { validatePassword } from "../../utils/multi/validation";
 import PasswordRequirements from "../../components/PasswordRequirements";
 import { getMemberClaims } from "../../utils/server/user";
 

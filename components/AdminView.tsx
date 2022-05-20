@@ -2,7 +2,7 @@
 
 import Router from "next/router";
 import { server } from "../next.config";
-import { validateFirstName, validateLastName, validateUsername, validateEmail } from "../utils/multi/user";
+import { validateFirstName, validateLastName, validateUsername, validateEmail } from "../utils/multi/validation";
 
 export function UserView(user) {
     async function saveChanges() {

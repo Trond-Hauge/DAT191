@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from "../../../db";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED } from '../../../messages/apiResponse';
-import { maxFileSizeBytes } from '../../../app.config';
+import { maxFileSize } from '../../../app.config';
 import { gc } from '../../../gc';
 import { getMemberClaims } from '../../../utils/server/user';
 
@@ -42,7 +42,7 @@ export default async function file(req: NextApiRequest, res: NextApiResponse) {
 export const config = {
     api: {
         bodyParser: {
-            sizeLimit: `${maxFileSizeBytes / 1024 / 1024}mb`
+            sizeLimit: `${maxFileSize}mb`
         }
     }
 }

@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
-import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../../utils/multi/user";
+import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../../utils/multi/validation";
 import { deleteUser } from "../../../utils/server/user";
 import { getMemberClaims } from "../../../utils/server/user";
 import { hash } from "bcrypt";

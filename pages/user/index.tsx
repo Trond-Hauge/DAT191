@@ -6,7 +6,7 @@ import { db } from "../../db";
 import { useRef } from "react";
 import { server } from "../../next.config";
 import { useRouter } from "next/router";
-import { validateEmail, validateFirstName, validateLastName, validateUsername } from "../../utils/multi/user";
+import { validateEmail, validateFirstName, validateLastName, validateUsername } from "../../utils/multi/validation";
 
 export default function UserAccount({ permission, user }) {
   const firstNameRef = useRef(null);

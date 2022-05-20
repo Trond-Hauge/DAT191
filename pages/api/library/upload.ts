@@ -9,6 +9,8 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED 
 import { uploadFile } from "../../../firebase";
 import { getMemberClaims } from "../../../utils/server/user";
 
+const B_TO_MB = 0.00000095367432;
+
 export default async function getDocuments(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const { id, permission } = getMemberClaims(req.cookies.auth);
@@ -29,12 +31,12 @@ export default async function getDocuments(req: NextApiRequest, res: NextApiResp
                     const desc = fields.desc;
                     const _public = fields.public;
                     const file = files.file;
-                    const size = file.size;
+                    const sizeBytes = file.size;
                     const filename = file.originalFilename;
                     const fileRef = `${id}/${Date.now().valueOf()}:${filename}`;
 
                     // Check if file size exceeds limit.
-                    if (size > maxFileSize) {
+                    if (sizeBytes * B_TO_MB > maxFileSize) {
                         res.status(207).json({ message: `File is too large. File size limit is ${maxFileSize}MBs` });
                         return;
                     }

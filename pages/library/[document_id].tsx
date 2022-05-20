@@ -16,7 +16,7 @@ export default function DocumentPage({ permission, doc }) {
   return (
     <>
     {Header(permission)}
-    <PDFViewer fileURL={loading ? {} : error ? error : fileURL} filename={doc.filename} />
+    <PDFViewer fileURL={fileURL ? fileURL : error ? error : {}} filename={doc.filename} />
     </>
   );
 }

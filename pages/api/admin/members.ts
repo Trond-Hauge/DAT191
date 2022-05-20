@@ -3,15 +3,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, NOT_AUTHORISED } from "../../../messages/apiResponse";
-import { validateFirstName, validateLastName, validateUsername } from "../../../utils/multi/user";
-import { authorisedAdmin } from "../../../utils/server/admin";
+import { validateFirstName, validateLastName, validateUsername } from "../../../utils/multi/validation";
 import { deleteUser, getMemberClaims } from "../../../utils/server/user";
 
 export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }
@@ -21,8 +20,8 @@ export default async function AdminUsersAPI(req: NextApiRequest, res: NextApiRes
     }
     else if (req.method === "PATCH") {
         const cookie = req.cookies.auth;
-        const authorised = await authorisedAdmin(cookie);
-        if (!authorised) {
+        const { permission } = getMemberClaims(cookie);
+        if (permission !== "admin") {
             res.status(401).json(NOT_AUTHORISED);
             return;
         }

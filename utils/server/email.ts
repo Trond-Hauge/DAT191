@@ -3,9 +3,10 @@
 import nodemailer from "nodemailer";
 
 /**
- * @param {*} receivingUser Email address of the receiving user
- * @param {*} subject Email subject
- * @param {*} text Email text
+ * Asynchronous function for sending email from the service account to a user.
+ * @param {*} receivingUser Email address of the receiving user.
+ * @param {*} subject Email subject.
+ * @param {*} text Email text.
  */
 export async function sendMail(receivingUser, subject, text) {
     const user = process.env.EMAIL_USER;
