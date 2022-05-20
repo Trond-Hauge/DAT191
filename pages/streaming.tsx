@@ -16,21 +16,21 @@ const unityContext = new UnityContext({
 
 export default function Streaming({ context, permission }: any) {
 
-  function updatePermission(permission){
-    let perm = 0;
+  let perm = 0;
   
     if (permission === "verified") perm = 1;
     if (permission === "admin") perm = 2;
+
+  function updatePermission(){
     
-    // WIP - Test after new build! Is collision volume disconnected?
-    unityContext.send("PlayerCapsule", "SetPermission", perm);
+    //unityContext.send("PermissionBlocking", "SetGivenPermission", perm);
     unityContext.send("PlayerCapsule", "SetTMPText", permission);
-    
+    unityContext.send("PlayerCapsule", "SetPermission", perm);
   }
 
   useEffect(function () {
-    unityContext.on("loaded", () => updatePermission(permission))
-  }, []);
+    unityContext.on("loaded", () => updatePermission())
+  });
 
   return (
     <>
