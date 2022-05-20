@@ -44,7 +44,7 @@ CREATE TABLE documents(
     public BOOLEAN NOT NULL,
     owner INTEGER NOT NULL,
     filename VARCHAR(64) NOT NULL,
-    fileref VARCHAR(100) NOT NULL, 
+    fileref VARCHAR(100) NOT NULL UNIQUE, 
     FOREIGN KEY(owner) REFERENCES members(member_id) ON DELETE CASCADE
 
     --categorisation! IMPORTANT, hear with users.

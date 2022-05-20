@@ -300,16 +300,17 @@ export function AddOrgView(users) {
         <h1 className="view-header">Add a new organisation</h1>
         <form onSubmit={handleSubmit}>
             <div>
-                <label><strong>Organisation name:</strong></label>
+                <label htmlFor="orgName"><strong>Organisation name:</strong></label>
                 <input
                     type="text"
+                    id="orgName"
                     name="orgName"
                     required
                 />
             </div>
             <div>
-                <label><strong>Organisation leader:</strong></label>
-                <select name="leaderID" required>
+                <label htmlFor="orgLeader"><strong>Organisation leader:</strong></label>
+                <select name="leaderID" id="orgLeader" required>
                     <option selected value="">-- select an option --</option>
                     {users.map( (user, index) => {
                         return (

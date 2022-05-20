@@ -1,0 +1,16 @@
+.unity {
+    height: calc(100vh - var(--nav-height));
+    width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    display: block;
+    position: absolute;
+}
+
+.fullscreen {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+}

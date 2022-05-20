@@ -20,15 +20,18 @@ export default function Streaming({  permission }) {
     if (permission === "admin") perm = 2;
 
   function updatePermission(){
-    
+    console.log("NOW");
     //unityContext.send("PermissionBlocking", "SetGivenPermission", perm);
     unityContext.send("PlayerCapsule", "SetTMPText", permission);
     unityContext.send("PlayerCapsule", "SetPermission", perm);
   }
 
   useEffect(function () {
-    unityContext.on("loaded", () => updatePermission())
-  });
+    unityContext.on("loaded", () => {
+        setTimeout(updatePermission, 50)
+    });
+    return () => unityContext.removeAllEventListeners();
+  }, []);
 
   return (
     <>
