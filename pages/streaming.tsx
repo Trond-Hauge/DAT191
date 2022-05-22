@@ -22,7 +22,7 @@ export default function Streaming({  permission }) {
   function updatePermission(){
     console.log("NOW");
     //unityContext.send("PermissionBlocking", "SetGivenPermission", perm);
-    unityContext.send("PlayerCapsule", "SetTMPText", permission);
+    //unityContext.send("PlayerCapsule", "SetTMPText", permission);
     unityContext.send("PlayerCapsule", "SetPermission", perm);
   }
 

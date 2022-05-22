@@ -34,3 +34,6 @@ yarn-error.log*
 .vercel
 messages/email.js
 email.config.js
+
+# other
+/Diagrams
