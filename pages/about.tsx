@@ -8,9 +8,8 @@ export default function About({ permission }) {
     <>
       {Header(permission)}
       <main>
-        <div className="main-content">
-          <p>This page is even more work in progress that the rest of the site.</p>
-        </div>
+        <h1>What is HEQED House?</h1>
+        <p>HEQED House is a sub-project of the HEQED, Health Equity through Education, project. More to come here later...</p>
       </main>
     </>
   );

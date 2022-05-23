@@ -13,7 +13,9 @@ export default function Login({ permission }) {
     <>
       {Header(permission)}
       <main>
-        <LoginForm redirectPath={redirect}/>
+        <div className="login-form-container">
+          <LoginForm redirectPath={redirect}/>
+        </div>
       </main>
     </>
   );

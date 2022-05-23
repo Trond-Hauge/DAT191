@@ -79,6 +79,25 @@
     width: 100%;
 }
 
+.register-form input {
+    border-bottom: 1px solid black;
+}
+
+.login-form-container {
+    margin-top: 10vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+}
+
+.login-form-container input {
+    margin-block: 1rem;
+}
+
 .view-container div {
     padding: 1rem;
 }

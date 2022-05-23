@@ -9,6 +9,10 @@ import { db } from "../db";
 import { UserView, DocumentView, OrganisationView, AddOrgView } from "../components/AdminView";
 
 export default function Login({ permission, users, documents, organisations }) {
+    // component states, contains lists of <a> elements for users, documents and organisations.
+    // selectedList contains the currently selected list to manage.
+    // view contains the currently selected view of a specific item from the selected list.
+    // search contains the current search query string.
     const [usersList, setUsersList] = useState(<></>);
     const [documentsList, setDocumentsList] = useState(<></>);
     const [organisationsList, setOrganisationsList] = useState(<></>);
@@ -16,9 +20,11 @@ export default function Login({ permission, users, documents, organisations }) {
     const [view, setView] = useState(<></>);
     const [search, setSearch] = useState("");
 
+    // References the select and search inputs from user.
     const selectRef = useRef<HTMLSelectElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
 
+    // Creates <a> list from users after filtering based on search and sets it as the currently selected list if selected. This is the default selected list.
     useEffect( () => {
         const list = AnchorListClick(users.filter(u => filterByName(u, search)), u => u.first_name + " " + u.last_name, handleClick, u => u.member_id);
         setUsersList(list);
@@ -28,6 +34,7 @@ export default function Login({ permission, users, documents, organisations }) {
         }
     }, [users, search]);
 
+    // Creates <a> list from documents after filtering based on search and sets it as the currently selected list if selected.
     useEffect( () => {
         const list = AnchorListClick(documents.filter(d => filterByDocument(d, search)), d => d.document_name, handleClick, d => d.document_id);
         setDocumentsList(list);
@@ -37,6 +44,7 @@ export default function Login({ permission, users, documents, organisations }) {
         }
     }, [documents, search]);
 
+    // Creates <a> list from organisations after filtering based on search and sets it as the currently selected list if selected.
     useEffect( () => {
         const list = AnchorListClick(organisations.filter(o => filterByOrganisation(o, search)), o => o.organisation_name, handleClick, o => o.organisation_id);
         setOrganisationsList(list);
@@ -46,6 +54,7 @@ export default function Login({ permission, users, documents, organisations }) {
         }
     }, [organisations, search]);
 
+    // Function for handling a click event on an item in list. Finds item and sets view according to which list is selected.
     async function handleClick(e) {
         const id = parseInt(e.target.querySelector("input[type='hidden']")?.value);
         const selected = selectRef.current?.value;
@@ -63,8 +72,11 @@ export default function Login({ permission, users, documents, organisations }) {
         }
     }
 
+    // Function for handling change of selected list. Upon changing selected list search input field is cleared.
+    // View is also cleared, in the case of the organisation list being selected, the view is set to the view for adding new organisaitons.
     async function handleSelectionChange() {
         searchRef.current.value = "";
+        setSearch("");
         const selected = selectRef.current?.value;
         if (selected === "docs") {
             setSelectedList(documentsList);
@@ -114,6 +126,7 @@ export async function getServerSideProps(ctx) {
     const { permission } = getMemberClaims(cookie);
     const url = ctx.resolvedUrl;
 
+    // If there is no logged-in user, redirect to login page, and set this url to redirect back to post login
     if (!cookie) return {
         redirect: {
             destination: `/user/login?next=${url}`,
@@ -121,6 +134,7 @@ export async function getServerSideProps(ctx) {
         }
     }
 
+    // If user doesn not have admin privilidge, redirect to home page
     if (permission !== "admin") return {
         redirect: {
             destination: "/",
@@ -128,16 +142,10 @@ export async function getServerSideProps(ctx) {
         }
     }
 
+    // Fetch all members, documents and organisations from database
     const users = await db("members").orderBy("last_name", "asc").orderBy("first_name", "asc");
     const documents = await db("documents").distinctOn("document_name").orderBy("document_name", "asc");
     const organisations = await db("organisations").orderBy("organisation_name", "asc");
-
-    if (!users || !documents || !organisations) return {
-        redirect: {
-            destination: "/error",
-            permanent: false
-        }
-    }
     
     return { props: { permission, users, documents, organisations} };
 }

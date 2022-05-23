@@ -10,6 +10,8 @@ import AnchorListClick from "../../components/AnchorListClick";
 import { filterByDocument } from "../../utils/multi/list";
 
 export default function Publications({ permission, documents }) {
+    // Hooks for routing, element referencing, and state. States include search query string from user,
+    // currently selected document, view that holds the UI for editing document and the <a> element list for selecting documents.
     const router = useRouter();
     const searchRef = useRef<HTMLInputElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -20,6 +22,8 @@ export default function Publications({ permission, documents }) {
     const [view, setView] = useState(<></>);
     const [aList, setAList] = useState(<></>);
 
+    // Sets values for title and description in view to avoid locking value by setting value in element definition.
+    // Also adds styling to the <textarea> element containing description, to fit size to text.
     useEffect( () => {
         if (descRef.current) {
             const ta: HTMLTextAreaElement = descRef.current;
@@ -33,6 +37,7 @@ export default function Publications({ permission, documents }) {
         }
     }, [view])
 
+    // Updates the view upon selecting a document.
     useEffect( () => {
         if (doc) {
             setView(
@@ -66,11 +71,13 @@ export default function Publications({ permission, documents }) {
         }
     }, [doc])
 
+    // Upon the user inputting a search query the list of documents is updated.
     useEffect( () => {
         const list = AnchorListClick(documents.filter(d => filterByDocument(d,search)), d => d.document_name, updateDoc, d => d.document_id)
         setAList(list);
     }, [documents, search])
 
+    // Function for finding and updating the document upon selection from the list.
     function updateDoc(e) {
         const a: HTMLAnchorElement = e.target;
         const docID = parseInt(a.querySelector<HTMLInputElement>("input[type='hidden']")?.value);
@@ -78,6 +85,8 @@ export default function Publications({ permission, documents }) {
         setDoc(d);
     }
 
+    // Function sending request with updated document data to the user/document API route.
+    // Alerts user on result of action.
     async function saveChanges() {
         const title = titleRef.current?.value;
         const desc = descRef.current?.value;
@@ -107,6 +116,8 @@ export default function Publications({ permission, documents }) {
         }
     }
 
+    // Function for sending DELETE request to the user/document API route.
+    // Alerts user on result of action.
     async function deleteDoc() {
         const id = doc.document_id;
 
@@ -130,6 +141,7 @@ export default function Publications({ permission, documents }) {
         }
     }
 
+    // Function for toggling the value of public.
     function togglePublic(e) {
         const btn = e.target;
         const val = btn.value;
@@ -172,6 +184,7 @@ export async function getServerSideProps (ctx) {
   const { id, permission } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;
 
+  // If the user is not logged in, redirect to login page and set current url as redirect path post login.
   if (!cookie) return {
     redirect: {
       destination: `/user/login?next=${url}`,
@@ -179,6 +192,7 @@ export async function getServerSideProps (ctx) {
     }
   }
 
+  // Get all documents published by user, if an error occurs redirect to error page.
   try {
     const documents = await db("documents").where("owner", id).distinctOn("document_name").orderBy("document_name", "asc");
     return { props: { permission, documents } };

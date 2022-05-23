@@ -14,7 +14,7 @@ export default function Home({ permission }) {
       <main>
         <div className="home-container-flex">
           <div className="container-inner">
-            <Link href="/streaming">
+            <Link href="/application">
               <a>
                 <Image
                   src={MatrixImage}
@@ -24,7 +24,7 @@ export default function Home({ permission }) {
                   priority
                   placeholder="blur"
                 />
-                <div className="centered">Streaming</div>
+                <div className="centered">HEQED House</div>
               </a>
             </Link>
           </div>

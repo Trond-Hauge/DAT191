@@ -10,6 +10,9 @@ import { getMemberClaims } from "../../utils/server/user";
 export default function Register({ permission }) {
     const router = useRouter();
 
+    // Function that handles submit of registration form. Validates input before sending request to user/account API route.
+    // Upon error the user is redirected to error page. Upon successful registration user is redirected to login page.
+    // If the response indicates that the user account was not registered, user is alerted with feedback message.
     async function handleSubmit(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -57,7 +60,7 @@ export default function Register({ permission }) {
             <div className="view-space">
                 <div className="view-container">
                     <h1 className="view-header">Create Account</h1>       
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="register-form">
                         <div>
                             <input
                                 name="firstName"
