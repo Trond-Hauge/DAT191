@@ -44,7 +44,7 @@ CREATE TABLE documents(
     public BOOLEAN NOT NULL,
     owner INTEGER NOT NULL,
     filename VARCHAR(64) NOT NULL,
-    fileref VARCHAR(100) NOT NULL UNIQUE, 
+    fileref VARCHAR(100) NOT NULL, 
     FOREIGN KEY(owner) REFERENCES members(member_id) ON DELETE CASCADE
 
     --categorisation! IMPORTANT, hear with users.
@@ -63,42 +63,49 @@ CREATE TABLE password_reset
 -- *** GENERATING EXAMPLE ENTRIES *** --
 INSERT INTO members (first_name, last_name, email, username, password, permission)
 VALUES ('Test', 'Testy', 'test@test.test', 'tester', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin'),
-    ('Tronny', 'Hilly', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'verified'),
+    ('Trond', 'Hauge', 'member@member.member', 'Tdog', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'verified'),
     ('John', 'Smith', 'name@domain', 'Johnny', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'unverified'),
-	('Oliver', 'OLoughlin', 'oliveroloughlin@hotmail.com', 'olli', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin');
+	('Oliver', 'OLoughlin', 'oliveroloughlin@hotmail.com', 'olli', '$2b$10$6ODjd7kCmvzZ0tmoOr.hk.QOR13zTFcXdFMtOP4P40IDkrAX0D2Iu', 'admin'),
+    ('Maria', 'Alme', 'mana@hvl.no', 'Mana', '$2b$10$vVzerBMt0s1FQqXxE4xmIea6skKQ7uas2f/GNuT.lLUDqiisjtLpu', 'admin'),
+    ('Clark', 'Nowack', 'clark.nowack@han.nl', 'Clark', '$2b$10$nUMQlVqedCZIjCcRtbznmufk3.2i6PuJ6W1lB7mCq.Vy89hXL2NtW', 'admin');
 
 INSERT INTO organisations(organisation_name, fk_leader)
-VALUES ('University Institution', 1),
-    ('Science And Research Center', 2);
+VALUES ('HAN University of Applied Sciences', 6),
+    ('Western Norway University of Applied Sciences', 5),
+    ('University of Zaragoza', 1),
+    ('Arcada University', 1),
+    ('Humanity and Inclusion', 1),
+    ('Center for Victims of Torture', 1);
 
 INSERT INTO members_organisations (member_id, organisation_id)
-VALUES (1, 1),
+VALUES (1, 3),
     (2,2),
-    (3,2),
-	(4,1),
-	(4,2);
+    (3,4),
+	(4,2),
+	(5,2),
+    (6,1);
 
 INSERT INTO documents (document_name, document_description, public, filename, fileref, owner)
 VALUES ('Document 1', 'Hocus, pocus. Avada kadavra.', true, 'Document.pdf', 'Document.pdf', 1),
-    ('Document 2', 'Blablabla, testign testing, another test, hello there yes you hi', true, 'Document.pdf', 'Document.pdf', 2),
-    ('Doc Oc', 'This doc is verry oc. Simple description, not too long', false, 'Document.pdf', 'Document.pdf', 1),
-    ('A Document Of Great Importance', 'Should be first in sorted list. This is a test document, and this is the description. A document description may be quite long, perhaps over 100 characters. Therefore it might be desireable to cut the contents when displayed on the website in a card. Maybe this limit should be at about 200 characters, but that is why we have this test', false, 'Document.pdf', 'Document.pdf', 2),
-    ('File copy 1', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 'Document.pdf', 1),
-    ('File copy 2', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 3),
-    ('File copy 3', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 1),
-    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 4),
-    ('File copy 5', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 'Document.pdf', 2),
-    ('File copy 6', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 'Document.pdf', 3),
-    ('File copy 7', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 2),
-    ('File copy 8', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 'Document.pdf', 1),
-    ('File copy 9', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 1),
-    ('File copy 10', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', true, 'Document.pdf', 'Document.pdf', 3),
-    ('File copy 11', 'This is a copy of a file. There are many files like this indeed. I need it to do some testing. Help me test my html and css styling. May we have grade A for our work please?', false, 'Document.pdf', 'Document.pdf', 4),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-    ('A File', 'Copied many times to fill library', true, 'Document.pdf', 'Document.pdf', 3),
-	('Haskell Book', 'This is a book on functional programming in Haskell (A very interesting prorgamming language). This file has been uploaded to test larger file sizes. This particular pdf is about 4MBs in size. At the moment the maximum file size is set to 25MBs.', true, 'Programming in Haskell.pdf', 'Programming in Haskell.pdf', 4);
+    ('Document 2', 'Blablabla, testign testing, another test, hello there yes you hi', true, 'Document.pdf', 'Document.pdf', 3),
+    ('Simple PDF', 'Yet another entry of this fine PDF example.', true, 'Document.pdf', 'Document.pdf', 2),
+    ('A Document Of Great Importance', 'Should be first in sorted list. This is a test document, and this is the description. A document description may be quite long, perhaps over 100 characters. Therefore it might be desireable to cut the contents when displayed on the website in a card. Maybe this limit should be at about 200 characters, but that is why we have this test', true, 'Document.pdf', 'Document.pdf', 4),
+    ('File copy 1', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 1),
+    ('File copy 2', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 2),
+    ('File copy 3', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 3),
+    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 4),
+    ('File copy 4', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 5),
+    ('File copy 5', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 6),
+    ('File copy 6', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 1),
+    ('File copy 7', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 2),
+    ('File copy 8', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 3),
+    ('File copy 9', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 4),
+    ('File copy 10', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 5),
+    ('File copy 12', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 6),
+    ('File copy 13', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 1),
+    ('File copy 14', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 2),
+    ('File copy 15', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 3),
+    ('File copy 16', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 4),
+    ('File copy 17', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 5),
+    ('File copy 18', 'This is a copy of a file. There are many files like this indeed. We need them to do some testing. Help us test some html and css styling.', true, 'Document.pdf', 'Document.pdf', 6);
 	
