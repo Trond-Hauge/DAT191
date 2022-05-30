@@ -9,7 +9,7 @@ import { filterByDocument, filterByName, filterByOrganisation } from "../../util
 import { useDocuments } from "../../utils/client/fetchers";
 import Spinner from "../../components/Spinner";
 
-export default function Library({ permission }) {
+export default function Library({ permission, id }) {
     const { documents, loading, error, mutate } = useDocuments();
     const router = useRouter();
     const {title, org, author} = router.query;
@@ -66,7 +66,7 @@ export default function Library({ permission }) {
                         </form>
                     </div>
                     <div className="upload-space">
-                        <UploadFileForm permission={permission} onUpload={mutate}/>
+                        <UploadFileForm uid={id} permission={permission} onUpload={mutate}/>
                     </div>
                 </div>
                 
@@ -84,6 +84,6 @@ export default function Library({ permission }) {
 
 export async function getServerSideProps(ctx) {
     const cookie = ctx.req?.cookies.auth;
-    const { permission } = getMemberClaims(cookie);
-    return { props: { permission } };
+    const { permission, id } = getMemberClaims(cookie);
+    return { props: { permission, id } };
 }

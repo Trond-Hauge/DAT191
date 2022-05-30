@@ -2,13 +2,17 @@
 
 import Router from "next/router";
 import { useRef } from "react";
+import { maxFileSize } from "../../app.config";
+import { deleteFile, uploadFile } from "../../firebase";
 import { server } from "../../next.config";
 
-export default function UploadFileForm({ permission, onUpload }) {
+const B_TO_MB = 0.00000095367432;
+
+export default function UploadFileForm({ uid, permission, onUpload }) {
     const msgRef = useRef<HTMLParagraphElement>(null);
 
     if (permission === "verified" || permission === "admin") {
-        const uploadFile = async e => {
+        const uploadDocumentOld = async e => {
             e.preventDefault();
             const form = new FormData(e.target);
             e.target.reset();
@@ -29,13 +33,61 @@ export default function UploadFileForm({ permission, onUpload }) {
             }
         }
 
+        const uploadDocument = async e => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const form = Object.fromEntries(formData.entries());
+            e.target.reset();
+
+            const name = form.name;
+            const desc = form.desc;
+            const _public = form.public;
+            const file: any = form.file;
+            const sizeBytes = file.size;
+            const filename = file.name;
+            const fileref = `${uid}/${Date.now().valueOf()}:${filename}`;
+
+            if (sizeBytes * B_TO_MB > maxFileSize) {
+                msgRef.current.innerText = `This file is too large. Maximum file size is ${maxFileSize}MBs`;
+                return;
+            }
+
+            try {
+                await uploadFile(fileref, file);
+
+                const res = await fetch("/api/library/uploadWithFirebase", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        name,
+                        desc,
+                        public: _public,
+                        filename,
+                        fileref,
+                    })
+                })
+
+                if (res.status === 200) {
+                    msgRef.current.innerText = "Document was uploaded successfully.";
+                    onUpload();
+                }
+                else {
+                    deleteFile(fileref);
+                    throw new Error("Failed to upload document to database");
+                }
+            } 
+            catch (error) {
+                msgRef.current.innerText = "Something went wrong.";
+            }
+        }
+
         return (
             <>
-            <form onSubmit={uploadFile}>
+            <form onSubmit={uploadDocument}>
                 <input
                     name="file"
                     type="file"
-                    accept=".pdf"
+                    accept="application/pdf"
                     required
                 />
                 <input
@@ -64,10 +116,6 @@ export default function UploadFileForm({ permission, onUpload }) {
             <p ref={msgRef}></p>
             </>
         )
-    }
-    else {
-        return (
-            <p className="side-menu-elem-wide">You must be a verified user to upload files to the library.</p>
-        )
-    }
+    } 
+    else return <p className="side-menu-elem-wide">You must be a verified user to upload files to the library.</p>
 }
