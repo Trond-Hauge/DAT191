@@ -5,8 +5,10 @@ import Router from "next/router";
 import { useState, useEffect } from "react";
 import { server } from "../next.config";
 import LoginForm from "./LoginForm";
+import Cookies from 'js-cookie'
 
-export default function Header(permission) {
+export default function Header() {
+  const permission = Cookies.get('permission')
   const isAdmin = permission === "admin";
 
   return (

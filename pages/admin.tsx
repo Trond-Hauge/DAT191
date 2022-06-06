@@ -1,6 +1,5 @@
 "use strict";
 
-import Header from "../components/header";
 import { getMemberClaims } from "../utils/server/user";
 import { useState, useRef, useEffect } from "react";
 import AnchorListClick from "../components/AnchorListClick";
@@ -8,7 +7,7 @@ import { filterByDocument, filterByName, filterByOrganisation } from "../utils/m
 import { db } from "../db";
 import { UserView, DocumentView, OrganisationView, AddOrgView } from "../components/AdminView";
 
-export default function Login({ permission, users, documents, organisations }) {
+export default function Login({ users, documents, organisations }) {
     // component states, contains lists of <a> elements for users, documents and organisations.
     // selectedList contains the currently selected list to manage.
     // view contains the currently selected view of a specific item from the selected list.
@@ -94,7 +93,6 @@ export default function Login({ permission, users, documents, organisations }) {
     
     return (
         <>
-        {Header(permission)}
         <main>
             <div className="wide-side-menu-container">
                 <select defaultValue={"users"} ref={selectRef} onChange={handleSelectionChange}>
@@ -134,7 +132,7 @@ export async function getServerSideProps(ctx) {
         }
     }
 
-    // If user doesn not have admin privilidge, redirect to home page
+    // If user does not have admin privilidge, redirect to home page
     if (permission !== "admin") return {
         redirect: {
             destination: "/",
@@ -147,5 +145,5 @@ export async function getServerSideProps(ctx) {
     const documents = await db("documents").distinctOn("document_name").orderBy("document_name", "asc");
     const organisations = await db("organisations").orderBy("organisation_name", "asc");
     
-    return { props: { permission, users, documents, organisations} };
+    return { props: { users, documents, organisations} };
 }

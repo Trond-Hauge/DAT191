@@ -5,11 +5,13 @@ import { useRef } from "react";
 import { maxFileSize } from "../../app.config";
 import { deleteFile, uploadFile } from "../../firebase";
 import { server } from "../../next.config";
+import { usePermission } from "../../utils/client/hooks";
 
 const B_TO_MB = 0.00000095367432;
 
-export default function UploadFileForm({ uid, permission, onUpload }) {
+export default function UploadFileForm({ uid, onUpload }) {
     const msgRef = useRef<HTMLParagraphElement>(null);
+    const permission = usePermission()
 
     if (permission === "verified" || permission === "admin") {
         const uploadDocumentOld = async e => {

@@ -1,14 +1,13 @@
 "use strict";
 
 import { getMemberClaims } from "../../utils/server/user";
-import Header from "../../components/header";
 import { db } from "../../db";
 import { useRef } from "react";
 import { server } from "../../next.config";
 import { useRouter } from "next/router";
 import { validateEmail, validateFirstName, validateLastName, validateUsername } from "../../utils/multi/validation";
 
-export default function UserAccount({ permission, user }) {
+export default function UserAccount({ user }) {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const usernameRef = useRef(null);
@@ -95,7 +94,6 @@ export default function UserAccount({ permission, user }) {
 
   return (
     <>
-      {Header(permission)}
       <main>
         <div className="view-space">
           <div className="view-container">
@@ -151,7 +149,7 @@ export default function UserAccount({ permission, user }) {
 
 export async function getServerSideProps (ctx) {
   const cookie = ctx.req?.cookies.auth;
-  const { email, permission } = getMemberClaims(cookie);
+  const { id } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;
 
   if (!cookie) return {
@@ -162,8 +160,8 @@ export async function getServerSideProps (ctx) {
   }
 
   try {
-    const user = await db.select("first_name", "last_name", "email", "username", "permission", "member_id").from("members").where("email", email).first();
-    return { props: { permission, user } };
+    const user = await db.select("first_name", "last_name", "email", "username", "permission", "member_id").from("members").where("member_id", id).first();
+    return { props: { user } };
   }
   catch (error) {
     console.error(error);

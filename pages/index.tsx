@@ -2,15 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Header from "../components/header";
-import { getMemberClaims } from "../utils/server/user";
 import MatrixImage from "../public/matrix_world_1200.jpg";
 import BookImage from "../public/book_1276.jpg";
 
-export default function Home({ permission }) {
+export default function Home() {
   return (
     <>
-    {Header(permission)}
       <main>
         <div className="home-container-flex">
           <div className="container-inner">
@@ -47,10 +44,4 @@ export default function Home({ permission }) {
       </main>
     </>
   );
-}
-
-export async function getServerSideProps (ctx) {
-  const cookie = ctx.req?.cookies.auth;
-  const { permission } = getMemberClaims(cookie);
-  return { props: { permission } };
 }

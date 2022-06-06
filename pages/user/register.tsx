@@ -1,13 +1,11 @@
 "use strict"
 
 import { useRouter } from "next/router";
-import Header from "../../components/header";
 import { server } from "../../next.config";
 import PasswordRequirements from "../../components/PasswordRequirements";
 import { validateEmail, validateFirstName, validateLastName, validatePassword, validateUsername } from "../../utils/multi/validation";
-import { getMemberClaims } from "../../utils/server/user";
 
-export default function Register({ permission }) {
+export default function Register() {
     const router = useRouter();
 
     // Function that handles submit of registration form. Validates input before sending request to user/account API route.
@@ -55,7 +53,6 @@ export default function Register({ permission }) {
     }
     return (
         <>
-        {Header(permission)}
         <main>
             <div className="view-space">
                 <div className="view-container">
@@ -113,9 +110,3 @@ export default function Register({ permission }) {
         </>
     );
 };
-
-export async function getServerSideProps(ctx) {
-    const cookie = ctx.req?.cookies.auth;
-    const { permission } = getMemberClaims(cookie);
-    return { props: { permission } };
-}

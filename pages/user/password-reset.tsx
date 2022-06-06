@@ -1,12 +1,10 @@
 "use strict";
 
-import Header from "../../components/header";
 import { server } from "../../next.config";
 import Router from "next/router";
 import { useRef } from "react";
 import { validatePassword } from "../../utils/multi/validation";
 import PasswordRequirements from "../../components/PasswordRequirements";
-import { getMemberClaims } from "../../utils/server/user";
 
 export default function Login({ permission }) {
   const passRef = useRef<HTMLInputElement>(null);
@@ -46,7 +44,6 @@ export default function Login({ permission }) {
 
   return (
     <>
-      {Header(permission)}
       <main>
         <div className="view-space">
           <div className="view-container">
@@ -81,13 +78,11 @@ export default function Login({ permission }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const cookie = ctx.req?.cookies.auth;
-  const { permission } = getMemberClaims(cookie);
   const reset_key = ctx.query.reset_key;
 
   const res = await fetch(`${server}/api/user/authenticatePasswordReset?reset_key=${reset_key}`, { method: "GET" });
   const { authorised } = await res.json();
   if (!authorised) return { redirect: { destination: "/error", permanent: false } }
 
-  return { props: { permission } };
+  return { };
 }

@@ -22,15 +22,25 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                 const claims =  {sub: member.member_id, memberEmail: member.email, permission: member.permission };
                 const jwt = sign(claims, process.env.JWT_SECRET, {expiresIn: `${loginCookieMaxAge / 3600}h`});
 
-                res.setHeader("Set-Cookie", cookie.serialize("auth", jwt, {
+                const authCookie = cookie.serialize("auth", jwt, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== "development",
                     sameSite: "strict",
                     maxAge: loginCookieMaxAge, 
                     path: "/", //root of domain
-                }));
+                })
+
+                const permCookie = cookie.serialize("permission", member.permission, {
+                    httpOnly: false,
+                    secure: process.env.NODE_ENV !== "development",
+                    sameSite: "strict",
+                    maxAge: loginCookieMaxAge, 
+                    path: "/", //root of domain
+                })
+
+                res.setHeader("Set-Cookie", [authCookie, permCookie])
                 res.status(200).json({ message: "Login successful." });
-            } 
+            }
             else {
                 console.error(err);
                 res.status(207).json(INCORRECT_LOGIN);

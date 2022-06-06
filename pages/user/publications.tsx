@@ -1,7 +1,6 @@
 "use strict";
 
 import { getMemberClaims } from "../../utils/server/user";
-import Header from "../../components/header";
 import { db } from "../../db";
 import { useEffect, useRef, useState } from "react";
 import { server } from "../../next.config";
@@ -9,7 +8,7 @@ import { useRouter } from "next/router";
 import AnchorListClick from "../../components/AnchorListClick";
 import { filterByDocument } from "../../utils/multi/list";
 
-export default function Publications({ permission, documents }) {
+export default function Publications({ documents }) {
     // Hooks for routing, element referencing, and state. States include search query string from user,
     // currently selected document, view that holds the UI for editing document and the <a> element list for selecting documents.
     const router = useRouter();
@@ -157,7 +156,6 @@ export default function Publications({ permission, documents }) {
 
     return (
         <>
-        {Header(permission)}
         <main>
             <div className="wide-side-menu-container">
                 <h4>Your Publications</h4>
@@ -181,7 +179,7 @@ export default function Publications({ permission, documents }) {
 
 export async function getServerSideProps (ctx) {
   const cookie = ctx.req?.cookies.auth;
-  const { id, permission } = getMemberClaims(cookie);
+  const { id } = getMemberClaims(cookie);
   const url = ctx.resolvedUrl;
 
   // If the user is not logged in, redirect to login page and set current url as redirect path post login.
@@ -195,7 +193,7 @@ export async function getServerSideProps (ctx) {
   // Get all documents published by user, if an error occurs redirect to error page.
   try {
     const documents = await db("documents").where("owner", id).distinctOn("document_name").orderBy("document_name", "asc");
-    return { props: { permission, documents } };
+    return { props: { documents } };
   }
   catch (error) {
     console.error(error);

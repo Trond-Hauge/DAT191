@@ -1,6 +1,5 @@
 "use strict";
 
-import Header from "../../components/header";
 import UploadFileForm from "../../components/library/UploadFileForm";
 import FileCardList from "../../components/library/FileCardList";
 import { useRouter } from "next/router";
@@ -9,7 +8,7 @@ import { filterByDocument, filterByName, filterByOrganisation } from "../../util
 import { useDocuments } from "../../utils/client/fetchers";
 import Spinner from "../../components/Spinner";
 
-export default function Library({ permission, id }) {
+export default function Library({ id }) {
     const { documents, loading, error, mutate } = useDocuments();
     const router = useRouter();
     const {title, org, author} = router.query;
@@ -40,7 +39,6 @@ export default function Library({ permission, id }) {
 
     return (
         <>
-            {Header(permission)}
             <main>
                 <div className="side-menu-container">
                     <div className="search-space">
@@ -66,7 +64,7 @@ export default function Library({ permission, id }) {
                         </form>
                     </div>
                     <div className="upload-space">
-                        <UploadFileForm uid={id} permission={permission} onUpload={mutate}/>
+                        <UploadFileForm uid={id} onUpload={mutate}/>
                     </div>
                 </div>
                 
@@ -84,6 +82,6 @@ export default function Library({ permission, id }) {
 
 export async function getServerSideProps(ctx) {
     const cookie = ctx.req?.cookies.auth;
-    const { permission, id } = getMemberClaims(cookie);
-    return { props: { permission, id } };
+    const { id } = getMemberClaims(cookie);
+    return { props: { id } };
 }
