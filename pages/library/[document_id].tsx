@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { getMemberClaims } from "../../utils/server/user";
 import { db } from "../../db";
 import { useFileURL } from "../../utils/client/fetchers";
+import { debug } from "console";
 
 const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
   ssr: false

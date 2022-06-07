@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Router from "next/router";
-import workerSrc from "pdfjs-dist/build/pdf.worker.entry";
 
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 // This setup is using React instead of regular variables to provide a more responsive experience, with less stress on the server.
 // The downside of this setup is that the user may lose their progress when refreshing.
@@ -17,6 +17,9 @@ export default function PDFViewer({ fileURL, filename }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(Router.query.page ? parseInt(Router.query.page) : 1);
   const [scale, setScale] = useState(Router.query.scale ? parseInt(Router.query.scale) : 10);
+
+  const {asPath} = useRouter();
+  const url = asPath.split("?")[0];
 
   function handleKeyDown(e) {
     switch (e.code) {
@@ -56,14 +59,14 @@ export default function PDFViewer({ fileURL, filename }) {
   function nextPage() {
     if (pageNumber < numPages) {
       setPageNumber((prevPage) => prevPage + 1);
-      //Router.replace(`${url}?page=${pageNumber+1}&scale=${scale}`, undefined, {shallow: true});
+      Router.replace(`${url}?page=${pageNumber+1}&scale=${scale}`, undefined, {shallow: true});
     }
   }
 
   function prevPage() {
     if (pageNumber > 1) {
       setPageNumber((prevPage) => prevPage - 1);
-      //Router.replace(`${url}?page=${pageNumber-1}&scale=${scale}`, undefined, {shallow: true});
+      Router.replace(`${url}?page=${pageNumber-1}&scale=${scale}`, undefined, {shallow: true});
     }
   }
 
@@ -76,14 +79,14 @@ export default function PDFViewer({ fileURL, filename }) {
   function zoomIn() {
     if (scale < 20) {
       setScale((prevScale) => prevScale + 1);
-      //Router.replace(`${url}?page=${pageNumber}&scale=${scale+0.1}`, undefined, {shallow: true});
+      Router.replace(`${url}?page=${pageNumber}&scale=${scale+0.1}`, undefined, {shallow: true});
     }
   }
 
   function zoomOut() {
     if (scale > 10) {
       setScale((prevScale) => prevScale - 1);
-      //Router.replace(`${url}?page=${pageNumber}&scale=${scale-0.1}`, undefined, {shallow: true});
+      Router.replace(`${url}?page=${pageNumber}&scale=${scale-0.1}`, undefined, {shallow: true});
     }
   }
 
