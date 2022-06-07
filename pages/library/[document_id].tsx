@@ -4,18 +4,17 @@ import dynamic from "next/dynamic";
 import { getMemberClaims } from "../../utils/server/user";
 import { db } from "../../db";
 import { useFileURL } from "../../utils/client/fetchers";
-import { debug } from "console";
 
 const PDFViewer = dynamic(() => import("../../components/pdf-viewer"), {
   ssr: false
 });
 
 export default function DocumentPage({ doc }) {
-  const { fileURL,  loading, error } = useFileURL(doc.fileref);
+  const { fileURL, error } = useFileURL(doc.fileref);
 
   return (
     <>
-    <PDFViewer fileURL={fileURL ? fileURL : error ? error : {}} filename={doc.filename} />
+    <PDFViewer fileURL={fileURL ?? error ?? {}} filename={doc.filename} />
     </>
   );
 }
